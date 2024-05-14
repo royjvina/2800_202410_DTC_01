@@ -60,7 +60,7 @@ isValidSession = (req) => {
 
 /* ------- all routes ------- */
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
     res.render('main');
 });
 

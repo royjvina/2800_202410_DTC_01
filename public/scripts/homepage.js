@@ -7,9 +7,9 @@
  * @balpreet787
  */
 function groupsTabHandler() {
-    showFriends.classList.remove('bg-[#4b061a]');
+    showFriends.classList.remove('bg-primary');
     showFriends.classList.remove('text-white');
-    showGroups.classList.add('bg-[#4b061a]');
+    showGroups.classList.add('bg-primary');
     showGroups.classList.add('text-white');
     groupSearch.classList.remove('hidden');
     friendSearch.classList.add('hidden');
@@ -25,9 +25,9 @@ function groupsTabHandler() {
  * @balpreet787
  */
 function friendsTabHandler() {
-    showGroups.classList.remove('bg-[#4b061a]');
+    showGroups.classList.remove('bg-primary');
     showGroups.classList.remove('text-white');
-    showFriends.classList.add('bg-[#4b061a]');
+    showFriends.classList.add('bg-primary');
     showFriends.classList.add('text-white');
     groupSearch.classList.add('hidden');
     friendSearch.classList.remove('hidden');
