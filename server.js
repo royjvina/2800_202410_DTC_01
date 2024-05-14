@@ -68,6 +68,10 @@ isValidSession = (req) => {
 
 /* ------- all routes ------- */
 
+const userRouter = require ("./routes/authentication")
+
+app.use("/", userRouter)
+
 app.get('/home', (req, res) => {
     res.render('main');
 });
@@ -124,19 +128,11 @@ app.post('/advisor', async function (req, res) {
 });
 
 
-
 // all unrealated routes
 app.get('*', (req, res) => {
-    res.status(404);
-    res.render('404');
+    res.render('errorPage');
 })
 
-// error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500);
-    res.render('error_page');
-});
 
 app.listen(port, () => {
     console.log('Server is running on port ' + port);
