@@ -76,6 +76,10 @@ app.get('/AI', (req, res) => {
     res.render('aiAdvisor');
 });
 
+app.get('/groups', (req, res) => {
+    res.render('groups');
+});
+
 app.post('/advisor', async function (req, res) {
     console.log(req.body);
     let { userMessages, assistantMessages } = req.body
