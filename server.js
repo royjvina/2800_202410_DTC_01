@@ -21,6 +21,8 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 
+
+app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
 var { database } = include('databaseConnection');
@@ -79,7 +81,7 @@ app.get('*', (req, res) => {
 // error handling middleware
 app.use((err, req, res, next) => {
     console.error(err);
-    res.status(200);
+    res.status(500);
     res.render('error_page');
 });
 
