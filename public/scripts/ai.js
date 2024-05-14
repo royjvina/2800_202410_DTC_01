@@ -44,7 +44,7 @@ async function sendMessage() {
     input.value = '';
     loadingOn();
     try {
-        const response = await fetch("http://localhost:3000/aiadvisor", {
+        const response = await fetch("http://localhost:3000/advisor", {
             method: "POST",
             headers: { "Content-Type": "application/json", },
             body: JSON.stringify({ "userMessages": userMessages, "assistantMessages": assistantMessages }),
