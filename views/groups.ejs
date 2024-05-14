@@ -8,8 +8,8 @@
             </div>
         </div>
     </div>
-    <div class="overflow-auto mt-[135px] mb-[70px]">
-        <div class="m-3 flex flex-row outline outline-2 p-3 rounded-xl">
+    <div id="expenses" class="overflow-auto mt-[135px] mb-[70px] flex-col">
+        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
             <div class="flex flex-col items-center">
                 <p>May</p>
                 <p>14</p>
@@ -25,7 +25,7 @@
                 <p class="flex font-medium text-xl">$57.66</p>
             </div>
         </div>
-        <div class="m-3 flex flex-row outline outline-2 p-3 rounded-xl">
+        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
             <div class="flex flex-col items-center">
                 <p>May</p>
                 <p>14</p>
@@ -41,7 +41,7 @@
                 <p class="flex font-medium text-xl">$80.50</p>
             </div>
         </div>
-        <div class="m-3 flex flex-row outline outline-2 p-3 rounded-xl">
+        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
             <div class="flex flex-col items-center">
                 <p>May</p>
                 <p>12</p>
@@ -57,7 +57,7 @@
                 <p class="flex font-medium text-xl">$208.96</p>
             </div>
         </div>
-        <div class="m-3 flex flex-row outline outline-2 p-3 rounded-xl">
+        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
             <div class="flex flex-col items-center">
                 <p>May</p>
                 <p>11</p>
@@ -73,7 +73,7 @@
                 <p class="flex font-medium text-xl">$30.40</p>
             </div>
         </div>
-        <div class="m-3 flex flex-row outline outline-2 p-3 rounded-xl">
+        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
             <div class="flex flex-col items-center">
                 <p>May</p>
                 <p>11</p>
@@ -89,7 +89,7 @@
                 <p class="flex font-medium text-xl">$80.88</p>
             </div>
         </div>
-        <div class="m-3 flex flex-row outline outline-2 p-3 rounded-xl">
+        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
             <div class="flex flex-col items-center">
                 <p>May</p>
                 <p>09</p>
@@ -105,7 +105,7 @@
                 <p class="flex font-medium text-xl">$90.44</p>
             </div>
         </div>
-        <div class="m-3 flex flex-row outline outline-2 p-3 rounded-xl">
+        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
             <div class="flex flex-col items-center">
                 <p>May</p>
                 <p>09</p>
@@ -121,7 +121,7 @@
                 <p class="flex font-medium text-xl">$12.12</p>
             </div>
         </div>
-        <div class="m-3 flex flex-row outline outline-2 p-3 rounded-xl">
+        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
             <div class="flex flex-col items-center">
                 <p>May</p>
                 <p>09</p>
@@ -139,4 +139,44 @@
         </div>
     </div>
 
+    <div id="balances" class="overflow-auto mt-[135px] mb-[70px] hidden">
+        <div class="grid grid-cols-2 mx-4">
+            <div>
+                <div class="ml-[75px] my-4 py-1 bg-red-400 rounded-l-xl flex items-center">
+                    <p class="pr-2 font-medium text-lg flex ml-auto">-$41.34</p>
+                </div>
+                <div class="my-4 py-1 flex items-center">
+                    <p class="pr-2 font-medium text-lg flex ml-auto">User 2</p>
+                </div>
+                <div class="ml-[2px] my-4 py-1 bg-red-400 rounded-l-xl flex items-center">
+                    <p class="pr-2 font-medium text-lg flex ml-auto">-$103.50</p>
+                </div>
+                <div class="ml-[110px] my-4 py-1 bg-red-400 rounded-l-xl flex items-center">
+                    <p class="pr-2 font-medium text-lg flex ml-auto">-$13.75</p>
+                </div>
+                <div class="my-4 py-1 flex items-center">
+                    <p class="pr-2 font-medium text-lg flex ml-auto">User 5</p>
+                </div>
+            </div>
+            <div class="border-0 border-l-2 border-gray-400">
+                <div>
+                    <p class="my-4 py-1 pl-2 font-semibold text-lg">User 1</p>
+                </div>
+                <div class="my-4 py-1 bg-green-400 rounded-r-xl mr-[125px]">
+                    <p class="pl-2 font-medium text-lg">$25.87</p>
+                </div>
+                <div>
+                    <p class="my-4 py-1 pl-2 font-semibold text-lg">User 3</p>
+                </div>
+                <div>
+                    <p class="my-4 py-1 pl-2 font-semibold text-lg">User 4</p>
+                </div>
+                <div class="my-4 py-1  rounded-r-xl">
+                    <p class="pl-2 font-medium text-lg">$0.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/scripts/groups.js"></script>
     <%- include('templates/footer') %>
