@@ -50,8 +50,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
 /* ------- all functions ------- */
 isValidSession = (req) => {
     if (req.session.authenticated) {
@@ -59,7 +57,6 @@ isValidSession = (req) => {
     }
     return false;
 };
-
 
 /* ------- all routes ------- */
 
@@ -74,10 +71,10 @@ app.get('/advisor', (req, res) => {
 
 
 // all unrealated routes
-// app.get('*', (req, res) => {
-//     res.status(404);
-//     res.render('404');
-// })
+app.get('*', (req, res) => {
+    res.status(404);
+    res.render('404');
+})
 
 // error handling middleware
 app.use((err, req, res, next) => {
