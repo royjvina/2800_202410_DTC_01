@@ -64,12 +64,6 @@ app.get('/', (req, res) => {
     res.render('main');
 });
 
-<<<<<<< HEAD
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
-=======
 app.get('/advisor', (req, res) => {
     res.render('ai_advisor');
 });
@@ -92,4 +86,3 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log('Server is running on port ' + port);
 });
->>>>>>> 3c613c43f0dde581b7b59e844c21e840d2a02196
