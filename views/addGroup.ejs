@@ -1,0 +1,44 @@
+<%- include('templates/headTags') %>
+    <header class="sticky top-0 ">
+            <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
+                <div><a id="cancelAddGroup" href="/home">
+                    Cancel
+                </a></div>
+            
+                <div class="">
+                    <button type="submit" form="addGroupForm" id="confirmAddGroup">Done</button>
+                </div>
+            </div>
+    </header>
+    <form action="/addGroup" method="post" id="addGroupForm" enctype="multipart/form-data">
+        <div class="flex flex-col m-5 gap-5">
+            <div class="flex flex-row gap-3">
+                <div>
+                    <label for="groupImage" class="cursor-pointer">
+                        <img src="/images/homepageIconsAndPlaceholders/addGroup.svg" class="w-14 h-14" alt="Add photo">
+                    <input id="groupImage" type="file" name="groupImage" capture class="hidden">
+                </div>
+                <div class="flex flex-col w-full">
+                    <label for="groupName">Group name</label>
+                    <input type="text" id="groupName" name="groupName" class="w-full border-b p-1 focus:outline-none focus:border-black">
+                </div>
+            </div>
+            <div class="flex flex-row">
+                <label class="w-1/6" for="groupType">Type</label>
+                <select class="w-5/6" id="groupType" name="groupType">
+                    <option value="travel">Travel</option>
+                    <option value="Home">Home</option>
+                    <option value="Casual">Casual</option>
+                    <option value="restaurants">Restaurants</option>
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <label for="addMembers">Add members</label>
+                <input type="tel" id="addMembers" name="addMembers" class="border-b p-2 focus:outline-none focus:border-black">
+            </div>
+
+        </div>
+    </form> 
+    
+
+    <%- include('templates/footer') %>

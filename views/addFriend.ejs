@@ -1,0 +1,27 @@
+<%- include('templates/headTags') %>
+    <header class="sticky top-0 ">
+            <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
+                <div><a id="cancelAddFriend" href="/home">
+                    Cancel
+                </a></div>
+            
+                <div class="">
+                    <button type="submit" form="addFriendForm" id="confirmAddFriend">Done</button>
+                </div>
+            </div>
+    </header>
+    <form action="/addFriend" method="post" id="addFriendForm">
+        <div class="flex flex-col m-5 gap-3">
+            <div class="flex flex-col">
+                <label for="friendName">Name</label>
+                <input type="text" id="friendName" name="friendName" class="border-b p-2 focus:outline-none focus:border-black">
+            </div>
+            <div class="flex flex-col">
+                <label for="friendPhone">Phone number</label>
+                <input type="tel" id="friendPhone" name="friendPhone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="border-b p-2 focus:outline-none focus:border-black">
+            </div>
+        </div>
+    </form> 
+    
+
+    <%- include('templates/footer') %>
