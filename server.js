@@ -68,10 +68,17 @@ isValidSession = (req) => {
 
 /* ------- all routes ------- */
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
+    req.session.recentPath = "/home";
     res.render('main');
-});
 
+});
+app.get('/addFriend', (req, res) => {
+    res.render('addFriend');
+});
+app.get('/addGroup', (req, res) => {
+    res.render('addGroup');
+});
 app.get('/AI', (req, res) => {
     res.render('aiAdvisor');
 });

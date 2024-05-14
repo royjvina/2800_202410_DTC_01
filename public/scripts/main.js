@@ -65,6 +65,9 @@ function removeSecondaryButtons() {
     }
 }
 
+
+
+
 showGroups.addEventListener('click', groupsTabHandler);
 showFriends.addEventListener('click', friendsTabHandler);
 addFriendSecondary.addEventListener('mouseenter', function () {

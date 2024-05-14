@@ -10,8 +10,8 @@
         </div>
         <div class="mb-[102px]">
         <div class="flex justify-end mt-[100px] mx-3">
-            <button class="hidden" id="addFriend">+ add friend</button>
-            <button class="hidden" id="createGroup">+ create group</button>
+            <a class="hidden" href="/addFriend" id="addFriend">+ add friend</a>
+            <a class="hidden" id="createGroup">+ create group</a>
         </div>
 
         <div class="text-black mt-2 flex mx-2 justify-center">
@@ -42,8 +42,8 @@
                     </div>
             
                     <div class="flex flex-row gap-10">
-                    <div>-$500</div>
-                    <button>X</button>
+                    <div class="">-$500</div>
+                    <button id="delete1" class="delete">X</button>
                 </div>
             </div>
             <div class="flex flex-row  shadow-md w-full justify-between p-3 rounded-lg items-center friend">
@@ -55,7 +55,7 @@
             
                 <div class="flex flex-row gap-10">
                     <div>-$500</div>
-                    <button>X</button>
+                    <button id="delete2" class="delete">X</button>
                 </div>
                 </div>
             </div>
@@ -162,13 +162,13 @@
             </div>
             </div>
             <div class="flex flex-row justify-center mt-10" id="addFriendSecondaryDiv">
-                <button id="addFriendSecondary" class="flex flex-row items-center border py-3 px-9 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
-                    <img src="/images/homepageIconsAndPlaceholders/addFriend.svg" id="addFriendPic" class="w-8 h-8" alt=""> <span>Add a friend</span></button>
+                <a id="addFriendSecondary" href="/addFriend" class="flex flex-row items-center border py-3 px-9 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
+                    <img src="/images/homepageIconsAndPlaceholders/addFriend.svg" id="addFriendPic" class="w-8 h-8" alt=""> <span>Add a friend</span></a>
             </div>
             <div class="flex-row justify-center mt-10 hidden" id="addGroupSecondaryDiv">
-                <button id="addGroupSecondary" class="flex flex-row items-center border py-3 px-7 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
-                    <img src="/images/homepageIconsAndPlaceholders/addGroup.svg" id="addGroupPic" class="w-8 h-8" alt=""> <span>Create a group</span></button>
+                <a id="addGroupSecondary" class="flex flex-row items-center border py-3 px-7 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
+                    <img src="/images/homepageIconsAndPlaceholders/addGroup.svg" id="addGroupPic" class="w-8 h-8" alt=""> <span>Create a group</span></a>
             </div>
         </div>
-        
+        <script src="/scripts/main.js"></script>
 <%- include('templates/footer') %>
