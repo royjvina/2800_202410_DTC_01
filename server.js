@@ -7,6 +7,12 @@ const path = require('path');
 const session = require('express-session');
 const Mongostore = require('connect-mongo');
 const bcrypt = require('bcrypt');
+const OpenAI = require("openai");
+const openai = new OpenAI(
+    {apiKey: process.env.OPENAI_API_KEY}
+);
+const constants = require('./constants.json');
+
 
 /* const saltRounds = */
 const port = process.env.PORT || 3000;
@@ -66,8 +72,55 @@ app.get('/', (req, res) => {
     res.render('main');
 });
 
-app.get('/advisor', (req, res) => {
-    res.render('ai_advisor');
+app.get('/AI', (req, res) => {
+    res.render('aiAdvisor');
+});
+
+app.post('/advisor', async function (req, res) {
+    console.log(req.body);
+    let {userMessages, assistantMessages} = req.body
+
+    let messages = [
+        {role: "system", content: constants.SYSTEM_COMMENT},
+        {role: "user", content: constants.USER_COMMENT},
+        {role: "assistant", content: constants.ASSISTANT_COMMENT},
+    ]
+
+    while (userMessages.length != 0 || assistantMessages.length != 0) {
+        if (userMessages.length != 0) {
+            messages.push(
+                JSON.parse('{"role": "user", "content": "'+ 
+                  String(userMessages.shift()).replace(/\n/g,"")+'"}')
+            )
+        }
+        if (assistantMessages.length != 0) {
+            messages.push(
+                JSON.parse('{"role": "assistant", "content": "'+
+                  String(assistantMessages.shift()).replace(/\n/g,"")+'"}')
+            )
+        }
+    }
+
+    const maxRetries = 3;
+    let retries = 0;
+    let completion
+    while (retries < maxRetries) {
+      try {
+        completion = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: messages
+        });
+        break;
+      } catch (error) {
+          retries++;
+          console.log(error);
+          console.log(`Error fetching data, retrying (${retries}/${maxRetries})...`);
+      }
+    }
+
+    let chatGPTResult = completion.choices[0].message.content
+    console.log(chatGPTResult);
+    res.json({"assistant": chatGPTResult});
 });
 
 
