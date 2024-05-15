@@ -41,7 +41,7 @@
 
 .chatHeader .history-icon {
   color: white;
-  font-size: 1.5em; /* Increased size of the icon */
+  font-size: 1.5em; 
   cursor: pointer;
 }
 
@@ -61,13 +61,13 @@
 }
 
 .inputContainer {
-  display: none; /* Hidden by default */
+  display: none; 
   align-items: center;
   background-color: #6E0924;
   padding: 10px;
   border-top: 1px solid #ddd;
   width: 100%;
-  flex-shrink: 0; /* Prevents the inputContainer from shrinking */
+  flex-shrink: 0; 
   position: relative;
 }
 
@@ -116,7 +116,7 @@ button {
   background-color: #6E0924;
   color: #f8fafc;
   border: none;
-  border-radius: 50%;
+  border-radius: 80%;
   cursor: pointer;
   font-size: 24px;
   transition: all 0.3s ease;
@@ -173,6 +173,15 @@ p {
 }
 
 #startBtn {
+  border: #000;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  border-radius: 20px;
+}
+
+#noBtn {
   border: #000;
   font-weight: bold;
   margin-top: 10px;
