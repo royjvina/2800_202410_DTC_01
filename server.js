@@ -6,7 +6,7 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const Mongostore = require('connect-mongo');
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 const OpenAI = require("openai");
 const openai = new OpenAI(
     { apiKey: process.env.OPENAI_API_KEY }
@@ -34,6 +34,15 @@ app.set("view engine", "ejs");
 var { database } = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('users');
+
+mongoose.connect(mongodb_uri)
+	.then(() => {
+		console.log('Connected to MongoDB')
+	})
+	.catch((error) => {
+		console.error('Error connecting to MongoDB:', error)
+	}
+)
 
 var mongoStore = Mongostore.create({
     mongoUrl: mongodb_uri,
@@ -68,19 +77,15 @@ isValidSession = (req) => {
 
 /* ------- all routes ------- */
 
-<<<<<<< HEAD
-const userRouter = require ("./routes/authentication")
+const authRouter = require ("./routes/authentication")
 
-app.use("/", userRouter)
+app.use("/", authRouter);
 
 app.get('/home', (req, res) => {
-=======
-app.get('/home', (req, res) => {
-    req.session.recentPath = "/home";
->>>>>>> 4a80acf9ff1a85382fcfbe1fed9422ff89612614
     res.render('main');
 
 });
+
 app.get('/addFriend', (req, res) => {
     res.render('addFriend');
 });
@@ -139,20 +144,17 @@ app.post('/advisor', async function (req, res) {
 });
 
 
-// all unrealated routes
+// all unrelated routes
 app.get('*', (req, res) => {
     res.render('errorPage');
 })
 
-<<<<<<< HEAD
-=======
 // error handling middleware
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(500);
     res.render('errorPage');
 });
->>>>>>> 4a80acf9ff1a85382fcfbe1fed9422ff89612614
 
 app.listen(port, () => {
     console.log('Server is running on port ' + port);
