@@ -7,6 +7,7 @@ const path = require('path');
 const session = require('express-session');
 const Mongostore = require('connect-mongo');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 const OpenAI = require("openai");
 const openai = new OpenAI(
     { apiKey: process.env.OPENAI_API_KEY }
@@ -31,9 +32,10 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
-var { database } = include('databaseConnection');
+// var { database } = include('databaseConnection');
 
-const userCollection = database.db(mongodb_database).collection('users');
+// const userCollection = database.db(mongodb_database).collection('users');
+// const chatHistoryCollection = database.db(mongodb_database).collection('chatHistory');
 
 var mongoStore = Mongostore.create({
     mongoUrl: mongodb_uri,
@@ -55,6 +57,7 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -84,7 +87,6 @@ app.get('/AI', (req, res) => {
 });
 
 app.post('/advisor', async function (req, res) {
-    console.log(req.body);
     let { userMessages, assistantMessages } = req.body
 
     let messages = [
@@ -126,7 +128,22 @@ app.post('/advisor', async function (req, res) {
     }
 
     let chatGPTResult = completion.choices[0].message.content
-    console.log(chatGPTResult);
+    question = messages.at(-1).content
+    answer = chatGPTResult
+    console.log(`Question: ${messages.at(-1).content}\nAnswer: ${chatGPTResult}`);
+
+
+    // await chatHistoryCollection.insertOne({ question, answer, timestamp: new Date() });
+
+    // await sessionCollection.updateOne(
+    //     { sessionId: req.sessionID },
+    //     {
+    //         $push: { qaPair: { question: question, answer: chatGPTResult, timestamp: new Date() } },
+    //         $setOnInsert: { sessionId: req.sessionID, createdAt: new Date() }
+    //     },
+    //     { upsert: true }
+    // );
+
     res.json({ "assistant": chatGPTResult });
 });
 
