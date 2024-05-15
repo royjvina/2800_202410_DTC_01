@@ -58,25 +58,41 @@ function manualExpenseTabHandler(event) {
 }
 
 /**
+ * This function is used to check which split method is being used, determined by checking if that given tab is coloured
+ * @claaudiaale
+ */
+function checkSplitMethod() {
+    if (showEqualExpense.classList.contains('bg-[#4b061a]')) {
+        return "Equal";
+    } else if (showPercentageExpense.classList.contains('bg-[#4b061a]')) {
+        return "Percentage";
+    } else {
+        return "Manual";
+    }
+}
+
+/**
  * This function is used to automatically add the expense total to the user who paid for an expense
  * @claaudiaale
  */
 function addExpenseToPaidByUser() {
+    let splitMethod = checkSplitMethod();
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let paidByUser = document.getElementById('selectedPaidBy').value;
 
-    document.querySelectorAll('.userEqualSplit').forEach(user => {
+    document.querySelectorAll('.user' + splitMethod + 'Split').forEach(user => {
         user.checked = false;
-        document.getElementById(user.id + 'Amount').innerHTML = '$0.00';
+        document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
     })
 
     if (expenseTotal > 0) {
-        document.getElementById(paidByUser + 'Amount').innerHTML = ('$' + expenseTotal.toFixed(2));
+        document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
+        if (splitMethod == "Percentage") {
+            document.getElementById(paidByUser + 'Percentage').value = 100;
+        }
         document.getElementById(paidByUser).checked = true;
     }
-
 }
-
 
 /**
  * This function is used to handle computation of splitting an expense's total equally as users are selected   
@@ -107,6 +123,44 @@ function calculateExpenseEqually() {
     }
 }
 
+/**
+ * This function is used to handle computation of splitting an expense's total percentage wise as users are selected   
+ * @claaudiaale
+ */
+
+function calculateExpensePercentage() {
+    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
+    let totalPercentage = 0;
+    let usersToSplitFor = [];
+
+    let percentageInputs = document.querySelectorAll('.percentage');
+    percentageInputs.forEach(input => {
+        if (!input.value) {
+            totalPercentage += 0;
+        } else {
+            totalPercentage += parseFloat(input.value);
+        }
+    })
+
+    if (totalPercentage == 100) {
+        let users = document.querySelectorAll('.percentage');
+        users.forEach(user => {
+            let userId = user.id
+            if (!Number.isNaN(user.value) || user.value == "") {
+                usersToSplitFor.push(userId)
+            }
+        })
+        usersToSplitFor.forEach(user => {
+            let userPercentage = parseFloat(document.getElementById(user).value);
+            let userAmount = (expenseTotal * (userPercentage / 100)).toFixed(2);
+            if (userAmount == 'NaN') {
+                userAmount = '0.00';
+            }
+            document.getElementById(user.slice(0, -10) + 'AmountPercentage').innerHTML = ('$' + userAmount);
+        }); 
+    }
+}
+
 
 
 
@@ -117,5 +171,12 @@ document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('click', calculateExpenseEqually);
 });
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
-selectedPaidBy.addEventListener('change', addExpenseToPaidByUser);
+selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("")});
+selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Percentage")});
+
+let percentageInputs = document.querySelectorAll('.percentage');
+percentageInputs.forEach(input => {
+    input.addEventListener('input', calculateExpensePercentage);
+});
+
 
