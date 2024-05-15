@@ -94,24 +94,32 @@ src="/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg" alt="">
                 </div>
             </div>
             <div id="groups" class="flex-col m-3 gap-3 hidden">
-                <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
-                        <div class="flex flex-row items-center gap-4">
-                            <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer"
-                            src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                            <div class="flex flex-col gap-3 p-2 pb-4">
-                                <span>Group</span>
-                                <div class="relative flex items-center">
-                                    <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
-                                    <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
-                                    <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
-            
+                <div class="flex flex-col">
+                    <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
+                            <div class="flex flex-row items-center gap-4">
+                                <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer"
+                                src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
+                                <div class="flex flex-col gap-3 p-2 pb-4">
+                                    <span>Group</span>
+                                    <div class="relative flex items-center">
+                                        <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
+                                        <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
+                                        <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
+                                    </div>
                                 </div>
                             </div>
+                            <div class="flex flex-row gap-10 items-center">
+                            <div>-$50</div>
+                            <button id="group1Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
                         </div>
-            
-                        <div class="flex flex-row gap-10">
-                        <div>-$500</div>
-                        <button>X</button>
+                        
+                    </div>
+                    <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="group1ConfirmDeleteOptions">
+                        <form action="/deleteGroup" method="post">
+                            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="group1ConfirmDelete" value="Confirm">
+                            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="group1CancelDelete" value="Cancel">
+                            
+                        </form>
                     </div>
                 </div>
                 <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
@@ -130,28 +138,8 @@ src="/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg" alt="">
                     </div>
         
                     <div class="flex flex-row gap-10">
-                    <div>-$500</div>
-                    <button>X</button>
-                </div>
-            </div>
-                <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
-                    <div class="flex flex-row items-center gap-4">
-                        <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer" 
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                        <div class="flex flex-col gap-3 p-2 pb-4">
-                            <span>Group</span>
-                            <div class="relative flex items-center">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
-        
-                            </div>
-                        </div>
-                    </div>
-        
-                    <div class="flex flex-row gap-10">
-                    <div>-$500</div>
-                    <button>X</button>
+                    <div>+$500</div>
+                    <button id="group2Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
                 </div>
             </div>
                 <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
@@ -170,8 +158,8 @@ src="/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg" alt="">
                     </div>
         
                     <div class="flex flex-row gap-10">
-                    <div>-$500</div>
-                    <button>X</button>
+                    <div>-$512</div>
+                    <button id="group3Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
                 </div>
             </div>
                 <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
@@ -190,8 +178,28 @@ src="/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg" alt="">
                     </div>
         
                     <div class="flex flex-row gap-10">
-                    <div>-$500</div>
-                    <button>X</button>
+                    <div>-$5</div>
+                    <button id="group4Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
+                </div>
+            </div>
+                <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
+                    <div class="flex flex-row items-center gap-4">
+                        <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer" 
+                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
+                        <div class="flex flex-col gap-3 p-2 pb-4">
+                            <span>Group</span>
+                            <div class="relative flex items-center">
+                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
+                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
+                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
+        
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="flex flex-row gap-10">
+                    <div>+$200</div>
+                    <button id="group5Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
                 </div>
             </div>
             </div>

@@ -90,6 +90,29 @@ function groupSelectorHandler(friendPhone) {
     });
 }
 
+function deleteGroupHandler() {
+    document.querySelectorAll('.deleteGroup').forEach(deleteGroup => {
+        deleteGroup.addEventListener('click', function () {
+            deleteGroupName = (this.id).replace('Delete', '');
+            console.log(deleteGroupName);
+            confirmDeleteOptions = document.getElementById(deleteGroupName + 'ConfirmDeleteOptions');
+            cancelDelete = document.getElementById(deleteGroupName + 'CancelDelete');
+            confirmDeleteOptions.classList.toggle('hidden');
+            confirmDeleteOptions.classList.add('hideManually');
+            setTimeout(() => {
+                confirmDeleteOptions.classList.toggle('hideManually');
+            }, 10);
+            confirmDeleteOptions.classList.toggle('flex');
+            cancelDelete.addEventListener('click', function () {
+                confirmDeleteOptions.classList.toggle('hidden');
+                confirmDeleteOptions.classList.remove('hideManually');
+                confirmDeleteOptions.classList.toggle('flex');
+                
+            });
+        });
+    });
+}
+
 /**
  * This function is used to handle the form fields for settling a debt with a friend
  * @balpreet787
@@ -212,6 +235,6 @@ document.querySelectorAll('.friend').forEach(friend => {
 });
 
 removeSecondaryButtons();
-
+deleteGroupHandler();
 showGroups.addEventListener('click', groupsTabHandler);
 showFriends.addEventListener('click', friendsTabHandler);
