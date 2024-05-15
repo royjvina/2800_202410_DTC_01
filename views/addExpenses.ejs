@@ -52,8 +52,11 @@
                             class="focus:outline-none focus:border-b-2 px-2 m-1">
                         <input type="text" id="selectedExpenseName" name="selectedExpenseName"
                             placeholder="Expense Name" class="focus:outline-none focus:border-b-2 px-2 m-1">
-                        <input type="number" id="selectedAmountExpense" name="selectedExpenseAmount" min="0.01"
-                            placeholder="Expense Total" class="focus:outline-none focus:border-b-2 px-2 m-1">
+                        <div class="flex flex-row px-2">
+                            <span class="text-gray-400 text-xl">$</span>
+                            <input type="number" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0.01"
+                                placeholder="Expense Total" class="focus:outline-none focus:border-b-2 px-2 m-1">
+                        </div>
                     </div>
                     <img class="flex justify-center items-center ml-auto pr-5"
                         src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="90" width="90">
@@ -65,6 +68,7 @@
                             <label class="font-semibold my-2 text-base" for="selectedPaidBy">Paid By:</label>
                             <select class="float-right px-4 rounded-lg m-2 text-black" name="selectedPaidBy"
                                 id="selectedPaidBy" placeholder="Select User">
+                                <option value="text-black" selected disabled class="hidden">User</option>
                                 <option class="text-black" value="user1">User 1</option>
                                 <option class="text-black" value="user2">User 2</option>
                                 <option class="text-black" value="user3">User 3</option>
@@ -89,7 +93,7 @@
             <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[300px] mb-[70px]">
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user1" name="user1" value="user1">
+                        <input type="checkbox" id="user1" name="userEqualSplit" value="user1" class="userEqualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -101,7 +105,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user2" name="user2" value="user2">
+                        <input type="checkbox" id="user2" name="userEqualSplit" value="user2" class="userEqualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -113,7 +117,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user3" name="user3" value="user3">
+                        <input type="checkbox" id="user3" name="userEqualSplit" value="user3" class="userEqualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -125,7 +129,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user4" name="user4" value="user4">
+                        <input type="checkbox" id="user4" name="userEqualSplit" value="user4" class="userEqualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -137,7 +141,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user5" name="user5" value="user5">
+                        <input type="checkbox" id="user5" name="userEqualSplit" value="user5" class="userEqualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -149,7 +153,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user6" name="user6" value="user6">
+                        <input type="checkbox" id="user6" name="userEqualSplit" value="user6" class="userEqualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -161,7 +165,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user7" name="user7" value="user7">
+                        <input type="checkbox" id="user7" name="userEqualSplit" value="user7" class="userEqualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
