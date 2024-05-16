@@ -93,6 +93,10 @@ app.get('/addGroup', (req, res) => {
     res.render('addGroup');
 });
 
+app.get('/individualExpense', (req, res) => {
+    res.render('individualExpense');
+});
+
 
 
 // all unrealated routes

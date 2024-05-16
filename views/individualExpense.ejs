@@ -1,16 +1,41 @@
 <%- include('templates/HeadTags') %>
-<body class="bg-gradient-to-b from-white to-primary">
+<body>
     <header class="sticky top-0">
         <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
             <div><a id="cancelIndividualExpense" href="/home">
                     Cancel
-                </a></div>
-
+                </a>
+            </div>
             <div class="">
                 <button type="submit" id="editExpense">Edit</button>
             </div>
         </div>
     </header>
 
+    <div class="flex flex-row bg-primary pb-6 rounded-b-3xl p-4 fixed top-14 w-full">
+        <img class="p-2" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="70" width="70">
+        <div class="flex flex-col pl-2 w-full">
+            <div class="flex flex-row justify-between leading-4 text-white pb-1">
+                <p class="text-xl font-semibold">Expense Name</p>
+                <p class="text-xl font-semibold">$95.97</p>
+            </div>
+            <p class="text-sm text-white font-normal leading-4">May 16, 2024</p>
+            <p class="text-sm text-white font-normal leading-4">Paid By: User 2</p>
+        </div>
+    </div>
+    <div class="overflow-auto mb-[70px] mt-[105px]">
+        <div class="flex flex-row items-center justify-between m-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+            <p class="font-medium">User 1's Split:</p>
+            <p class="font-medium">$31.99</p>
+        </div>
+        <div class="flex flex-row items-center justify-between m-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+            <p class="font-medium">Your Split:</p>
+            <p class="font-medium">$31.99</p>
+        </div>
+        <div class="flex flex-row items-center justify-between m-2 p-3 rounded-lg shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+            <p class="font-medium">User 3's Split:</p>
+            <p class="font-medium">$31.99</p>
+        </div>
+    </div>
 
 <%- include('templates/footer') %>
