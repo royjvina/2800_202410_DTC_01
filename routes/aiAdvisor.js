@@ -22,6 +22,10 @@ let chatHistoryCollection;
     }
 })();
 
+router.get('/history', (req, res) => {
+    res.render('aiLog');
+});
+
 router.get('/AI', (req, res) => {
     res.render('aiAdvisor');
 });
@@ -30,9 +34,7 @@ router.post('/advisor', async function (req, res) {
     let { userMessages, assistantMessages } = req.body;
 
     let messages = [
-        { role: "system", content: constants.SYSTEM_COMMENT },
-        { role: "user", content: constants.USER_COMMENT },
-        { role: "assistant", content: constants.ASSISTANT_COMMENT },
+        { role: "system", content: constants.SYSTEM_COMMENT }
     ];
 
     while (userMessages.length != 0 || assistantMessages.length != 0) {
