@@ -101,6 +101,10 @@ app.get('/setting', (req, res) => {
     res.render('recentActivity');
  })
 
+ app.get('/groups', (req, res) => {
+    res.render('groups');
+ })
+
 // all unrealated routes
 app.get('*', (req, res) => {
     res.render('404');
