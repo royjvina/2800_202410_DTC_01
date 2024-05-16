@@ -85,11 +85,26 @@ app.get('/addFriend', (req, res) => {
     res.render('addFriend');
 });
 
+app.get('/addExpenses', (req, res) => {
+    res.render('addExpenses')
+})
+
 app.get('/addGroup', (req, res) => {
     res.render('addGroup');
 });
 
-// all unrelated routes
+app.get('/setBudget', (req, res) => {
+    res.render('set_budget');
+});
+
+app.get('/setting', (req, res) => {
+    res.render('setting_page');
+});
+
+
+
+
+// all unrealated routes
 app.get('*', (req, res) => {
     res.render('404');
 })
