@@ -6,7 +6,7 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const Mongostore = require('connect-mongo');
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const OpenAI = require("openai");
 const openai = new OpenAI(
@@ -34,8 +34,7 @@ app.set("view engine", "ejs");
 
 // var { database } = include('databaseConnection');
 
-// const userCollection = database.db(mongodb_database).collection('users');
-// const chatHistoryCollection = database.db(mongodb_database).collection('chatHistory');
+const userCollection = database.db(mongodb_database).collection('users');
 
 var mongoStore = Mongostore.create({
     mongoUrl: mongodb_uri,
@@ -71,11 +70,15 @@ isValidSession = (req) => {
 
 /* ------- all routes ------- */
 
+const authRouter = require ("./routes/authentication")
+
+app.use("/", authRouter);
+
 app.get('/home', (req, res) => {
-    req.session.recentPath = "/home";
     res.render('main');
 
 });
+
 app.get('/addFriend', (req, res) => {
     res.render('addFriend');
 });
@@ -148,11 +151,9 @@ app.post('/advisor', async function (req, res) {
 });
 
 
-
-// all unrealated routes
+// all unrelated routes
 app.get('*', (req, res) => {
-    res.status(404);
-    res.render('404');
+    res.render('errorPage');
 })
 
 // error handling middleware
