@@ -68,30 +68,23 @@ isValidSession = (req) => {
     return false;
 };
 
+
 /* ------- all routes ------- */
 
-const authRouter = require("./routes/authentication")
-const aiAdvisorRouter = require("./routes/aiAdvisor")
+const authRouter = require("./routes/authentication");
+const aiAdvisorRouter = require("./routes/aiAdvisor");
+const homeRouter = require("./routes/home");
 
 app.use("/", authRouter);
 app.use("/", aiAdvisorRouter);
+app.use("/", homeRouter);
 
 
-app.get('/home', (req, res) => {
-    res.render('main');
-});
 
-app.get('/addFriend', (req, res) => {
-    res.render('addFriend');
-});
 
 app.get('/addExpenses', (req, res) => {
     res.render('addExpenses')
 })
-
-app.get('/addGroup', (req, res) => {
-    res.render('addGroup');
-});
 
 app.get('/setBudget', (req, res) => {
     res.render('set_budget');
