@@ -11,7 +11,7 @@ function startChat() {
     document.getElementById("introContainer").style.display = "none";
     document.getElementById("introQuestion").style.display = "none";
     document.getElementById("chat").style.display = "block";
-    inputContainer.style.display = "flex"; // Show the input container
+    inputContainer.style.display = "flex";
     let welcomeMsg = "Hello!";
     appendMessage(welcomeMsg, 'bot');
 }
