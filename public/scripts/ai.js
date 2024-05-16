@@ -3,6 +3,8 @@ const input = document.getElementById('userInput');
 const button = document.getElementById('sendBtn');
 const loading = document.getElementById('loading');
 const inputContainer = document.getElementById('inputContainer');
+const historyButton = document.querySelector('.history-icon');
+
 let chatCnt = 0;
 let userMessages = [];
 let assistantMessages = [];
@@ -19,6 +21,10 @@ function startChat() {
 function noStartChat() {
     alert('Thank you! You can start the chat later.');
 }
+
+historyButton.addEventListener("click", () => {
+    window.location.href = '/history';
+});
 
 input.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
