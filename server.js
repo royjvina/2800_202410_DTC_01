@@ -91,14 +91,18 @@ app.get('/addGroup', (req, res) => {
 
 // all unrelated routes
 app.get('*', (req, res) => {
-    res.render('errorPage');
+    res.render('404');
 })
 
-// error handling middleware
+// Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err);
-    res.status(500);
-    res.render('errorPage');
+
+    if (err.status === 400) {
+        res.status(400).render('error400');
+    } else {
+        res.status(500).render('error500');
+    }
 });
 
 app.listen(port, () => {
