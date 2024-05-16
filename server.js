@@ -6,13 +6,8 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const Mongostore = require('connect-mongo');
-const bcrypt = require('bcrypt');
-const OpenAI = require("openai");
-const openai = new OpenAI(
-    { apiKey: process.env.OPENAI_API_KEY }
-);
-const constants = require('./constants.json');
-
+const mongoose = require('mongoose');
+const cors = require('cors')
 
 /* const saltRounds = */
 const port = process.env.PORT || 3000;
@@ -31,9 +26,15 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
-var { database } = include('databaseConnection');
 
-const userCollection = database.db(mongodb_database).collection('users');
+mongoose.connect(mongodb_uri)
+    .then(() => {
+        console.log('Connected to MongoDB')
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error)
+    }
+    )
 
 var mongoStore = Mongostore.create({
     mongoUrl: mongodb_uri,
@@ -55,6 +56,7 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -68,78 +70,45 @@ isValidSession = (req) => {
 
 /* ------- all routes ------- */
 
-app.get('/', (req, res) => {
+const authRouter = require("./routes/authentication")
+const aiAdvisorRouter = require("./routes/aiAdvisor")
+
+app.use("/", authRouter);
+app.use("/", aiAdvisorRouter);
+
+
+app.get('/home', (req, res) => {
     res.render('main');
 });
 
-app.get('/AI', (req, res) => {
-    res.render('aiAdvisor');
+app.get('/addFriend', (req, res) => {
+    res.render('addFriend');
 });
 
 app.get('/addExpenses', (req, res) => {
     res.render('addExpenses')
 })
 
-app.post('/advisor', async function (req, res) {
-    console.log(req.body);
-    let { userMessages, assistantMessages } = req.body
-
-    let messages = [
-        { role: "system", content: constants.SYSTEM_COMMENT },
-        { role: "user", content: constants.USER_COMMENT },
-        { role: "assistant", content: constants.ASSISTANT_COMMENT },
-    ]
-
-    while (userMessages.length != 0 || assistantMessages.length != 0) {
-        if (userMessages.length != 0) {
-            messages.push(
-                JSON.parse('{"role": "user", "content": "' +
-                    String(userMessages.shift()).replace(/\n/g, "") + '"}')
-            )
-        }
-        if (assistantMessages.length != 0) {
-            messages.push(
-                JSON.parse('{"role": "assistant", "content": "' +
-                    String(assistantMessages.shift()).replace(/\n/g, "") + '"}')
-            )
-        }
-    }
-
-    const maxRetries = 3;
-    let retries = 0;
-    let completion
-    while (retries < maxRetries) {
-        try {
-            completion = await openai.chat.completions.create({
-                model: "gpt-4o",
-                messages: messages
-            });
-            break;
-        } catch (error) {
-            retries++;
-            console.log(error);
-            console.log(`Error fetching data, retrying (${retries}/${maxRetries})...`);
-        }
-    }
-
-    let chatGPTResult = completion.choices[0].message.content
-    console.log(chatGPTResult);
-    res.json({ "assistant": chatGPTResult });
+app.get('/addGroup', (req, res) => {
+    res.render('addGroup');
 });
 
 
 
 // all unrealated routes
 app.get('*', (req, res) => {
-    res.status(404);
     res.render('404');
 })
 
-// error handling middleware
+// Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err);
-    res.status(500);
-    res.render('errorPage');
+
+    if (err.status === 400) {
+        res.status(400).render('error400');
+    } else {
+        res.status(500).render('error500');
+    }
 });
 
 app.listen(port, () => {

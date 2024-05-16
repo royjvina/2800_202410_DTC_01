@@ -1,2 +1,22 @@
-<%- include('templates/header') %> <!-- Include header -->
-<%- include('templates/footer') %> <!-- Include footer -->
+<%- include('templates/headTags') %>
+<body class = "">
+    <div class = 'flex flex-col items-center h-dvh w-dvw'>
+        <div id = 'spacer' class = "bg-inherit h-[10%]"></div>
+        <div class = "bg-primary  max-w-[50%] w-fit h-fit rounded-full my-4">
+            <img src="/images/navbarIcons/logo.png" class="mx-auto blur-[0.5px] p-8" id="logo" alt="logo">
+        </div>
+        <div class = "text-center">
+            <h1 class = "text-2xl font-semibold pb-2">PennyWise</h1>
+            <h2 class = "text-lg">Welcome back!</h2>
+            <p class = 'pb-2'>Please login to continue.</p>
+        </div>
+        <form method="POST" class="flex flex-col items-center w-full justify-center gap-y-4 text-center">
+            <input type="text" name="email" class="focus:outline-none mx-auto bg-slate-50 w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error ? 'placeholder-red-400' : '' %>" placeholder = "<%= error ? 'Invalid login' : 'Enter your email' %>" value = "<%= error === 'incorrect_password' ? email : '' %>">
+            <input type="password" name="password" class="focus:outline-none mx-auto bg-slate-50 w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4" placeholder="Enter your password">
+            <button type = "submit" id = "login" class="bg-primary mx-auto text-white font-medium w-1/2 text-lg p-2 border-primary border-2 rounded-full shadow-md">Login</button>
+        </form>
+        <div class = "pt-4 text-center">
+            <p class = "">Don't have an account? <span onclick = "window.location = '/register'" class = 'font-bold cursor-pointer'>Sign Up</span></p>
+        </div>
+    </div>
+<% include('templates/footer') %>
