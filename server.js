@@ -97,7 +97,13 @@ app.get('/individualExpense', (req, res) => {
     res.render('individualExpense');
 });
 
+app.get('/individualExpense', (req, res) => {
+    res.render('individualExpense');
+});
 
+app.get('/recentActivity', (req, res) => {
+    res.render('recentActivity');
+})
 
 // all unrealated routes
 app.get('*', (req, res) => {
