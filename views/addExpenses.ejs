@@ -1,24 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#6E0924",
-                        secondary: "#D3D0CB",
-                    },
-                },
-            },
-        }
-    </script>
-    <title>Document</title>
-</head>
+<%- include('templates/HeadTags') %>
 
 <body class="bg-gradient-to-b from-white to-primary">
     <header class="sticky top-0">
@@ -181,7 +161,7 @@
             <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[300px] mb-[70px] hidden">
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user1" name="userPercentageSplit" value="user1" class="userPercentageSplit">
+                        <input type="checkbox" id="user1" name="userPercentageSplit" value="user1" class="userPercentageSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -194,13 +174,13 @@
                                     type="number" id="user1Percentage" name="user1Percentage" min="0" placeholder="0">
                                 <p class="text-gray-400 text-xl font-semibold px-2">%</p>
                             </div>
-                            <span class="ml-auto text-sm text-gray-500" id="user1AmountPercentage" name="user1AmountPercentage">$0.00</span>
+                            <span class="ml-auto text-sm text-gray-500 px-2" id="user1AmountPercentage" name="user1AmountPercentage">$0.00</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user2" name="userPercentageSplit" value="user2" class="userPercentageSplit">
+                        <input type="checkbox" id="user2" name="userPercentageSplit" value="user2" class="userPercentageSplit hidden">
                         <div class="w-3/4 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -213,13 +193,13 @@
                                     type="number" id="user2Percentage" name="user2Percentage" min="0" placeholder="0">
                                 <p class="text-gray-400 text-xl font-semibold px-2">%</p>
                             </div>
-                            <span class="ml-auto text-sm text-gray-500" id="user2AmountPercentage" name="user2AmountPercentage">$0.00</span>
+                            <span class="ml-auto text-sm text-gray-500 px-2" id="user2AmountPercentage" name="user2AmountPercentage">$0.00</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user3" name="userPercentageSplit" value="user3" class="userPercentageSplit">
+                        <input type="checkbox" id="user3" name="userPercentageSplit" value="user3" class="userPercentageSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -232,13 +212,13 @@
                                     type="number" id="user3Percentage" name="user3Percentage" min="0" placeholder="0">
                                 <p class="text-gray-400 text-xl font-semibold px-2">%</p>
                             </div>
-                            <span class="ml-auto text-sm text-gray-500" id="user3AmountPercentage" name="user3AmountPercentage">$0.00</span>
+                            <span class="ml-auto text-sm text-gray-500 px-2" id="user3AmountPercentage" name="user3AmountPercentage">$0.00</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user4" name="userPercentageSplit" value="user4" class="userPercentageSplit">
+                        <input type="checkbox" id="user4" name="userPercentageSplit" value="user4" class="userPercentageSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -251,13 +231,13 @@
                                     type="number" id="user4Percentage" name="user4Percentage" min="0" placeholder="0">
                                 <p class="text-gray-400 text-xl font-semibold px-2">%</p>
                             </div>
-                            <span class="ml-auto text-sm text-gray-500" id="user4AmountPercentage" name="user4AmountPercentage">$0.00</span>
+                            <span class="ml-auto text-sm text-gray-500 px-2" id="user4AmountPercentage" name="user4AmountPercentage">$0.00</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user5" name="userPercentageSplit" value="user5" class="userPercentageSplit">
+                        <input type="checkbox" id="user5" name="userPercentageSplit" value="user5" class="userPercentageSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -270,13 +250,13 @@
                                     type="number" id="user5Percentage" name="user5Percentage" min="0" placeholder="0">
                                 <p class="text-gray-400 text-xl font-semibold px-2">%</p>
                             </div>
-                            <span class="ml-auto text-sm text-gray-500" id="user5AmountPercentage" name="user5AmountPercentage">$0.00</span>
+                            <span class="ml-auto text-sm text-gray-500 px-2" id="user5AmountPercentage" name="user5AmountPercentage">$0.00</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user6" name="userPercentageSplit" value="user6" class="userPercentageSplit">
+                        <input type="checkbox" id="user6" name="userPercentageSplit" value="user6" class="userPercentageSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -289,13 +269,13 @@
                                     type="number" id="user6Percentage" name="user6Percentage" min="0" placeholder="0">
                                 <p class="text-gray-400 text-xl font-semibold px-2">%</p>
                             </div>
-                            <span class="ml-auto text-sm text-gray-500" id="user6AmountPercentage" name="user6AmountPercentage">$0.00</span>
+                            <span class="ml-auto text-sm text-gray-500 px-2" id="user6AmountPercentage" name="user6AmountPercentage">$0.00</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user7" name="userPercentageSplit" value="user7" class="userPercentageSplit">
+                        <input type="checkbox" id="user7" name="userPercentageSplit" value="user7" class="userPercentageSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -308,7 +288,7 @@
                                     type="number" id="user7Percentage" name="user7Percentage" min="0" placeholder="0">
                                 <p class="text-gray-400 text-xl font-semibold px-2">%</p>
                             </div>
-                            <span class="ml-auto text-sm text-gray-500" id="user7AmountPercentage" name="user7AmountPercentage">$0.00</span>
+                            <span class="ml-auto text-sm text-gray-500 px-2" id="user7AmountPercentage" name="user7AmountPercentage">$0.00</span>
                         </div>
                     </div>
                 </div>
@@ -317,7 +297,7 @@
             <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[300px] mb-[70px] hidden">
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user1" name="user1" value="user1" class="userManualSplit">
+                        <input type="checkbox" id="user1" name="user1" value="user1" class="userManualSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -335,7 +315,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user2" name="user2" value="user2" class="userManualSplit">
+                        <input type="checkbox" id="user2" name="user2" value="user2" class="userManualSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -353,7 +333,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user3" name="user3" value="user3" class="userManualSplit">
+                        <input type="checkbox" id="user3" name="user3" value="user3" class="userManualSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -371,7 +351,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user4" name="user4" value="user4" class="userManualSplit">
+                        <input type="checkbox" id="user4" name="user4" value="user4" class="userManualSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -389,7 +369,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user5" name="user5" value="user5" class="userManualSplit">
+                        <input type="checkbox" id="user5" name="user5" value="user5" class="userManualSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -407,7 +387,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user6" name="user6" value="user6" class="userManualSplit">
+                        <input type="checkbox" id="user6" name="user6" value="user6" class="userManualSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -425,7 +405,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user7" name="user7" value="user7" class="userManualSplit">
+                        <input type="checkbox" id="user7" name="user7" value="user7" class="userManualSplit hidden">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">

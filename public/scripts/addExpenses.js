@@ -82,24 +82,24 @@ function addExpenseToPaidByUser() {
 
     document.querySelectorAll('.user' + splitMethod + 'Split').forEach(user => {
         user.checked = false;
-        if (splitMethod == 'Manual') {
-            document.getElementById(user.id + 'Amount' + splitMethod).value = '$0.00';
-        } else if (splitMethod == 'Percentage') {
-            document.getElementById(user.id + 'Percentage').value = 0;
-        } else {
+        if (splitMethod == 'Equal') {
             document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
+        } else if (splitMethod == 'Percentage') {
+            document.getElementById(user.id + 'Percentage').value = "";
+        } else {
+            document.getElementById(user.id + 'Amount' + splitMethod).value = '$0.00';
         }
     })
 
     if (expenseTotal > 0) {
         document.getElementById(paidByUser).checked = true;
-        if (splitMethod == "Percentage") {
+        if (splitMethod == "Equal") {
+            document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
+        } else if (splitMethod == 'Percentage') {
             document.getElementById(paidByUser + 'Percentage').value = 100;
             document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
         } else if (splitMethod == 'Manual') {
             document.getElementById(paidByUser + 'AmountManual').value = expenseTotal.toFixed(2);
-        } else if (splitMethod == 'Equal') {
-        document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
         }
     }
 }
@@ -134,14 +134,11 @@ function calculateExpenseEqually() {
 }
 
 /**
- * This function is used to handle computation of splitting an expense's total percentage wise as users are selected   
+ * This function is used to handle computation of calculating the total percentage that a user inputs for an expense
  * @claaudiaale
  */
-
-function calculateExpensePercentage() {
-    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
+function calculateUsersPercentage() {
     let totalPercentage = 0;
-    let usersToSplitFor = [];
 
     let percentageInputs = document.querySelectorAll('.percentage');
     percentageInputs.forEach(input => {
@@ -150,7 +147,19 @@ function calculateExpensePercentage() {
         } else {
             totalPercentage += parseFloat(input.value);
         }
-    })
+    }) 
+    return totalPercentage;
+}
+
+
+/**
+ * This function is used to handle computation of splitting an expense's total percentage wise as users are selected   
+ * @claaudiaale
+ */
+
+function calculateExpensePercentage() {
+    let totalPercentage = calculateUsersPercentage();
+    let usersToSplitFor = [];
 
     if (totalPercentage == 100) {
         let users = document.querySelectorAll('.percentage');
@@ -168,7 +177,7 @@ function calculateExpensePercentage() {
             }
             document.getElementById(user.slice(0, -10) + 'AmountPercentage').innerHTML = ('$' + userAmount);
         }); 
-    }
+    } 
 }
 
 /**
@@ -180,6 +189,7 @@ function calculateExpenseManual() {
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let userTotal = 0;
     let manualInputs = document.querySelectorAll('.manual');
+
     manualInputs.forEach(input => {
         if (!input.value) {
             userTotal += 0;
@@ -187,10 +197,7 @@ function calculateExpenseManual() {
             userTotal += parseFloat(input.value);
         }
     })
-    if (userTotal != expenseTotal) {
-        errorMessage = "The total amount split does not equal the expense total. Please ensure the split amounts are correct.";
-        displayErrorModal(errorMessage);
-    }
+    return userTotal == expenseTotal;
 }
 
 /**
@@ -210,8 +217,9 @@ function displayErrorModal(errorMessage) {
  */
 
 function displayEmptyFieldModal(event) {
+    let totalPercentage = calculateUsersPercentage();
+    let splitMethod = checkSplitMethod();
     if (!selectedGroup.value) {
-        console.log("dskjfhsdkfjs")
         event.preventDefault();
         let errorMessage = 'Please select a group to add an expense to.';
         displayErrorModal(errorMessage);
@@ -230,6 +238,14 @@ function displayEmptyFieldModal(event) {
     } else if (!selectedPaidBy.value) {
         event.preventDefault();
         let errorMessage = 'Please select a user who paid for the expense.';
+        displayErrorModal(errorMessage);
+    } else if (splitMethod == 'Percentage' && totalPercentage != 100) {
+        event.preventDefault();
+        let errorMessage = 'Please ensure that the total percentage of the expense is 100.';
+        displayErrorModal(errorMessage);
+    } else if (splitMethod == 'Manual' && calculateExpenseManual()) {
+        event.preventDefault();
+        let errorMessage = 'Please ensure that your manual inputs are equal to the total expense amount.';
         displayErrorModal(errorMessage);
     }
 }
