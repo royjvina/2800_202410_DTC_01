@@ -4,7 +4,7 @@ const router = express.Router()
 
 router.get("/home", (req, res) => {
     console.log(req.session.username);
-    res.render('main', { username: req.session.username });
+    res.render('main', { username: req.session.username, profilePic: req.session.profilePic});
 })
 router.get("/addFriend", (req, res) => {
     res.render('addFriend');

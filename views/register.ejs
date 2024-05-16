@@ -1,8 +1,7 @@
 <%- include('templates/headTags') %>
-<body class = "">
-    <div class = 'flex flex-col items-center h-dvh w-dvw'>
+    <div class = 'flex flex-col items-center my-12'>
         <div id = 'spacer' class = "bg-inherit h-[10%]"></div>
-        <div class = "bg-primary  max-w-[50%] w-fit h-fit rounded-full my-4">
+        <div class = "bg-primary  max-w-[50%] w-fit h-fit rounded-full">
             <img src="/images/navbarIcons/logo.png" class="mx-auto blur-[0.5px] p-8" id="logo" alt="logo">
         </div>
         <div class = "text-center">
@@ -16,7 +15,16 @@
                 <p class='pb-2'>Please register to continue.</p>
             <% } %>
         </div>
-        <form action = '/submitRegistration' method = "POST" class = "flex flex-col items-center w-full justify-center gap-y-4 text-center">
+        <form action = '/submitRegistration' method = "POST" class = "flex flex-col items-center w-full justify-center gap-y-4 text-center" enctype="multipart/form-data">
+            <div class="flex flex-col items-center justify-center">
+                <div>
+                    <label for="profileImage" class="cursor-pointer">
+                        <img src="/images/homepageIconsAndPlaceholders/addProfilePic.svg" class="w-24 h-24 mx-auto" alt="Add photo" id="previewProfileImage">
+                    <input id="profileImage" type="file" name="profileImage" capture class="hidden">
+                </label>
+                </div>
+                <span class="underline text-red-600 hidden" id="removePic">Remove profile pic</span>
+            </div>
             <input type = "text" name = "email" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('email') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('email') ? 'Invalid email' : 'Enter your email' %>">
             <input type = "tel" name = "phone" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('phone') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('phone') ? 'Invalid phone #' : 'Enter your phone #' %>">
             <input type = "text" name =  "username" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('username') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('username') ? 'Invalid name' : 'Enter your name' %>">
@@ -27,4 +35,5 @@
             <p class = "">Already have an account? <span onclick = "window.location = '/'" class = 'font-bold cursor-pointer'>Login</span></p>
         </div>
     </div>
+<script src="/scripts/register.js"></script>
 <% include('templates/footer') %>
