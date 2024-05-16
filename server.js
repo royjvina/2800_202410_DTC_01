@@ -93,7 +93,9 @@ app.get('/addGroup', (req, res) => {
     res.render('addGroup');
 });
 
-
+app.get('/recentActivity', (req, res) => {
+    res.render('recentActivity');
+})
 
 // all unrealated routes
 app.get('*', (req, res) => {
