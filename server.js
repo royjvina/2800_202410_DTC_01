@@ -65,6 +65,7 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -97,6 +98,7 @@ app.get('/AI', (req, res) => {
     res.render('aiAdvisor');
 });
 
+
 app.post('/advisor', async function (req, res) {
     console.log(req.body);
     let { userMessages, assistantMessages } = req.body
@@ -122,6 +124,67 @@ app.post('/advisor', async function (req, res) {
         }
     }
 
+    app.post('/advisor', async function (req, res) {
+        let { userMessages, assistantMessages } = req.body
+    
+        let messages = [
+            { role: "system", content: constants.SYSTEM_COMMENT },
+            { role: "user", content: constants.USER_COMMENT },
+            { role: "assistant", content: constants.ASSISTANT_COMMENT },
+        ]
+    
+        while (userMessages.length != 0 || assistantMessages.length != 0) {
+            if (userMessages.length != 0) {
+                messages.push(
+                    JSON.parse('{"role": "user", "content": "' +
+                        String(userMessages.shift()).replace(/\n/g, "") + '"}')
+                )
+            }
+            if (assistantMessages.length != 0) {
+                messages.push(
+                    JSON.parse('{"role": "assistant", "content": "' +
+                        String(assistantMessages.shift()).replace(/\n/g, "") + '"}')
+                )
+            }
+        }
+    
+        const maxRetries = 3;
+        let retries = 0;
+        let completion
+        while (retries < maxRetries) {
+            try {
+                completion = await openai.chat.completions.create({
+                    model: "gpt-4o",
+                    messages: messages
+                });
+                break;
+            } catch (error) {
+                retries++;
+                console.log(error);
+                console.log(`Error fetching data, retrying (${retries}/${maxRetries})...`);
+            }
+        }
+    
+        let chatGPTResult = completion.choices[0].message.content
+        question = messages.at(-1).content
+        answer = chatGPTResult
+        console.log(`Question: ${messages.at(-1).content}\nAnswer: ${chatGPTResult}`);
+    
+    
+        // await chatHistoryCollection.insertOne({ question, answer, timestamp: new Date() });
+    
+        // await sessionCollection.updateOne(
+        //     { sessionId: req.sessionID },
+        //     {
+        //         $push: { qaPair: { question: question, answer: chatGPTResult, timestamp: new Date() } },
+        //         $setOnInsert: { sessionId: req.sessionID, createdAt: new Date() }
+        //     },
+        //     { upsert: true }
+        // );
+    
+        res.json({ "assistant": chatGPTResult });
+    });
+    
     const maxRetries = 3;
     let retries = 0;
     let completion
