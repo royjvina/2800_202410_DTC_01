@@ -66,7 +66,7 @@ function checkSplitMethod() {
         return "Equal";
     } else if (showPercentageExpense.classList.contains('bg-[#4b061a]')) {
         return "Percentage";
-    } else {
+    } else if (showManualExpense.classList.contains('bg-[#4b061a]')) {
         return "Manual";
     }
 }
@@ -82,15 +82,25 @@ function addExpenseToPaidByUser() {
 
     document.querySelectorAll('.user' + splitMethod + 'Split').forEach(user => {
         user.checked = false;
-        document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
+        if (splitMethod == 'Manual') {
+            document.getElementById(user.id + 'Amount' + splitMethod).value = '$0.00';
+        } else if (splitMethod == 'Percentage') {
+            document.getElementById(user.id + 'Percentage').value = 0;
+        } else {
+            document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
+        }
     })
 
     if (expenseTotal > 0) {
-        document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
+        document.getElementById(paidByUser).checked = true;
         if (splitMethod == "Percentage") {
             document.getElementById(paidByUser + 'Percentage').value = 100;
+            document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
+        } else if (splitMethod == 'Manual') {
+            document.getElementById(paidByUser + 'AmountManual').value = expenseTotal.toFixed(2);
+        } else if (splitMethod == 'Equal') {
+        document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
         }
-        document.getElementById(paidByUser).checked = true;
     }
 }
 
@@ -109,16 +119,16 @@ function calculateExpenseEqually() {
         let splitAmount = (expenseTotal / numberOfUsers).toFixed(2);
         usersToSplitFor.forEach(user => {
             let userId = user.id
-            document.getElementById(userId + 'Amount').innerHTML = ('$' + splitAmount);
+            document.getElementById(userId + 'AmountEqual').innerHTML = ('$' + splitAmount);
         })
         usersNotIncluded.forEach(user => {
             let userId = user.id
-            document.getElementById(userId + 'Amount').innerHTML = '$0.00';
+            document.getElementById(userId + 'AmountEqual').innerHTML = '$0.00';
         })
     } else if (numberOfUsers == 0) {
         usersNotIncluded.forEach(user => {
             let userId = user.id
-            document.getElementById(userId + 'Amount').innerHTML = '$0.00';
+            document.getElementById(userId + 'AmountEqual').innerHTML = '$0.00';
         })
     }
 }
@@ -169,7 +179,6 @@ function calculateExpensePercentage() {
 function calculateExpenseManual() {
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let userTotal = 0;
-
     let manualInputs = document.querySelectorAll('.manual');
     manualInputs.forEach(input => {
         if (!input.value) {
@@ -178,13 +187,52 @@ function calculateExpenseManual() {
             userTotal += parseFloat(input.value);
         }
     })
-
     if (userTotal != expenseTotal) {
-        
+        errorMessage = "The total amount split does not equal the expense total. Please ensure the split amounts are correct.";
+        displayErrorModal(errorMessage);
     }
 }
 
+/**
+ * This function is used to handle the modal display when there is an error in the expense split
+ * @claaudiaale
+ */
 
+function displayErrorModal(errorMessage) {
+    let errorModal = document.getElementById('errorModal');
+    document.getElementById('errorMessage').innerHTML = errorMessage;
+    errorModal.showModal();
+}
+
+/**
+ * This function is used to handle the modal display when there is an error in empty fields when adding an expense
+ * @claaudiaale
+ */
+
+function displayEmptyFieldModal(event) {
+    if (!selectedGroup.value) {
+        console.log("dskjfhsdkfjs")
+        event.preventDefault();
+        let errorMessage = 'Please select a group to add an expense to.';
+        displayErrorModal(errorMessage);
+    } else if (!selectedDate.value) {
+        event.preventDefault();
+        let errorMessage = 'Please select a date for the expense.';
+        displayErrorModal(errorMessage);
+    } else if (!selectedExpenseName.value) {
+        event.preventDefault();
+        let errorMessage = 'Please enter a name for the expense.';
+        displayErrorModal(errorMessage);
+    } else if (!selectedExpenseAmount.value) {
+        event.preventDefault();
+        let errorMessage = 'Please enter an amount for the expense.';
+        displayErrorModal(errorMessage);
+    } else if (!selectedPaidBy.value) {
+        event.preventDefault();
+        let errorMessage = 'Please select a user who paid for the expense.';
+        displayErrorModal(errorMessage);
+    }
+}
 
 
 showEqualExpense.addEventListener('click', function (event) {equalExpenseTabHandler(event)});
@@ -196,10 +244,14 @@ document.querySelectorAll('.userEqualSplit').forEach(user => {
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
 selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("")});
 selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Percentage")});
+selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Manual")});
 
 let percentageInputs = document.querySelectorAll('.percentage');
 percentageInputs.forEach(input => {
     input.addEventListener('input', calculateExpensePercentage);
 });
+
+confirmAddExpense.addEventListener('click', function(event) {displayEmptyFieldModal(event)});
+closeExpenseError.addEventListener('click', function() {errorModal.close()})
 
 

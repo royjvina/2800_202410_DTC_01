@@ -23,27 +23,28 @@
 <body class="bg-gradient-to-b from-white to-primary">
     <header class="sticky top-0">
         <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
-            <div><a id="cancelAddGroup" href="/home">
+            <div><a id="cancelAddExpense" href="/home">
                     Cancel
                 </a></div>
 
             <div class="">
-                <button type="submit" form="addGroupForm" id="confirmAddGroup">Done</button>
+                <button type="submit" form="addExpenseForm" id="confirmAddExpense">Done</button>
             </div>
         </div>
     </header>
 
     <div>
-        <form action="" method="post">
+        <form action="/addExpensePage" id="addExpenseForm" method="post">
             <div class="fixed top-14 w-full bg-white z-10">
                 <div class="m-2 p-3 outline outline-1 rounded-xl">
                     <label class="font-semibold" for="selectedGroup">For:</label>
                     <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
-                        <option value="group1">Group 1</option>
-                        <option value="group2">Group 2</option>
-                        <option value="group3">Group 3</option>
-                        <option value="group4">Group 4</option>
-                        <option value="group5">Group 5</option>
+                        <option value="" selected disabled class="hidden">Select A Group</option>
+                        <option class="text-center" value="group1">Group 1</option>
+                        <option class="text-center" value="group2">Group 2</option>
+                        <option class="text-center" value="group3">Group 3</option>
+                        <option class="text-center" value="group4">Group 4</option>
+                        <option class="text-center" value="group5">Group 5</option>
                     </select>
                 </div>
                 <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
@@ -54,7 +55,7 @@
                             placeholder="Expense Name" class="focus:outline-none focus:border-b-2 px-2 m-1">
                         <div class="flex flex-row px-2">
                             <span class="text-gray-400 text-xl">$</span>
-                            <input type="number" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0.01"
+                            <input type="number" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0"
                                 placeholder="Expense Total" class="focus:outline-none focus:border-b-2 px-2 m-1">
                         </div>
                     </div>
@@ -100,7 +101,7 @@
                             <p class="font-semibold px-2">User 1</p>
                         </div>
                         <p class="w-full font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user1Amount" name="user1Amount" min="0" placeholder="$0.00">$0.00</p>
+                            type="number" id="user1AmountEqual" name="user1AmountEqual" min="0" placeholder="$0.00">$0.00</p>
                     </div>
                 </div>
                 <div class="flex flex-row">
@@ -112,7 +113,7 @@
                             <p class="font-semibold px-2">User 2</p>
                         </div>
                         <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user2Amount" name="user2Amount" min="0" placeholder="$0.00">$0.00</p>
+                            type="number" id="user2AmountEqual" name="user2AmountEqual" min="0" placeholder="$0.00">$0.00</p>
                     </div>
                 </div>
                 <div class="flex flex-row">
@@ -124,7 +125,7 @@
                             <p class="font-semibold px-2">User 3</p>
                         </div>
                         <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user3Amount" name="user3Amount" min="0" placeholder="$0.00">$0.00</p>
+                            type="number" id="user3AmountEqual" name="user3AmountEqual" min="0" placeholder="$0.00">$0.00</p>
                     </div>
                 </div>
                 <div class="flex flex-row">
@@ -136,7 +137,7 @@
                             <p class="font-semibold px-2">User 4</p>
                         </div>
                         <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user4Amount" name="user4Amount" min="0" placeholder="$0.00">$0.00</p>
+                            type="number" id="user4AmountEqual" name="user4AmountEqual" min="0" placeholder="$0.00">$0.00</p>
                     </div>
                 </div>
                 <div class="flex flex-row">
@@ -148,7 +149,7 @@
                             <p class="font-semibold px-2">User 5</p>
                         </div>
                         <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user5Amount" name="user5Amount" min="0" placeholder="$0.00">$0.00</p>
+                            type="number" id="user5AmountEqual" name="user5AmountEqual" min="0" placeholder="$0.00">$0.00</p>
                     </div>
                 </div>
                 <div class="flex flex-row">
@@ -160,7 +161,7 @@
                             <p class="font-semibold px-2">User 6</p>
                         </div>
                         <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user6Amount" name="user6Amount" min="0" placeholder="$0.00">$0.00</p>
+                            type="number" id="user6AmountEqual" name="user6AmountEqual" min="0" placeholder="$0.00">$0.00</p>
                     </div>
                 </div>
                 <div class="flex flex-row">
@@ -172,7 +173,7 @@
                             <p class="font-semibold px-2">User 7</p>
                         </div>
                         <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user7Amount" name="user7Amount" min="0" placeholder="$0.00">$0.00</p>
+                            type="number" id="user7AmountEqual" name="user7AmountEqual" min="0" placeholder="$0.00">$0.00</p>
                     </div>
                 </div>
             </div>
@@ -180,7 +181,7 @@
             <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[300px] mb-[70px] hidden">
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user1" name="userPercentageSplit" value="user1">
+                        <input type="checkbox" id="user1" name="userPercentageSplit" value="user1" class="userPercentageSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -199,7 +200,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user2" name="userPercentageSplit" value="user2">
+                        <input type="checkbox" id="user2" name="userPercentageSplit" value="user2" class="userPercentageSplit">
                         <div class="w-3/4 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -218,7 +219,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user3" name="userPercentageSplit" value="user3">
+                        <input type="checkbox" id="user3" name="userPercentageSplit" value="user3" class="userPercentageSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -237,7 +238,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user4" name="userPercentageSplit" value="user4">
+                        <input type="checkbox" id="user4" name="userPercentageSplit" value="user4" class="userPercentageSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -256,7 +257,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user5" name="userPercentageSplit" value="user5">
+                        <input type="checkbox" id="user5" name="userPercentageSplit" value="user5" class="userPercentageSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -275,7 +276,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user6" name="userPercentageSplit" value="user6">
+                        <input type="checkbox" id="user6" name="userPercentageSplit" value="user6" class="userPercentageSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -294,7 +295,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user7" name="userPercentageSplit" value="user7">
+                        <input type="checkbox" id="user7" name="userPercentageSplit" value="user7" class="userPercentageSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -316,7 +317,7 @@
             <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[300px] mb-[70px] hidden">
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user1" name="user1" value="user1">
+                        <input type="checkbox" id="user1" name="user1" value="user1" class="userManualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -324,7 +325,7 @@
                         </div>
                         <div class="relative w-1/2">
                             <input type="number" id="user1AmountManual" name="user1AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 z-0 w-full ml-auto manual"
+                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 z-0 w-full ml-auto manual userAmountManual"
                                 placeholder="0.00">
                             <div class="absolute inset-y-0 start-0 flex items-center">
                                 <span class="text-gray-400 text-xl font-semibold">$</span>
@@ -334,7 +335,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user2" name="user2" value="user2">
+                        <input type="checkbox" id="user2" name="user2" value="user2" class="userManualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -342,7 +343,7 @@
                         </div>
                         <div class="relative w-1/2">
                             <input type="number" id="user2AmountManual" name="user2AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual"
+                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
                                 placeholder="0.00">
                             <div class="absolute inset-y-0 start-0 flex items-center">
                                 <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
@@ -352,7 +353,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user3" name="user3" value="user3">
+                        <input type="checkbox" id="user3" name="user3" value="user3" class="userManualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -360,7 +361,7 @@
                         </div>
                         <div class="relative w-1/2">
                             <input type="number" id="user3AmountManual" name="user3AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual"
+                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
                                 placeholder="0.00">
                             <div class="absolute inset-y-0 start-0 flex items-center">
                                 <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
@@ -370,7 +371,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user4" name="user4" value="user4">
+                        <input type="checkbox" id="user4" name="user4" value="user4" class="userManualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -378,7 +379,7 @@
                         </div>
                         <div class="relative w-1/2">
                             <input type="number" id="user4AmountManual" name="user4AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual"
+                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
                                 placeholder="0.00">
                             <div class="absolute inset-y-0 start-0 flex items-center">
                                 <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
@@ -388,7 +389,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user5" name="user5" value="user5">
+                        <input type="checkbox" id="user5" name="user5" value="user5" class="userManualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -396,7 +397,7 @@
                         </div>
                         <div class="relative w-1/2">
                             <input type="number" id="user5AmountManual" name="user5AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual"
+                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
                                 placeholder="0.00">
                             <div class="absolute inset-y-0 start-0 flex items-center">
                                 <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
@@ -406,7 +407,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user6" name="user6" value="user6">
+                        <input type="checkbox" id="user6" name="user6" value="user6" class="userManualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -414,7 +415,7 @@
                         </div>
                         <div class="relative w-1/2">
                             <input type="number" id="user6AmountManual" name="user6AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual"
+                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
                                 placeholder="0.00">
                             <div class="absolute inset-y-0 start-0 flex items-center">
                                 <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
@@ -424,7 +425,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user7" name="user7" value="user7">
+                        <input type="checkbox" id="user7" name="user7" value="user7" class="userManualSplit">
                         <div class="w-1/2 flex flex-row items-center">
                             <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
                                 height="50" width="50">
@@ -432,7 +433,7 @@
                         </div>
                         <div class="relative w-1/2">
                             <input type="number" id="user7AmountManual" name="user7AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual"
+                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
                                 placeholder="0.00">
                             <div class="absolute inset-y-0 start-0 flex items-center">
                                 <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
@@ -442,6 +443,15 @@
                 </div>
             </div>
         </form>
+
+        <dialog id="errorModal" class="rounded-lg">
+            <div class="p-4 rounded-lg">
+                <p id="errorMessage"></p>
+                <div class="flex justify-center">
+                    <button id="closeExpenseError" class="p-3 py-1 bg-primary text-white rounded-lg m-2">Close</button>
+                </div>
+            </div>
+        </dialog>
 
     </div>
     <script src="/scripts/addExpenses.js"></script>
