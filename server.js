@@ -27,14 +27,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
 
-mongoose.connect(mongodb_uri)
+mongoose.connect(mongodb_uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
     .then(() => {
         console.log('Connected to MongoDB')
     })
     .catch((error) => {
         console.error('Error connecting to MongoDB:', error)
     }
-    )
+    );
 
 var mongoStore = Mongostore.create({
     mongoUrl: mongodb_uri,
@@ -67,6 +70,14 @@ isValidSession = (req) => {
     }
     return false;
 };
+sessionValidation = (req, res, next) => {
+    if (isValidSession(req)) {
+        next();
+    }
+    else {
+        res.redirect('/')
+    }
+}
 
 
 /* ------- all routes ------- */
@@ -74,10 +85,13 @@ isValidSession = (req) => {
 const authRouter = require("./routes/authentication");
 const aiAdvisorRouter = require("./routes/aiAdvisor");
 const homeRouter = require("./routes/home");
+const getImagesFromDB = require("./routes/getImagesFromDB");
 
 app.use("/", authRouter);
-app.use("/", aiAdvisorRouter);
-app.use("/", homeRouter);
+app.use("/", sessionValidation, aiAdvisorRouter);
+app.use("/", sessionValidation, homeRouter);
+app.use("/", sessionValidation, getImagesFromDB);
+
 
 
 
