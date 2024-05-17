@@ -6,7 +6,8 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const Mongostore = require('connect-mongo');
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const cors = require('cors')
 
 /* const saltRounds = */
 const port = process.env.PORT || 3000;
@@ -25,9 +26,15 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
-var { database } = include('databaseConnection');
 
-const userCollection = database.db(mongodb_database).collection('users');
+mongoose.connect(mongodb_uri)
+    .then(() => {
+        console.log('Connected to MongoDB')
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error)
+    }
+    );
 
 var mongoStore = Mongostore.create({
     mongoUrl: mongodb_uri,
@@ -49,6 +56,7 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -59,30 +67,69 @@ isValidSession = (req) => {
     }
     return false;
 };
+sessionValidation = (req, res, next) => {
+    if (isValidSession(req)) {
+        next();
+    }
+    else {
+        res.redirect('/')
+    }
+}
+
 
 /* ------- all routes ------- */
 
-app.get('/', (req, res) => {
-    res.render('main');
+const authRouter = require("./routes/authentication");
+const aiAdvisorRouter = require("./routes/aiAdvisor");
+const homeRouter = require("./routes/home");
+const getImagesFromDB = require("./routes/getImagesFromDB");
+
+app.use("/", authRouter);
+app.use("/", sessionValidation, aiAdvisorRouter);
+app.use("/", sessionValidation, homeRouter);
+app.use("/", sessionValidation, getImagesFromDB);
+
+
+
+
+
+app.get('/addExpenses', (req, res) => {
+    res.render('addExpenses')
+})
+
+app.get('/setBudget', (req, res) => {
+    res.render('set_budget');
 });
 
-app.get('/advisor', (req, res) => {
-    res.render('ai_advisor');
+app.get('/individualExpense', (req, res) => {
+    res.render('individualExpense');
 });
 
+app.get('/settings', (req, res) => {
+    res.render('settings');
+});
+app.get('/recentActivity', (req, res) => {
+    res.render('recentActivity');
+})
 
+app.get('/groups', (req, res) => {
+    res.render('groups');
+})
 
 // all unrealated routes
 app.get('*', (req, res) => {
-    res.status(404);
     res.render('404');
 })
 
-// error handling middleware
+// Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err);
-    res.status(500);
-    res.render('error_page');
+
+    if (err.status === 400) {
+        res.status(400).render('error400');
+    } else {
+        res.status(500).render('error500');
+    }
 });
 
 app.listen(port, () => {
