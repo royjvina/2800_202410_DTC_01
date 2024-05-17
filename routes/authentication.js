@@ -50,7 +50,13 @@ router.post('/logout', (req, res) => {
 
 router.get("/register", (req, res) => {
     const incorrectFields = req.query.error ? req.query.error.split(',') : [];
-    res.render('register.ejs', { error: incorrectFields });
+    const signUpFields = req.session.signUpFields || {};
+    console.log(signUpFields);
+    incorrectFields.forEach(field => {
+        signUpFields[field] = '';
+    });
+
+    res.render('register.ejs', { error: incorrectFields, signUpFields });
 });
 
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
@@ -68,6 +74,7 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
         if (error) {
             const validationErrors = error.details.map(detail => detail.context.key);
             incorrectFields.push(...validationErrors);
+            req.session.signUpFields = { email, phone, username, password };
         }
 
         if (incorrectFields.length > 0) {
