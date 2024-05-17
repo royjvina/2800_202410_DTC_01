@@ -43,7 +43,7 @@ async function createTransporter() {
 
 router.get("/", (req, res) => {
     const errorMessage = req.query.error;
-    
+
     res.render('index.ejs', { error: errorMessage });
 })
 
@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
         var passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
-            return res.redirect('/?error=invalidLogin' );
+            return res.redirect('/?error=invalidLogin');
         }
 
         req.session.userId = user._id;
@@ -130,7 +130,7 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
         req.session.profilePic = `/profileImage/${newUser._id}`;
         req.session.username = newUser.username;
         req.session.authorisation = newUser.authorisation;
-
+        delete req.session.signUpFields;
         res.redirect('/home');
     } catch (error) {
         console.error('Error registering user:', error);
