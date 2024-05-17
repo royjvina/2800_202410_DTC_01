@@ -17,6 +17,7 @@ function groupsTabHandler() {
     friends.classList.add('hidden');
     groups.classList.remove('hidden');
     groups.classList.add('flex');
+    createGroup.classList.add('hidden');
     addFriendSecondaryDiv.classList.add('hidden');
     addGroupSecondaryDiv.classList.remove('hidden');
     addGroupSecondaryDiv.classList.add('flex');
@@ -36,6 +37,7 @@ function friendsTabHandler() {
     groups.classList.add('hidden');
     friends.classList.remove('hidden');
     friends.classList.add('flex');
+    addFriend.classList.add('flex');
     addGroupSecondaryDiv.classList.add('hidden');
     addFriendSecondaryDiv.classList.remove('hidden');
     addFriendSecondaryDiv.classList.add('flex');
@@ -52,7 +54,7 @@ function removeSecondaryButtons() {
     const addFriend = document.getElementById('addFriend');
     const addGroup = document.getElementById('createGroup');
 
-    if (document.querySelectorAll('.friend').length >= 5 && !addFriendSecondaryDiv.classList.contains('hidden')) {
+    if (document.querySelectorAll('.friend').length >= 5 && !friends.classList.contains('hidden')) {
         addFriendSecondary.classList.add('hidden');
         addFriend.classList.remove('hidden');
     }
@@ -60,13 +62,16 @@ function removeSecondaryButtons() {
         addFriend.classList.add('hidden');
         addFriendSecondary.classList.remove('hidden');
     }
-    if (document.querySelectorAll('.group').length >= 5 && !addGroupSecondaryDiv.classList.contains('hidden')) {
+    if (document.querySelectorAll('.group-container').length >= 5 && !groups.classList.contains('hidden')) {
+        console.log(document.querySelectorAll('.group').length);
         addGroupSecondary.classList.add('hidden');
+        console.log('heree');
         addGroup.classList.remove('hidden');
     }
     else {
         addGroup.classList.add('hidden');
         addGroupSecondary.classList.remove('hidden');
+        console.log('here');
     }
 }
 
@@ -80,6 +85,7 @@ function groupSelectorHandler(friendPhone) {
     const submitSettle = document.getElementById('submitSettle' + friendPhone);
     const groups = document.querySelectorAll('.group');
     groups.forEach(group => {
+
         group.addEventListener('click', function () {
             const selectedGroup = this.textContent;
             groupToSettle.value = selectedGroup;
@@ -104,14 +110,16 @@ function deleteGroupHandler() {
             }, 10);
             confirmDeleteOptions.classList.toggle('flex');
             cancelDelete.addEventListener('click', function () {
-                confirmDeleteOptions.classList.toggle('hidden');
+                confirmDeleteOptions.classList.add('hidden');
                 confirmDeleteOptions.classList.remove('hideManually');
-                confirmDeleteOptions.classList.toggle('flex');
+                confirmDeleteOptions.classList.remove('flex');
 
             });
         });
     });
 }
+
+
 
 /**
  * This function is used to handle the form fields for settling a debt with a friend
@@ -235,6 +243,8 @@ document.querySelectorAll('.friend').forEach(friend => {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+    removeSecondaryButtons();
+    deleteGroupHandler();
     const profileImage = document.getElementById('homepagePic');
     const profileImageSrc = profileImage.getAttribute('data-src');
 
@@ -245,7 +255,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 
-removeSecondaryButtons();
-deleteGroupHandler();
+
+
+
 showGroups.addEventListener('click', groupsTabHandler);
 showFriends.addEventListener('click', friendsTabHandler);

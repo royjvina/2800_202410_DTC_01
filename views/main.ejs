@@ -94,113 +94,168 @@ id="usernameAndPic">
             </div>
             <div id="groups" class="flex-col m-3 gap-3 hidden">
                 <div class="flex flex-col">
-                    <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
-                            <div class="flex flex-row items-center gap-4">
-                                <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer"
-                                src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                                <div class="flex flex-col gap-3 p-2 pb-4">
-                                    <span>Group</span>
-                                    <div class="relative flex items-center">
-                                        <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
-                                        <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
-                                        <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
+                    <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group-container" id="group1">
+                        <!-- Group clickable area -->
+                        <a href="/groups" class="flex flex-row items-center gap-4 w-full">
+                            <div class="flex flex-row items-center gap-4 w-full justify-between">
+                                <div class="flex flex-row items-center gap-4">
+                                    <img class="w-10 h-10 rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="Group Image">
+                                    <div class="flex flex-col gap-3 p-2 pb-4">
+                                        <span>Group</span>
+                                        <div class="relative flex items-center">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
+                                        </div>
                                     </div>
                                 </div>
+                                <div class=" mr-10">-$50</div>
                             </div>
-                            <div class="flex flex-row gap-10 items-center">
-                            <div>-$50</div>
-                            <button id="group1Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
-                        </div>
+                        </a>
+                        <!-- Delete button -->
+                        <button id="group1Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+                <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="group1ConfirmDeleteOptions">
+                    <form action="/deleteGroup" method="post">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="group1ConfirmDelete" value="Confirm">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="group1CancelDelete" value="Cancel">
                         
-                    </div>
-                    <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="group1ConfirmDeleteOptions">
-                        <form action="/deleteGroup" method="post">
-                            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="group1ConfirmDelete" value="Confirm">
-                            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="group1CancelDelete" value="Cancel">
-                            
-                        </form>
-                    </div>
+                    </form>
                 </div>
-                <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
-                    <div class="flex flex-row items-center gap-4">
-                        <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer" 
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                        <div class="flex flex-col gap-3 p-2 pb-4">
-                            <span>Group</span>
-                            <div class="relative flex items-center">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
-        
+                
+                <div class="flex flex-col">
+                    <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group-container" id="group2">
+                        <!-- Group clickable area -->
+                        <a href="/groups" class="flex flex-row items-center gap-4 w-full">
+                            <div class="flex flex-row items-center gap-4 w-full justify-between">
+                                <div class="flex flex-row items-center gap-4">
+                                    <img class="w-10 h-10 rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="Group Image">
+                                    <div class="flex flex-col gap-3 p-2 pb-4">
+                                        <span>Group 2</span>
+                                        <div class="relative flex items-center">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mr-10">-$30</div>
                             </div>
-                        </div>
+                        </a>
+                        <!-- Delete button -->
+                        <button id="group2Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">
+                            Delete
+                        </button>
                     </div>
-        
-                    <div class="flex flex-row gap-10">
-                    <div>+$500</div>
-                    <button id="group2Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
                 </div>
-            </div>
-                <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
-                    <div class="flex flex-row items-center gap-4">
-                        <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer" 
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                        <div class="flex flex-col gap-3 p-2 pb-4">
-                            <span>Group</span>
-                            <div class="relative flex items-center">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
-        
+                <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="group2ConfirmDeleteOptions">
+                    <form action="/deleteGroup" method="post">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="group2ConfirmDelete" value="Confirm">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="group2CancelDelete" value="Cancel">
+                    </form>
+                </div>
+                
+                <div class="flex flex-col">
+                    <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group-container" id="group3">
+                        <!-- Group clickable area -->
+                        <a href="/groups" class="flex flex-row items-center gap-4 w-full">
+                            <div class="flex flex-row items-center gap-4 w-full justify-between">
+                                <div class="flex flex-row items-center gap-4">
+                                    <img class="w-10 h-10 rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="Group Image">
+                                    <div class="flex flex-col gap-3 p-2 pb-4">
+                                        <span>Group 3</span>
+                                        <div class="relative flex items-center">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mr-10">-$323</div>
                             </div>
-                        </div>
+                        </a>
+                        <!-- Delete button -->
+                        <button id="group3Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">
+                            Delete
+                        </button>
                     </div>
-        
-                    <div class="flex flex-row gap-10">
-                    <div>-$512</div>
-                    <button id="group3Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
                 </div>
-            </div>
-                <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
-                    <div class="flex flex-row items-center gap-4">
-                        <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer" 
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                        <div class="flex flex-col gap-3 p-2 pb-4">
-                            <span>Group</span>
-                            <div class="relative flex items-center">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
-        
+                <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="group3ConfirmDeleteOptions">
+                    <form action="/deleteGroup" method="post">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="group3ConfirmDelete" value="Confirm">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="group3CancelDelete" value="Cancel">
+                    </form>
+                </div>
+                
+                <div class="flex flex-col">
+                    <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group-container" id="group4">
+                        <!-- Group clickable area -->
+                        <a href="/groups" class="flex flex-row items-center gap-4 w-full">
+                            <div class="flex flex-row items-center gap-4 w-full justify-between">
+                                <div class="flex flex-row items-center gap-4">
+                                    <img class="w-10 h-10 rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="Group Image">
+                                    <div class="flex flex-col gap-3 p-2 pb-4">
+                                        <span>Group 4</span>
+                                        <div class="relative flex items-center">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mr-10">$321</div>
                             </div>
-                        </div>
+                        </a>
+                        <!-- Delete button -->
+                        <button id="group4Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">
+                            Delete
+                        </button>
                     </div>
-        
-                    <div class="flex flex-row gap-10">
-                    <div>-$5</div>
-                    <button id="group4Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
                 </div>
-            </div>
-                <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group">
-                    <div class="flex flex-row items-center gap-4">
-                        <img class="w-10 h-10 ml-auto rounded-full hover:cursor-pointer" 
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                        <div class="flex flex-col gap-3 p-2 pb-4">
-                            <span>Group</span>
-                            <div class="relative flex items-center">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
-                                <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
-        
+                <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="group4ConfirmDeleteOptions">
+                    <form action="/deleteGroup" method="post">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="group4ConfirmDelete" value="Confirm">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="group4CancelDelete" value="Cancel">
+                    </form>
+                </div>
+                
+                <div class="flex flex-col">
+                    <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group-container" id="group5">
+                        <!-- Group clickable area -->
+                        <a href="/groups" class="flex flex-row items-center gap-4 w-full">
+                            <div class="flex flex-row items-center gap-4 w-full justify-between">
+                                <div class="flex flex-row items-center gap-4">
+                                    <img class="w-10 h-10 rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="Group Image">
+                                    <div class="flex flex-col gap-3 p-2 pb-4">
+                                        <span>Group 5</span>
+                                        <div class="relative flex items-center">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-0">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-3">
+                                            <img src="/images/homepageIconsAndPlaceholders/profilepic.svg" class="w-4 h-4 rounded-full border-2 border-white absolute left-6">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mr-10">-$50</div>
                             </div>
-                        </div>
+                        </a>
+                        <!-- Delete button -->
+                        <button id="group5Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">
+                            Delete
+                        </button>
                     </div>
-        
-                    <div class="flex flex-row gap-10">
-                    <div>+$200</div>
-                    <button id="group5Delete" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">Delete</button>
                 </div>
+                <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="group5ConfirmDeleteOptions">
+                    <form action="/deleteGroup" method="post">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="group5ConfirmDelete" value="Confirm">
+                        <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="group5CancelDelete" value="Cancel">
+                    </form>
+                </div>
+                
             </div>
+            
             </div>
             <div class="flex flex-row justify-center mt-10" id="addFriendSecondaryDiv">
                 <a id="addFriendSecondary" href="/addFriend" class="flex flex-row items-center border py-3 px-9 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
