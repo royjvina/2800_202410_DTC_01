@@ -17,7 +17,7 @@ router.get('/history', async (req, res) => {
 });
 
 router.get('/AI', (req, res) => {
-    res.render('aiAdvisor');
+    res.render('aiAdvisor', {username : req.session.username});
 });
 
 router.post('/advisor', async function (req, res) {

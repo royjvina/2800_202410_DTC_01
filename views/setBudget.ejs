@@ -108,5 +108,11 @@
   </main>
 
   <script src="/scripts/setBudget.js"></script>
+  <script>
+    document.getElementById('saveBudget').addEventListener('click', function (event) {
+      event.preventDefault();
+      window.location.href = '/personal';
+    });
+  </script>
 
   <%- include('templates/footer') %>

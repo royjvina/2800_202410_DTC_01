@@ -90,7 +90,7 @@ const groupsRouter = require("./routes/groups");
 const individualExpenseRouter = require("./routes/individualExpense");
 const recentActivityRouter = require("./routes/recentActivity");
 const settingsRouter = require("./routes/settings");
-const personalRouter = require("./routes/personal");
+
 
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
