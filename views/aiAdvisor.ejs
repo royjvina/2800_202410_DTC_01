@@ -30,18 +30,4 @@
     </div>
 </div>
 <script src="/scripts/ai.js"></script>
-<script>
-    function saveConversation() {
-        fetch('/ai/saveConversation', { method: 'POST' })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Conversation saved successfully.');
-                    alert('Conversation saved successfully.');
-                } else {
-                    console.error('Failed to save conversation.');
-                }
-            })
-            .catch(error => console.error('Error saving conversation:', error));
-    }
-</script>
 <%- include('templates/footer') %>
