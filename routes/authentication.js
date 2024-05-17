@@ -71,6 +71,7 @@ router.post('/', async (req, res) => {
         req.session.profilePic = `/profileImage/${user._id}`;
         req.session.username = user.username;
         req.session.phoneNumber = user.phone;
+        req.session.email = user.email;
         req.session.authenticated = true;
         req.session.authorisation = user.authorisation;
         res.redirect('/home')
@@ -147,6 +148,7 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
         req.session.profilePic = `/profileImage/${newUser._id}`;
         req.session.username = newUser.username;
         req.session.phoneNumber = newUser.phone;
+        req.session.email = newUser.email;
         req.session.authorisation = newUser.authorisation;
         delete req.session.signUpFields;
         res.redirect('/home');
