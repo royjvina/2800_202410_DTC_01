@@ -26,7 +26,22 @@
             <input type="text" id="userInput" placeholder="Type here">
             <button id="sendBtn" onclick="sendMessage()"><i class="fa-regular fa-message"></i></button>
         </div>
+        <button id="saveBtn" onclick="saveConversation()">Save</button>
     </div>
 </div>
 <script src="/scripts/ai.js"></script>
+<script>
+    function saveConversation() {
+        fetch('/ai/saveConversation', { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Conversation saved successfully.');
+                    alert('Conversation saved successfully.');
+                } else {
+                    console.error('Failed to save conversation.');
+                }
+            })
+            .catch(error => console.error('Error saving conversation:', error));
+    }
+</script>
 <%- include('templates/footer') %>
