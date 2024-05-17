@@ -91,6 +91,7 @@ const individualExpenseRouter = require("./routes/individualExpense");
 const recentActivityRouter = require("./routes/recentActivity");
 const settingsRouter = require("./routes/settings");
 
+
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
 app.use("/", sessionValidation, homeRouter);

@@ -16,44 +16,10 @@
         <% } else { %>
             <p class="text-gray-500">No conversation history found.</p>
         <% } %>
-        <a href="/home" class="mt-4 inline-block bg-red-400 text-white py-2 px-4 rounded hover:bg-red-600">Go Home</a>
+        <a href="/AI" class="mt-4 inline-block bg-red-400 text-white py-2 px-4 rounded hover:bg-red-600">Go Back</a>
     </div>
 </div>
 
-<script>
-    document.querySelectorAll('.save-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            const chatId = button.getAttribute('data-id');
-            fetch(`/ai/saveChat/${chatId}`, { method: 'POST' })
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = `chat_${chatId}.txt`;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                })
-                .catch(err => console.error('Error saving chat:', err));
-        });
-    });
-
-    document.querySelectorAll('.delete-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            const chatId = button.getAttribute('data-id');
-            fetch(`/ai/deleteChat/${chatId}`, { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        button.closest('li').remove();
-                    } else {
-                        console.error('Error deleting chat:', response);
-                    }
-                })
-                .catch(err => console.error('Error deleting chat:', err));
-        });
-    });
-</script>
+<script src="/scripts/ai.js"></script>
 
 <%- include('templates/footer') %>
