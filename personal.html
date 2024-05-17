@@ -27,12 +27,14 @@
     </div>
   </header>
 
-  <main class="flex flex-col">
-    <div class="flex-grow flex items-center justify-center bg-gray-100 p-4">
+  <main class="flex flex-col h-screen">
+    <div class="flex-grow flex flex-col items-center justify-center bg-gray-100 p-8">
 
-      <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4">
+      <!--Expense container -->
+
+      <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 mb-4">
         <div class="flex justify-between mb-3">
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center pt-5">
             <h5 class="text-xl font-bold leading-none text-gray-900 pe-1">Expense</h5>
             <svg data-popover-target="chart-info" data-popover-placement="bottom"
               class="w-3.5 h-3.5 text-gray-500  hover:text-gray-900 cursor-pointer ms-1" aria-hidden="true"
@@ -43,9 +45,9 @@
             <div data-popover id="chart-info" role="tooltip"
               class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 ">
               <div class="p-3 space-y-2">
-                <h3 class="font-semibold text-gray-900 ">Montly budget</h3>
+                <h3 class="font-semibold text-gray-900 ">Track your expense</h3>
                 <p>budget</p>
-                <h3 class="font-semibold text-gray-900 ">how to manage your money</h3>
+                <h3 class="font-semibold text-gray-900 ">How much have you spent</h3>
                 <p>managing money</p>
                 <a href="#"
                   class="flex items-center font-medium text-blue-600  hover:text-blue-700 hover:underline">Read
@@ -69,10 +71,11 @@
               <label for="month" class="ms-2 text-sm font-medium text-gray-900 ">month</label>
             </div>
             <div class="flex items-center me-4">
-              <input id="6months" type="checkbox" value="6months"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  focus:ring-2 ">
-              <label for="6months" class="ms-2 text-sm font-medium text-gray-900 ">6 months</label>
+              <input id="month" type="checkbox" value="month"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 ">
+              <label for="month" class="ms-2 text-sm font-medium text-gray-900 ">last month</label>
             </div>
+
             <div class="flex items-center me-4">
               <input id="year" type="checkbox" value="year"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  focus:ring-2 ">
@@ -89,83 +92,48 @@
 
           </div>
         </div>
-        <a href="#"
-          class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 px-3 py-2">
-          Set budget
-          <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 6 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="m1 9 4-4-4-4" />
-          </svg>
-        </a>
+
       </div>
 
-    </div>
+
+
+
+
+      <!-- Budget container -->
+
+
+      <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 mb-10">
+        <div class="flex flex-auto justify-between items-center">
+          <h5 class="text-xl font-bold text-gray-900 items-center mb-4">Budget</h5>
+          <a href="#"
+            class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 px-3 py-2 mb-4">
+            Set budget
+            <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+              fill="none" viewBox="0 0 6 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m1 9 4-4-4-4" />
+            </svg>
+          </a>
+
+        </div>
+
+        <!-- bar chart-->
+
+        <div class="bg-gray-100 p-5 rounded-md" style="max-height: 200px; overflow-y: auto;">
+          <div id="bar-chart" class="space-y-4">
+
+
+          </div>
+
+
+
+        </div>
+
+
+
+      </div>
 
   </main>
-
-  <!-- bar chart-->
-
-  <div class="flex-grow flex items-center justify-center bg-gray-100 p-4">
-
-
-    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 ">
-
-      <h5 class="text-xl font-bold leading-none text-gray-900 pb-7">Categories</h5>
-
-      <div class=" bg-gray-100 p-4 rounded-md">
-
-        <div class="px-3 pb-4">
-          <div class="flex mb-1 justify-between items-center">
-            <span class="font-medium text-blue-700 dark:text-white text-sm">grocery</span>
-            <span class="text-xs items-center font-medium text-blue-700 dark:text-white">45%</span>
-          </div>
-          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
-          </div>
-        </div>
-
-        <div class="px-3 pb-4">
-          <div class="flex mb-1 justify-between items-center">
-            <span class="font-medium text-blue-700 dark:text-white text-sm">travel</span>
-            <span class="text-xs items-center font-medium text-blue-700 dark:text-white">45%</span>
-          </div>
-          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
-          </div>
-        </div>
-
-        <div class="px-3 pb-4">
-          <div class="flex mb-1 justify-between items-center">
-            <span class="font-medium text-blue-700 dark:text-white text-sm">rent</span>
-            <span class="text-xs items-center font-medium text-blue-700 dark:text-white">45%</span>
-          </div>
-          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
-          </div>
-        </div>
-
-        <div class="px-3 pb-4">
-          <div class="flex mb-1 justify-between items-center">
-            <span class="font-medium text-blue-700 dark:text-white text-sm">tuition</span>
-            <span class="text-xs items-center font-medium text-blue-700 dark:text-white">45%</span>
-          </div>
-          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
-          </div>
-        </div>
-
-      </div>
-
-
-
-    </div>
-  </div>
-
-
-
-
-
 
   <footer class="fixed w-full bottom-0 rounded-3xl">
     <div class="grid grid-cols-5 bg-[#6E0924] rounded-t-3xl pt-2">
@@ -197,7 +165,7 @@
     </div>
   </footer>
 
-  <script src="/donut_chart.js"></script>
+  <script src="/personalChart.js"></script>
 </body>
 
 </html>
