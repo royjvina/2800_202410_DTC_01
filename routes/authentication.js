@@ -43,8 +43,8 @@ async function createTransporter() {
 
 router.get("/", (req, res) => {
     const errorMessage = req.query.error;
-
-    res.render('index.ejs', { error: errorMessage });
+    const loginEmail = req.session.loginEmail || '';
+    res.render('index.ejs', { error: errorMessage, loginEmail });
 })
 
 router.post('/', async (req, res) => {
@@ -54,15 +54,18 @@ router.post('/', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
+            req.session.loginEmail = email;
             return res.redirect('/?error=invalidLogin');
         }
 
         var passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
+            req.session.loginEmail = email;
             return res.redirect('/?error=invalidLogin');
         }
 
+        req.session.loginEmail = '';
         req.session.userId = user._id;
         req.session.username = user.username;
         req.session.profilePic = `/profileImage/${user._id}`;
