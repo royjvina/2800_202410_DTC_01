@@ -1,0 +1,25 @@
+<%- include('templates/header') %>
+
+<div class="min-h-screen flex flex-col items-center bg-gray-100 py-6">
+    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl">
+        <h1 class="text-3xl font-bold mb-4">Conversation History</h1>
+        <% if (chatHistories.length > 0) { %>
+            <ul>
+                <% chatHistories.forEach(chat => { %>
+                    <li class="mb-5">
+                        <p>Date: <%= new Date(chat.date).toLocaleString() %></p>
+                        <button class="save-btn text-xl" data-id="<%= chat._id %>"><strong>Download</strong></button>
+                        <button class="delete-btn text-xl" data-id="<%= chat._id %>"><strong>Delete</strong></button>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p class="text-gray-500">No conversation history found.</p>
+        <% } %>
+        <a href="/AI" class="mt-4 inline-block bg-red-400 text-white py-2 px-4 rounded hover:bg-red-600">Go Back</a>
+    </div>
+</div>
+
+<script src="/scripts/aiLog.js"></script>
+
+<%- include('templates/footer') %>
