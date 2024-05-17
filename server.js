@@ -98,7 +98,7 @@ app.get('/addExpenses', (req, res) => {
 })
 
 app.get('/setBudget', (req, res) => {
-    res.render('set_budget');
+    res.render('setBudget');
 });
 
 app.get('/individualExpense', (req, res) => {
@@ -108,6 +108,11 @@ app.get('/individualExpense', (req, res) => {
 app.get('/settings', (req, res) => {
     res.render('settings');
 });
+
+app.get('/personal', (req, res) => {
+    res.render('personal');
+});
+
 app.get('/recentActivity', (req, res) => {
     res.render('recentActivity');
 })
