@@ -4,11 +4,11 @@
   <main class="bg-gray-50">
     <div class="max-w-md mx-auto bg-white shadow-xl rounded-lg overflow-hidden h-dvh w-dvw">
       <div class="p-4 flex items-center justify-between shadow border-b">
-        <button class="text-gray-600 hover:text-gray-800">
+        <a href="/home" class="text-gray-600 hover:text-gray-800">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
-        </button>
+        </a>
         <h2 class="text-lg font-semibold text-center flex-1">Setting</h2>
       </div>
 
@@ -26,8 +26,8 @@
           </div>
           <div class="ml-4 flex items-center justify-between flex-auto p-4">
             <div>
-              <h3 class="text-lg font-semibold">user name</h3>
-              <p class="text-gray-600">user ID</p>
+              <h3 class="text-lg font-semibold"><%= username %></h3>
+              <p class="text-gray-600"><%= phoneNumber %></p>
             </div>
             <div>
               <form action="/logout" method="POST">
