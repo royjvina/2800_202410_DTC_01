@@ -3,6 +3,8 @@ const input = document.getElementById('userInput');
 const button = document.getElementById('sendBtn');
 const loading = document.getElementById('loading');
 const inputContainer = document.getElementById('inputContainer');
+const historyButton = document.querySelector('.history-icon');
+
 let chatCnt = 0;
 let userMessages = [];
 let assistantMessages = [];
@@ -11,7 +13,7 @@ function startChat() {
     document.getElementById("introContainer").style.display = "none";
     document.getElementById("introQuestion").style.display = "none";
     document.getElementById("chat").style.display = "block";
-    inputContainer.style.display = "flex"; // Show the input container
+    inputContainer.style.display = "flex";
     let welcomeMsg = "Hello!";
     appendMessage(welcomeMsg, 'bot');
 }
@@ -19,6 +21,10 @@ function startChat() {
 function noStartChat() {
     alert('Thank you! You can start the chat later.');
 }
+
+historyButton.addEventListener("click", () => {
+    window.location.href = '/history';
+});
 
 input.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
