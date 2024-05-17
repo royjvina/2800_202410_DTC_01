@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require('../models/User');
 const { registrationSchema } = require('../models/UserRegistration');
+const { passwordSchema } = require('../models/userPassword');
 const bcrypt = require('bcrypt');
 const { createTransport } = require('nodemailer');
 const { google } = require('googleapis');
@@ -265,6 +266,7 @@ router.post('/reset', async (req, res) => {
 router.get('/reset/:token', async (req, res) => {
     try {
         const token = req.params.token;
+        const errorMessage = req.query.error;
 
         const user = await User.findOne({
             resetPasswordToken: token,
@@ -275,16 +277,23 @@ router.get('/reset/:token', async (req, res) => {
             return res.redirect('/reset?error=tokenInvalid');
         }
 
-        res.render('resetForm.ejs', { token });
+        res.render('resetForm.ejs', { token, error: errorMessage });
     } catch (error) {
         console.error('Error finding user for password reset:', error);
         res.status(500).send('Error finding user for password reset.');
     }
 });
 
-
 router.post('/reset/:token', async (req, res) => {
     const { password, confirmPassword } = req.body;
+
+    // Validate password
+    const { error } = passwordSchema.validate({ password });
+
+    if (error) {
+        const errorMessage = error.details[0].message;
+        return res.redirect(`/reset/${req.params.token}?error=${encodeURIComponent(errorMessage)}`);
+    }
 
     if (password !== confirmPassword) {
         return res.redirect(`/reset/${req.params.token}?error=passwordMismatch`);
