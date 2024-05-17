@@ -85,6 +85,12 @@ const homeRouter = require("./routes/home");
 const personalRouter = require("./routes/personal");
 const recentRouter = require("./routes/recentActivity");
 const getImagesFromDB = require("./routes/getImagesFromDB");
+const addExpenseRouter = require("./routes/addExpenses");
+const groupsRouter = require("./routes/groups");
+const individualExpenseRouter = require("./routes/individualExpense");
+const recentActivityRouter = require("./routes/recentActivity");
+const settingsRouter = require("./routes/settings");
+const personalRouter = require("./routes/personal");
 
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
@@ -92,22 +98,19 @@ app.use("/", sessionValidation, homeRouter);
 app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, recentRouter);
 app.use("/", sessionValidation, getImagesFromDB);
+app.use("/", sessionValidation, addExpenseRouter);
+app.use("/", sessionValidation, groupsRouter);
+app.use("/", sessionValidation, individualExpenseRouter);
+app.use("/", sessionValidation, recentActivityRouter);
+app.use("/", sessionValidation, settingsRouter);
+app.use("/", sessionValidation, personalRouter);
 
-app.get('/addExpenses', (req, res) => {
-    res.render('addExpenses')
-})
 
-app.get('/setBudget', (req, res) => {
-    res.render('setBudget');
-});
 
-app.get('/individualExpense', (req, res) => {
-    res.render('individualExpense');
-});
 
-app.get('/settings', (req, res) => {
-    res.render('settings');
-});
+
+
+
 
 
 // all unrealated routes
