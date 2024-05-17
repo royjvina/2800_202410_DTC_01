@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
 
         req.session.userId = user._id;
         req.session.username = user.username;
-        req.session.profilePic = user.profileImage ? `/profileImage/${user._id}` : `/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg`;
+        req.session.profilePic = `/profileImage/${user._id}`;
         req.session.authenticated = true;
         req.session.authorisation = user.authorisation;
         res.redirect('/home')
@@ -87,7 +87,7 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
 
         req.session.userId = newUser._id;
         req.session.authenticated = true;
-        req.session.profilePic = newUser.profileImage ? `/profileImage/${newUser._id}` : `/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg`;
+        req.session.profilePic = `/profileImage/${newUser._id}`;
         req.session.username = newUser.username;
         req.session.authorisation = newUser.authorisation;
 
