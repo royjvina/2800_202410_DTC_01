@@ -27,10 +27,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
 
-mongoose.connect(mongodb_uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(mongodb_uri)
     .then(() => {
         console.log('Connected to MongoDB')
     })
