@@ -108,16 +108,16 @@ app.get('/individualExpense', (req, res) => {
     res.render('individualExpense');
 });
 
-app.get('/setting', (req, res) => {
-    res.render('setting_page');
+app.get('/settings', (req, res) => {
+    res.render('settings');
 });
- app.get('/recentActivity', (req, res) => {
+app.get('/recentActivity', (req, res) => {
     res.render('recentActivity');
- })
+})
 
- app.get('/groups', (req, res) => {
+app.get('/groups', (req, res) => {
     res.render('groups');
- })
+})
 
 // all unrealated routes
 app.get('*', (req, res) => {
