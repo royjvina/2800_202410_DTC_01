@@ -2,11 +2,10 @@ const express = require("express");
 const router = express.Router();
 const User = require('../models/User');
 const { registrationSchema } = require('../models/UserRegistration');
-const { passwordSchema } = require('../models/userPassword');
+const { passwordSchema } = require('../models/UserPassword');
 const bcrypt = require('bcrypt');
 const { createTransport } = require('nodemailer');
 const { google } = require('googleapis');
-const OAuth2 = google.auth.OAuth2;
 const crypto = require('crypto');
 const saltRounds = 12;
 const multer = require('multer');
@@ -19,6 +18,7 @@ const OAuth2Client = new google.auth.OAuth2(
     process.env.CLIENTSECRET,
     process.env.REDIRECTURL
 );
+
 OAuth2Client.setCredentials({ refreshToken: process.env.REFRESHTOKEN });
 
 async function createTransporter() {

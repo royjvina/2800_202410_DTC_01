@@ -82,16 +82,16 @@ sessionValidation = (req, res, next) => {
 const authRouter = require("./routes/authentication");
 const aiAdvisorRouter = require("./routes/aiAdvisor");
 const homeRouter = require("./routes/home");
+const personalRouter = require("./routes/personal");
+const recentRouter = require("./routes/recentActivity");
 const getImagesFromDB = require("./routes/getImagesFromDB");
 
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
 app.use("/", sessionValidation, homeRouter);
+app.use("/", sessionValidation, personalRouter);
+app.use("/", sessionValidation, recentRouter);
 app.use("/", sessionValidation, getImagesFromDB);
-
-
-
-
 
 app.get('/addExpenses', (req, res) => {
     res.render('addExpenses')
@@ -109,17 +109,6 @@ app.get('/settings', (req, res) => {
     res.render('settings');
 });
 
-app.get('/personal', (req, res) => {
-    res.render('personal');
-});
-
-app.get('/recentActivity', (req, res) => {
-    res.render('recentActivity');
-})
-
-app.get('/groups', (req, res) => {
-    res.render('groups');
-})
 
 // all unrealated routes
 app.get('*', (req, res) => {
