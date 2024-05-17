@@ -1,0 +1,38 @@
+<%- include('templates/headTags') %>
+<body class = "">
+    <div class = 'flex flex-col items-center h-dvh w-dvw'>
+        <div id = 'spacer' class = "bg-inherit h-[10%]"></div>
+        <div class = "bg-primary  max-w-[50%] w-fit h-fit rounded-full my-4">
+            <img src="/images/navbarIcons/logo.png" class="mx-auto blur-[0.5px] p-8" id="logo" alt="logo">
+        </div>
+        <%  if (message === 'checkEmail') { %>
+            <div class = "text-center">
+                <h1 class = "text-2xl font-semibold pb-2">PennyWise</h1>
+                <p class = 'font-bold mx-8 pb-4'>We have sent you an email!</p>
+            </div>
+            <p class = "text-center font-bold mx-8">Please check your inbox for a reset link.</p>
+        <% } else if (message === 'passwordResetSuccess') { %>
+            <div class = "text-center">
+                <h1 class = "text-2xl font-semibold pb-2">PennyWise</h1>
+                <p class = 'font-bold mx-8 pb-4'>Your password has been reset!</p>
+            </div>
+            <p class = "text-center font-bold mx-8">You can now login with your new password.</p>
+        <% } else { %>
+        <div class = "text-center">
+            <h1 class = "text-2xl font-semibold pb-2">PennyWise</h1>
+            <h2 class = "text-lg">Forgot your password?</h2>
+            <p class = 'mx-8 pb-4'>If there is an account associated with your email, we can send a password reset link!</p>
+        </div>
+        <form method="POST" class="flex flex-col items-center w-full justify-center gap-y-4 text-center">
+            <input type="text" name="email" class="focus:outline-none mx-auto bg-slate-50 w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4" placeholder = "Enter your email">
+            <button type = "submit" id = "reset" class="bg-primary mx-auto text-white font-medium w-1/2 text-lg p-2 border-primary border-2 rounded-full shadow-md">Send Email</button>
+        </form>
+        <% } %>
+        <div class = "pt-4 text-center">
+            <p class = "">Want to try again? <span onclick = "window.location = '/'" class = 'font-bold cursor-pointer'>Login</span></p>
+        </div>
+        <div class = "pt-2 text-center">
+            <p class = "">Don't have an account? <span onclick = "window.location = '/register'" class = 'font-bold cursor-pointer'>Sign Up</span></p>
+        </div>
+    </div>
+<% include('templates/footer') %>

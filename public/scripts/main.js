@@ -107,7 +107,7 @@ function deleteGroupHandler() {
                 confirmDeleteOptions.classList.toggle('hidden');
                 confirmDeleteOptions.classList.remove('hideManually');
                 confirmDeleteOptions.classList.toggle('flex');
-                
+
             });
         });
     });
@@ -232,6 +232,17 @@ document.querySelectorAll('.friend').forEach(friend => {
         groupSelectorHandler(friendPhone);
     });
 
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const profileImage = document.getElementById('homepagePic');
+    const profileImageSrc = profileImage.getAttribute('data-src');
+
+    profileImage.src = profileImageSrc;
+
+    profileImage.onerror = function () {
+        profileImage.src = '/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg';
+    };
 });
 
 removeSecondaryButtons();

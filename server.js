@@ -34,7 +34,7 @@ mongoose.connect(mongodb_uri)
     .catch((error) => {
         console.error('Error connecting to MongoDB:', error)
     }
-    )
+    );
 
 var mongoStore = Mongostore.create({
     mongoUrl: mongodb_uri,
@@ -67,42 +67,54 @@ isValidSession = (req) => {
     }
     return false;
 };
+sessionValidation = (req, res, next) => {
+    if (isValidSession(req)) {
+        next();
+    }
+    else {
+        res.redirect('/')
+    }
+}
+
 
 /* ------- all routes ------- */
 
-const authRouter = require("./routes/authentication")
-const aiAdvisorRouter = require("./routes/aiAdvisor")
+const authRouter = require("./routes/authentication");
+const aiAdvisorRouter = require("./routes/aiAdvisor");
+const homeRouter = require("./routes/home");
+const getImagesFromDB = require("./routes/getImagesFromDB");
 
 app.use("/", authRouter);
-app.use("/", aiAdvisorRouter);
+app.use("/", sessionValidation, aiAdvisorRouter);
+app.use("/", sessionValidation, homeRouter);
+app.use("/", sessionValidation, getImagesFromDB);
 
 
-app.get('/home', (req, res) => {
-    res.render('main');
-});
 
-app.get('/addFriend', (req, res) => {
-    res.render('addFriend');
-});
+
 
 app.get('/addExpenses', (req, res) => {
     res.render('addExpenses')
 })
 
-app.get('/addGroup', (req, res) => {
-    res.render('addGroup');
-});
-
 app.get('/setBudget', (req, res) => {
     res.render('set_budget');
 });
 
-app.get('/setting', (req, res) => {
-    res.render('setting_page');
+app.get('/individualExpense', (req, res) => {
+    res.render('individualExpense');
 });
 
+app.get('/settings', (req, res) => {
+    res.render('settings');
+});
+app.get('/recentActivity', (req, res) => {
+    res.render('recentActivity');
+})
 
-
+app.get('/groups', (req, res) => {
+    res.render('groups');
+})
 
 // all unrealated routes
 app.get('*', (req, res) => {

@@ -5,6 +5,12 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true },
     phone: { type: String, required: true },
     password: { type: String, required: true },
-});
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
+    profileImage: {
+        data: Buffer,
+        contentType: String
+    },
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
