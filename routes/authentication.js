@@ -79,10 +79,16 @@ router.post('/', async (req, res) => {
     }
 })
 
+
 router.post('/logout', (req, res) => {
-    req.session.destroy()
-    res.redirect('/')
-})
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('/home');
+        }
+        res.clearCookie('connect.sid');
+        res.redirect('/');
+    });
+});
 
 router.get("/register", (req, res) => {
     const incorrectFields = req.query.error ? req.query.error.split(',') : [];
