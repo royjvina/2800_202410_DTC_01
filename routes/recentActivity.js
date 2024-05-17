@@ -6,8 +6,4 @@ router.get('/recentActivity', (req, res) => {
     res.render('recentActivity')
 })
 
-router.get('/individualExpense', (req, res) => {
-    res.render('individualExpense')
-})
-
 module.exports = router
