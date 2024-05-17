@@ -82,3 +82,19 @@ function loadingOff() {
     loading.style.display = 'none';
     button.disabled = false;
 }
+
+async function saveConversation() {
+    try {
+        const response = await fetch('/saveConversation', { method: 'POST' });
+        if (response.ok) {
+            console.log('Conversation saved successfully.');
+            alert('Conversation saved successfully.');
+        } else {
+            console.error('Failed to save conversation.');
+            alert('Failed to save conversation.');
+        }
+    } catch (error) {
+        console.error('Error saving conversation:', error);
+        alert('Error saving conversation: ' + error);
+    }
+}
