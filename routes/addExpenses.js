@@ -6,8 +6,5 @@ router.get('/addExpenses', (req, res) => {
     res.render('addExpenses')
 })
 
-router.get('/home', (req, res) => {
-    res.render('main')
-})
 
 module.exports = router

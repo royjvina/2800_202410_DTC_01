@@ -6,8 +6,5 @@ router.get('/groups', (req, res) => {
     res.render('groups')
 })
 
-router.get('/individualExpense', (req, res) => {
-    res.render('individualExpense')
-})
 
 module.exports = router
