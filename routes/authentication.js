@@ -9,6 +9,7 @@ const { google } = require('googleapis');
 const crypto = require('crypto');
 const saltRounds = 12;
 const multer = require('multer');
+const path = require("path");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -44,7 +45,7 @@ async function createTransporter() {
 router.get("/", (req, res) => {
     const errorMessage = req.query.error;
     const loginEmail = req.session.loginEmail || '';
-    res.render('index.ejs', { error: errorMessage, loginEmail });
+    res.render('index.ejs', { error: errorMessage, loginEmail, path: req.path });
 })
 
 router.post('/', async (req, res) => {
@@ -100,7 +101,7 @@ router.get("/register", (req, res) => {
         signUpFields[field] = '';
     });
 
-    res.render('register.ejs', { error: incorrectFields, signUpFields });
+    res.render('register.ejs', { error: incorrectFields, signUpFields, path: req.path });
 });
 
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
@@ -158,10 +159,6 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
     }
 });
 
-router.get("/register", (req, res) => {
-    const incorrectFields = req.query.error ? req.query.error.split(',') : [];
-    res.render('register.ejs', { error: incorrectFields });
-});
 
 // Handle registration form submission
 router.post('/submitRegistration', async (req, res) => {
@@ -208,10 +205,7 @@ router.post('/submitRegistration', async (req, res) => {
     }
 });
 
-router.get("/register", (req, res) => {
-    const incorrectFields = req.query.error ? req.query.error.split(',') : [];
-    res.render('register.ejs', { error: incorrectFields });
-});
+
 
 // Handle registration form submission
 router.post('/submitRegistration', async (req, res) => {
@@ -251,7 +245,7 @@ router.post('/submitRegistration', async (req, res) => {
 
 router.get("/reset", (req, res) => {
     const message = req.query.message;
-    res.render('reset.ejs', { message });
+    res.render('reset.ejs', { message, path: req.path});
 });
 
 router.post('/reset', async (req, res) => {
