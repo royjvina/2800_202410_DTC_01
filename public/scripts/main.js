@@ -8,6 +8,8 @@
  * @balpreet787
  */
 function groupsTabHandler() {
+    AddButtonsDiv.classList.remove('justify-end');
+    AddButtonsDiv.classList.add('justify-start');
     showFriends.classList.remove('bg-[#4b061a]');
     showFriends.classList.remove('text-white');
     showGroups.classList.add('bg-[#4b061a]');
@@ -28,6 +30,8 @@ function groupsTabHandler() {
  * @balpreet787
  */
 function friendsTabHandler() {
+    AddButtonsDiv.classList.remove('justify-start');
+    AddButtonsDiv.classList.add('justify-end');
     showGroups.classList.remove('bg-[#4b061a]');
     showGroups.classList.remove('text-white');
     showFriends.classList.add('bg-[#4b061a]');
@@ -127,16 +131,14 @@ function deleteGroupHandler() {
  * @param {string} friendPhone 
  */
 function formFieldsHandler(friendPhone) {
+    const enterAmount = document.getElementById('enterAmount' + friendPhone);
     const amount = document.getElementById('amount' + friendPhone);
-    const groupToSettle = document.getElementById('groupToSettle' + friendPhone);
-    const selectGroupDropDown = document.getElementById('selectGroupDropDown' + friendPhone);
     const submitSettle = document.getElementById('submitSettle' + friendPhone);
     const confirmGroup = document.getElementById('confirmGroup' + friendPhone);
     const cancelSettle = document.getElementById('cancelSettle' + friendPhone);
-    const selectGroupWarning = document.getElementById('selectGroupWarning' + friendPhone);
     const EnterAmountWarning = document.getElementById('EnterAmountWarning' + friendPhone);
-    const arrow = document.getElementById('arrow' + friendPhone);
-    amount.addEventListener('input', function () {
+    enterAmount.value = (amount.textContent).slice(2, amount.textContent.length);
+    enterAmount.addEventListener('input', function () {
         confirmGroup.classList.add('hidden');
         confirmGroup.classList.remove('flex');
         submitSettle.classList.remove('hidden');
@@ -154,21 +156,14 @@ function formFieldsHandler(friendPhone) {
     });
     submitSettle.addEventListener('click', function (event) {
         event.preventDefault();
-        if (groupToSettle.value === '') {
-            selectGroupWarning.classList.toggle('hidden');
-            setTimeout(() => {
-                selectGroupWarning.classList.toggle('hideManually');
-            }, 10);
-        }
-        else if (amount.value === '' || isNaN(amount.value)) {
+        
+        if (enterAmount.value === '' || isNaN(enterAmount.value)) {
             EnterAmountWarning.classList.toggle('hidden');
             setTimeout(() => {
                 EnterAmountWarning.classList.toggle('hideManually');
             }, 10);
-            selectGroupWarning.classList.add('hidden');
         }
         else {
-            selectGroupWarning.classList.add('hidden');
             EnterAmountWarning.classList.add('hidden');
             submitSettle.classList.toggle('hidden');
             confirmGroup.classList.remove('hidden');
@@ -179,22 +174,6 @@ function formFieldsHandler(friendPhone) {
             confirmGroup.classList.add('flex');
         }
 
-    });
-    selectGroupDropDown.addEventListener('click', function () {
-        const groupDropDown = document.getElementById('groupChoices');
-        groupDropDown.classList.toggle('hidden');
-
-
-        if (groupDropDown.classList.contains('hidden')) {
-            arrow.innerHTML = '&#x25BC;'
-        }
-        else {
-            arrow.innerHTML = '&#x25B2'
-            groupDropDown.classList.add('hideManually');
-            setTimeout(() => {
-                groupDropDown.classList.toggle('hideManually');
-            }, 10);
-        }
     });
 
 
