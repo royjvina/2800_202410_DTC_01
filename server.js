@@ -115,7 +115,7 @@ app.use("/", sessionValidation, personalRouter);
 
 // all unrealated routes
 app.get('*', (req, res) => {
-    res.render('404');
+    res.render('404', {path: req.path});
 })
 
 // Error handling middleware
@@ -123,9 +123,9 @@ app.use((err, req, res, next) => {
     console.error(err);
 
     if (err.status === 400) {
-        res.status(400).render('error400');
+        res.status(400).render('error400', {path: req.path});
     } else {
-        res.status(500).render('error500');
+        res.status(500).render('error500', {path: req.path});
     }
 });
 
