@@ -5,35 +5,35 @@
  * Function to handle the category selection in the add group form
  * @balpreet787
  */
-function categoryHandler() {
-    const categories = document.querySelectorAll("#groupCategoryChoices li");
-    categories.forEach(category => {
-        category.addEventListener("click", function () {
-            categories.forEach(category => {
-                category.classList.remove("bg-primary");
-                category.classList.add("bg-secondary");
-                category.classList.remove("text-white");
-                let img = category.querySelector('img');
-                let categoryId = category.id;
-                img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
-            });
-            category.classList.toggle("bg-secondary");
-            category.classList.toggle("bg-primary");
-            category.classList.toggle("text-white");
-            let img = category.querySelector('img');
-            let categoryId = category.id;
+// function categoryHandler() {
+//     const categories = document.querySelectorAll("#groupCategoryChoices li");
+//     categories.forEach(category => {
+//         category.addEventListener("click", function () {
+//             categories.forEach(category => {
+//                 category.classList.remove("bg-primary");
+//                 category.classList.add("bg-secondary");
+//                 category.classList.remove("text-white");
+//                 let img = category.querySelector('img');
+//                 let categoryId = category.id;
+//                 img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
+//             });
+//             category.classList.toggle("bg-secondary");
+//             category.classList.toggle("bg-primary");
+//             category.classList.toggle("text-white");
+//             let img = category.querySelector('img');
+//             let categoryId = category.id;
 
-            if (category.classList.contains("bg-primary")) {
-                categoryInput.value = category.textContent;
-                img.src = `/images/addGroupIcons/${categoryId}White.svg`;
-            }
-            else {
-                categoryInput.value = "misc";
+//             if (category.classList.contains("bg-primary")) {
+//                 categoryInput.value = category.textContent;
+//                 img.src = `/images/addGroupIcons/${categoryId}White.svg`;
+//             }
+//             else {
+//                 categoryInput.value = "misc";
 
-            }
-        });
-    });
-}
+//             }
+//         });
+//     });
+// }
 
 /**
  * Function to handle the friend selection in the add group form
@@ -89,5 +89,5 @@ groupImage.addEventListener("change", function () {
     }
 });
 
-categoryHandler();
+// categoryHandler();
 addFriendsToGroupHandler();
