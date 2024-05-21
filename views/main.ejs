@@ -8,15 +8,15 @@ id="usernameAndPic">
 <img class="w-16 h-16 ml-auto rounded-full hover:cursor-pointer" id="homepagePic" data-src="<%= profilePic %>" alt="">
 </div>
 <div class="mb-[102px]">
-    <div class="flex justify-end mt-[100px] mx-3">
+    <div class="flex justify-start mt-[100px] mx-3" id="AddButtonsDiv">
+        <a class="hidden self-start" href="/addGroup" id="createGroup">+ create group</a>
         <a class="hidden" href="/addFriend" id="addFriend">+ add friend</a>
-        <a class="hidden" href="/addGroup" id="createGroup">+ create group</a>
         </div>
         
         <div class="text-black mt-2 flex mx-2 justify-center">
             <div class="flex flex-row border border-black rounded-full w-full justify-center">
-                <button class="w-1/2 p-1 text-white bg-[#4b061a] rounded-full" id="showFriends">Friends</button>
-                <button class="w-1/2 p-1 rounded-full" id="showGroups">Groups</button>
+                <button class="w-1/2 p-1 text-white  rounded-full bg-[#4b061a]" id="showGroups">Groups</button>
+                <button class="w-1/2 p-1 rounded-full" id="showFriends">Friends</button>
             </div>
         </div>
         <div class="m-3" id="friendSearch">
@@ -32,67 +32,8 @@ id="usernameAndPic">
             </div>
         </div>
         
-            <div id="friends" class="flex flex-col m-3 gap-3">
-                <div class="flex flex-col gap-1">
-                    <div class="flex flex-row shadow-md w-full bg-primary text-white justify-between p-3 items-center rounded-xl friend" id="friend4513211111">
-                        <div class="flex flex-row items-center gap-4">
-                            <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer"
-                            src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                            <div>Friend 1</div>
-                        </div>
-                        <div class="flex flex-row gap-10">
-                        <div class="">+$52</div>
-                    </div>
-                </div>
-                <form action="/settleup" method="post" class="hidden hideManually fadeOut" id="formFriend4513211111">
-                        <div class="flex flex-col justify-between gap-5 rounded-xl bg-white p-2 items-center mb-4 shadow-2xl text-black">
-                            <input type="text" name="friend4513211111" id="" value="4513211111" class="hidden">
-                            <div class="flex flex-col items-center justify-center">
-                                <span class="" id="selectGroupDropDown4513211111">Select group <span id="arrow4513211111">&#x25BC;</span></span>
-                                <ul class="rounded-lg justify-center gap-3 text-primary p-1.5 flex flex-row flex-wrap hidden fadeOut" id="groupChoices" name="groupToSettle">
-                                    <li class="group border-primary border rounded p-1">group 1</li>
-                                    <li class="group border-primary border rounded p-1">group 2</li>
-                                    <li class="group border-primary border rounded p-1">group 3</li>
-                                    <li class="group border-primary border rounded p-1">group 4</li>
-                                </ul>
-                            </div>
-                            <div class="flex flex-row justify-evenly gap-3">
-                            <div class="flex flex-row w-1/2 items-center gap-1 justify-end">
-                                <label class="text-xl" for="amount">$</label>
-                                <input class="text-center rounded-lg px-1 text-black w-1/2 p-1 focus:outline-none focus:border-b focus:border-primary" type="number" id="amount4513211111" name="amount4513211111" value="52">
-                            </div>
-                        <div class="flex flex-row items-center justify-start gap-2 w-1/2">
-                            <span>in </span><input type="text" class="w-1/2 p-1 rounded-lg  text-primary border-b border-primary text-l text-center" name="4513211111" id="groupToSettle4513211111" disabled value="">
-                        </div>
-                    </div>
-                    <div class="m-1 hidden hideManually fadeOut" id="selectGroupWarning4513211111">
-                        Please select the group you want to settle up your friend in.
-                    </div>
-                    <div class="m-1 hidden hideManually fadeOut" id="EnterAmountWarning4513211111">
-                        Please enter a valid amount to settle up.
-                    </div>
-                        <input class="text-primary border-primary border gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2 fadeOut" type="button" id="submitSettle4513211111" value="Settle up">
-                        <div class="flex-row justify-center items-center gap-3 hidden fadeOut" id="confirmGroup4513211111">
-                            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="confirmSettle4513211111" value="Confirm">
-                            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="cancelSettle4513211111" value="Cancel">
-                            
-                        </div>
-                    </div>
-                    </form>
-            </div>
-            <div class="flex flex-row shadow-md w-full bg-primary text-white justify-between p-3 items-center rounded-xl friend" id="friend451322222">
-                <div class="flex flex-row items-center gap-4">
-                    <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" 
-                    src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                    <div>Friend 2</div>
-                </div>
-            
-                <div class="flex flex-row gap-10">
-                    <div>-$500</div>
-                </div>
-                </div>
-            </div>
-            <div id="groups" class="flex-col m-3 gap-3 hidden">
+           
+            <div id="groups" class="flex-col m-3 gap-3 flex">
                 <div class="flex flex-col">
                     <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group-container" id="group1">
                         <!-- Group clickable area -->
@@ -255,9 +196,56 @@ id="usernameAndPic">
                 </div>
                 
             </div>
+            <div id="friends" class="hidden flex-col m-3 gap-3">
+                <div class="flex flex-col gap-1">
+                    <div class="flex flex-row shadow-md w-full bg-primary text-white justify-between p-3 items-center rounded-xl friend" id="friend4513211111">
+                        <div class="flex flex-row items-center gap-4">
+                            <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer"
+                            src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
+                            <div>Friend 1</div>
+                        </div>
+                        <div class="flex flex-row gap-10">
+                        <div class=""  id="amount4513211111">+$52</div>
+                    </div>
+                </div>
+                <form action="/settleup" method="post" class="hidden hideManually fadeOut" id="formFriend4513211111">
+                    <div class="m-1 hidden hideManually fadeOut text-red-500" id="EnterAmountWarning4513211111">
+                        Please enter a valid amount to settle up.
+                    </div>
+                        <div class="flex flex-row justify-center gap-5 rounded-xl bg-white p-2 items-center mb-4 shadow-2xl text-black">
+                            <input type="text" name="friend4513211111" id="" value="4513211111" class="hidden">
+                            
+                            <div class="flex flex-row justify-evenly gap-3">
+                            <div class="flex flex-row w-1/2 items-center gap-1 justify-end">
+                                <label class="text-xl" for="amount">$</label>
+                                <input class="text-center rounded-lg px-1 text-black w-full p-1 focus:outline-none focus:border-b focus:border-primary" type="number" id="enterAmount4513211111" name="enterAmount4513211111" value="52">
+                            </div>
+                        
+                    </div>
+                        <div class=" flex flex-row justify-center"><input class="text-primary border-primary border gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2 fadeOut" type="button" id="submitSettle4513211111" value="Settle up"></div>
+                        <div class="flex-row justify-center items-center gap-3 hidden fadeOut" id="confirmGroup4513211111">
+                            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="confirmSettle4513211111" value="Confirm">
+                            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="cancelSettle4513211111" value="Cancel">
+                            
+                        </div>
+                    </div>
+                    </form>
+            </div>
+            <div class="flex flex-row shadow-md w-full bg-primary text-white justify-between p-3 items-center rounded-xl friend" id="friend451322222">
+                <div class="flex flex-row items-center gap-4">
+                    <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" 
+                    src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
+                    <div>Friend 2</div>
+                </div>
+            
+                <div class="flex flex-row gap-10">
+                    <div>-$500</div>
+                </div>
+                </div>
+            </div>
             
             </div>
-            <div class="flex flex-row justify-center mt-10" id="addFriendSecondaryDiv">
+            <div class="hidden flex-row justify-center mt-10" id="addFriendSecondaryDiv">
                 <a id="addFriendSecondary" href="/addFriend" class="flex flex-row items-center border py-3 px-9 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
                     <img src="/images/homepageIconsAndPlaceholders/addFriend.svg" id="addFriendPic" class="w-8 h-8" alt=""> <span>Add a friend</span></a>
             </div>
