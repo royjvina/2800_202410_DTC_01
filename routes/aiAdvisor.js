@@ -60,9 +60,9 @@ router.post('/advisor', async function (req, res) {
     }
 
     let chatGPTResult = completion.choices[0].message.content;
-    console.log(`Question: ${messages.at(-1).content}\nAnswer: ${chatGPTResult}`);
+    console.log(`Question: ${messages.at(-2).content}\nAnswer: ${chatGPTResult}`);
 
-    let question = messages.at(-1).content;
+    let question = messages.at(-2).content;
     let answer = chatGPTResult;
 
     if (!req.session.chatHistory) {
