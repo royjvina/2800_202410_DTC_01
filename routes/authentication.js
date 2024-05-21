@@ -214,8 +214,14 @@ router.post('/submitRegistration', async (req, res) => {
 
     try {
         const existingUser = await User.findOne({ email });
+        const existingPhone = await User.findOne({ phone });
+
         if (existingUser) {
             incorrectFields.push('email');
+        }
+
+        if (existingPhone) {
+            incorrectFields.push('phone');
         }
 
         const { error } = registrationSchema.validate({ email, phone, username, password }, { abortEarly: false });

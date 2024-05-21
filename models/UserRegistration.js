@@ -7,7 +7,7 @@ const registrationSchema = Joi.object({
         .messages({
             'string.pattern.base': 'Password must be 8-20 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.'
         }),
-    phone: Joi.string().required()
+    phone: Joi.string().pattern(new RegExp('^[0-9]{10}$')).required()
 });
 
 module.exports = { registrationSchema };
