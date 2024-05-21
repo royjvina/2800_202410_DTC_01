@@ -57,7 +57,7 @@ var options = {
         },
         style: {
             marginLeft: 50,
-            marginRight: 50
+            marginRight: 50,
         }
     },
     plotOptions: {

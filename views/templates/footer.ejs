@@ -1,36 +1,87 @@
-<body>
-    <footer class="fixed w-full bottom-0 rounded-3xl">
-        <div class="grid grid-cols-5 bg-primary rounded-t-3xl pt-2">
-            <div class="flex flex-col mb-1">
-                <a id="homepageButton" href="/home" class=" flex justify-center py-1 pt-2 rounded-t-3xl"> <img
-                        src="/images/navbarIcons/groups.svg" id="homepageIcon" class="w-8 h-8" alt=""></a>
-                <label id="homepageLabel" for="homepageButton" class="text-xs text-center text-white">Home</label>
+    <footer class="fixed w-full bottom-4 rounded-3xl">
+        <div class="grid grid-cols-5 mx-3 rounded-3xl backdrop-blur-md items-center border border-solid">
+            <% if(path == '/home') { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 bg-primary text-white rounded-lg" id="homepageNavDiv">
+                <a id="homepageButton" href="/home" class="flex justify-center py-1 pt-2 rounded-t-3xl">
+                    <img src="/images/navbarIcons/groupsSelected.svg" id="homepageIcon" class="w-8 h-8" alt="">
+                </a>
+                <label id="homepageLabel" for="homepageButton" class="text-xs text-center">Home</label>
             </div>
-            <div class="flex flex-col mb-1">
-                <a id="personalButton" href="/personal" class="flex justify-center py-[2px] pt-[10px] bg-primary"><img
-                        src="/images/navbarIcons/personal.svg" id="personalIcon" class="w-8 h-8" alt=""></a>
-                <label id="personalLabel" for="personalButton" class="text-xs text-center text-white">Personal</label>
+            <% } else { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 rounded-lg" id="homepageNavDiv">
+                <a id="homepageButton" href="/home" class="flex justify-center py-1 pt-2 rounded-t-3xl">
+                    <img src="/images/navbarIcons/groups.svg" id="homepageIcon" class="w-8 h-8" alt="">
+                </a>
+                <label id="homepageLabel" for="homepageButton" class="text-xs text-center">Home</label>
             </div>
-            <div class="flex flex-col mb-1">
-                <a id="addExpenseButton" href="/addExpenses"
-                    class="flex justify-center py-1 pt-2 bg-primary  rounded-t-3xl"><img
-                        src="/images/navbarIcons/addExpense.svg" id="addExpenseIcon" class="w-8 h-8" alt=""></a>
-                <label id="addExpenseLabel" for="addExpenseButton" class="text-xs text-center text-white">Add</label>
-            </div>
-            <div class="flex flex-col mb-1">
-                <a id="recentButton" href="/recentActivity" class="flex justify-center py-1 pt-2 bg-primary"><img
-                        src="/images/navbarIcons/recent.svg" id="recentIcon" class="w-8 h-8" alt=""></a>
-                <label id="RecentLabel" for="recentButton" class="text-xs text-center text-white">Recent</label>
-            </div>
-            <div class="flex flex-col mb-1">
-                <a id="adviceButton" href="/AI" class="flex justify-center py-1 pt-2 bg-primary rounded-t-3xl"><img
-                        src="/images/navbarIcons/advice.svg" class="w-8 h-8" id="adviceIcon" alt=""></a>
-                <label id="adviceLabel" for="adviceButton" class="text-xs text-center text-white">Advice</label>
-            </div>
+            <% } %>
 
+            <% if(path == '/personal') { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 bg-primary text-white rounded-lg" id="personalNavDiv">
+                <a id="personalButton" href="/personal" class="flex justify-center py-1 pt-2">
+                    <img src="/images/navbarIcons/personalSelected.svg" id="personalIcon" class="w-8 h-8" alt="">
+                </a>
+                <label id="personalLabel" for="personalButton" class="text-xs text-center">Personal</label>
+            </div>
+            <% } else { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 rounded-lg" id="personalNavDiv">
+                <a id="personalButton" href="/personal" class="flex justify-center py-1 pt-2">
+                    <img src="/images/navbarIcons/personal.svg" id="personalIcon" class="w-8 h-8" alt="">
+                </a>
+                <label id="personalLabel" for="personalButton" class="text-xs text-center">Personal</label>
+            </div>
+            <% } %>
+
+            <% if(path == '/addExpenses') { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 bg-primary text-white rounded-lg" id="addExpenseNav">
+                <a id="addExpenseButton" href="/addExpenses" class="flex justify-center py-1 pt-2 rounded-t-3xl">
+                    <img src="/images/navbarIcons/addExpenseSelected.svg" id="addExpenseIcon" class="w-8 h-8" alt="">
+                </a>
+                <label id="addExpenseLabel" for="addExpenseButton" class="text-xs text-center">Add</label>
+            </div>
+            <% } else { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 rounded-lg" id="addExpenseNav">
+                <a id="addExpenseButton" href="/addExpenses" class="flex justify-center py-1 pt-2 rounded-t-3xl">
+                    <img src="/images/navbarIcons/addExpense.svg" id="addExpenseIcon" class="w-8 h-8" alt="">
+                </a>
+                <label id="addExpenseLabel" for="addExpenseButton" class="text-xs text-center">Add</label>
+            </div>
+            <% } %>
+
+            <% if(path == '/recentActivity') { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 bg-primary text-white rounded-lg" id="recentNavDiv">
+                <a id="recentButton" href="/recentActivity" class="flex justify-center py-1 pt-2">
+                    <img src="/images/navbarIcons/recentSelected.svg" id="recentIcon" class="w-8 h-8" alt="">
+                </a>
+                <label id="RecentLabel" for="recentButton" class="text-xs text-center">Recent</label>
+            </div>
+            <% } else { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 rounded-lg" id="recentNavDiv">
+                <a id="recentButton" href="/recentActivity" class="flex justify-center py-1 pt-2">
+                    <img src="/images/navbarIcons/recent.svg" id="recentIcon" class="w-8 h-8" alt="">
+                </a>
+                <label id="RecentLabel" for="recentButton" class="text-xs text-center">Recent</label>
+            </div>
+            <% } %>
+
+            <% if(path == '/AI') { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 bg-primary text-white rounded-lg" id="adviceNavDiv">
+                <a id="adviceButton" href="/AI" class="flex justify-center py-1 pt-2">
+                    <img src="/images/navbarIcons/adviceSelected.svg" class="w-8 h-8" id="adviceIcon" alt="">
+                </a>
+                <label id="adviceLabel" for="adviceButton" class="text-xs text-center">Advice</label>
+            </div>
+            <% } else { %>
+            <div class="flex flex-col mb-1 py-1 pb-2 rounded-lg" id="adviceNavDiv">
+                <a id="adviceButton" href="/AI" class="flex justify-center py-1 pt-2">
+                    <img src="/images/navbarIcons/advice.svg" class="w-8 h-8" id="adviceIcon" alt="">
+                </a>
+                <label id="adviceLabel" for="adviceButton" class="text-xs text-center">Advice</label>
+            </div>
+            <% } %>
         </div>
     </footer>
-
 </body>
+
 
 </html>

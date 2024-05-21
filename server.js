@@ -85,6 +85,7 @@ const groupsRouter = require("./routes/groups");
 const individualExpenseRouter = require("./routes/individualExpense");
 const recentActivityRouter = require("./routes/recentActivity");
 const settingsRouter = require("./routes/settings");
+const suggestedReimbursementsRouter = require("./routes/suggestedReimbursements")
 
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
@@ -96,10 +97,24 @@ app.use("/", sessionValidation, groupsRouter);
 app.use("/", sessionValidation, individualExpenseRouter);
 app.use("/", sessionValidation, recentActivityRouter);
 app.use("/", sessionValidation, settingsRouter);
+<<<<<<< HEAD
+=======
+app.use("/", sessionValidation, personalRouter);
+app.use("/", sessionValidation, suggestedReimbursementsRouter);
+
+
+
+
+
+
+
+
+
+>>>>>>> ddcfc4b701673975aef1ff1633d68e387db94816
 
 // all unrealated routes
 app.get('*', (req, res) => {
-    res.render('404');
+    res.render('404', {path: req.path});
 })
 
 // Error handling middleware
@@ -107,9 +122,9 @@ app.use((err, req, res, next) => {
     console.error(err);
 
     if (err.status === 400) {
-        res.status(400).render('error400');
+        res.status(400).render('error400', {path: req.path});
     } else {
-        res.status(500).render('error500');
+        res.status(500).render('error500', {path: req.path});
     }
 });
 
