@@ -258,6 +258,23 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 
+/**
+ * This function is used to handle the click event on a certain group in order to redirect to the correct group's page  
+ * @claaudiaale
+ */
+
+function groupClickHandler() {
+    let groups = document.querySelectorAll('.group-container')
+    groups.forEach(group => {
+        group.addEventListener('click', function () {
+            let groupId = group.id;
+            
+        })
+    })
+}
+
+groupClickHandler();
+
 
 
 

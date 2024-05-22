@@ -9,27 +9,42 @@
     </style>
     <div class="fixed w-full bg-white pb-2">
         <div class="flex flex-row">
-            <img class="m-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="75" width="75">
+            <% if(group.group_picBase64) { %>
+            <img class="m-3" src="<%= group.group_picBase64%>" alt="" height="75" width="75">
+            <% } else { %>  
+            <img class="m-3" src="/images/navbarIcons/groups.svg" alt="" height="75" width="75">
+            <% } %>
             <div>
                 <div class="flex flex-row items-center">
-                    <p class="font-semibold text-xl mt-2 pr-2" id="groupNameHere"><%=groupName%></p>
+                    <p class="font-semibold text-xl mt-2 pr-2" id="groupNameHere"><%=group.group_name%></p>
                     <a href="/addGroup"><img src="/images/otherIcons/editIcon.svg" alt="" class="h-4 w-4 mt-2"></a>
                 </div>
-                <p class="text-gray-400 text-xs pb-2" id="usersOfAGroupHere">
-                    <% if (usersInGroup.length > 3) { %>
+                <p class="text-gray-400 text-xs" id="usersOfAGroupHere">
+                    <% if (group.members.length > 3) { %>
                     <div id="moreThanThreeUsers" class="text-gray-400 text-xs pb-2 moreUsers">
-                        <%= usersInGroup[0]%>, <%=usersInGroup[1]%>, <%=usersInGroup[2]%> and <%=usersInGroup.length - 3%> more
+                        <%= group.members[0].user_id.username%>, <%=group.members[1].user_id.username%>, <%=group.members[2].user_id.username%> and <%=group.members.length - 3%> more
                     </div>
                     <div id="allUsers" class="hidden text-gray-400 text-xs pb-2 moreUsers">
-                        <%= usersInGroup.join(", ") %>
-                    </div>
-                    <% } else { %>
-                    <div id="lessThanThreeUsers">
-                        <%= usersInGroup.join(", ") %>
+                        <% for (let i=0; i < group.members.length; i++) { %>
+                            <% if (i == group.members.length - 1) { %>
+                                <%= group.members[i].user_id.username %>
+                            <% } else { %>
+                                <%= group.members[i].user_id.username %>, 
+                            <% } %>
+                        <% } %>
                     </div>
                     <% } %>
+                    <div id="lessThanThreeUsers" class="text-gray-400 text-xs pb-2 moreUsers">
+                        <% for (let i=0; i < group.members.length; i++) { %>
+                            <% if (i == group.members.length - 1) { %>
+                                <%= group.members[i].user_id.username %>
+                            <% } else { %>
+                                <%= group.members[i].user_id.username %>, 
+                            <% } %>
+                        <% } %>
+                    </div>
                 </p>
-                <a href="/suggestedReimbursements" class="flex justify-center font-medium">
+                <a href="/suggestedReimbursements" class="flex justify-start font-medium">
                     <p class="px-2 text-[#4b061a] outline outline-1 outline-[#4b061a] hover:bg-[#4b061a] hover:text-white rounded-lg flex flex-row items-center">
                         <span class="text-sm">Suggested Reimbursements</span>
                         <span class="pl-2 text-2xl mb-1">&#8250;</span>

@@ -40,7 +40,8 @@ router.get("/home", async (req, res) => {
         });
     });
     res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups });
-})
+});
+
 router.get("/addFriend", (req, res) => {
     res.render('addFriend', { path: '/home', error: req.query.error });
 });
