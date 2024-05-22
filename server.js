@@ -86,6 +86,9 @@ const individualExpenseRouter = require("./routes/individualExpense");
 const recentActivityRouter = require("./routes/recentActivity");
 const settingsRouter = require("./routes/settings");
 const suggestedReimbursementsRouter = require("./routes/suggestedReimbursements")
+const expensePersonalRouter = require("./routes/expensePersonal");
+
+
 
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
@@ -99,6 +102,7 @@ app.use("/", sessionValidation, settingsRouter);
 app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, suggestedReimbursementsRouter);
 
+app.use("/", sessionValidation, expensePersonalRouter);
 
 
 
