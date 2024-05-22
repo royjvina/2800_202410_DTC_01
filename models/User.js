@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
-    friend: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    group: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
