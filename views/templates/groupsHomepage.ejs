@@ -35,9 +35,14 @@
     </div>
     <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="<%= group._id %>ConfirmDeleteOptions">
         <form action="/deleteGroup" method="post">
-            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="<%= group._id %>ConfirmDelete" value="Confirm">
-            <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="<%= group._id %>CancelDelete" value="Cancel">
-            <input type="text" class="hidden" name="groupDeleteName" id="<%= group._id %>Selected">
+            <div class="text-red-600 text-center text-sm mb-2">
+                All the transactions and debts will also be deleted. Are you sure you want to delete this group?
+            </div>
+            <div class="flex flex-row justify-center gap-2">
+                <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="<%= group._id %>ConfirmDelete" value="Confirm">
+                <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="<%= group._id %>CancelDelete" value="Cancel">
+                <input type="text" class="hidden" name="groupDeleteId" id="<%= group._id %>Selected">
+            </div>
         </form>
     </div>
 </li>

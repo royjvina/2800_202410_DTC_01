@@ -116,7 +116,7 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
 router.post('/deleteGroup', async (req, res) => {
     try {
         console.log(req.body);
-        let groupID = new ObjectId(req.body.groupDeleteName);
+        let groupID = new ObjectId(req.body.groupDeleteId);
         console.log(groupID);
         await Group.findByIdAndDelete(groupID);
         await User.updateMany({ groups: groupID }, { $pull: { groups: groupID } });

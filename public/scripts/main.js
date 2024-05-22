@@ -82,38 +82,23 @@ function removeSecondaryButtons() {
     }
 }
 
+
+
 /**
- * This function is used to handle selecting a group in which they can settle a debt with their friend
+ * This function is used to handle the delete a groups
  * @balpreet787
- */
-function groupSelectorHandler(friendPhone) {
-    groupToSettle = document.getElementById('groupToSettle' + friendPhone);
-    const confirmGroup = document.getElementById('confirmGroup' + friendPhone);
-    const submitSettle = document.getElementById('submitSettle' + friendPhone);
-    const groups = document.querySelectorAll('.group');
-    groups.forEach(group => {
-
-        group.addEventListener('click', function () {
-            const selectedGroup = this.textContent;
-            groupToSettle.value = selectedGroup;
-            confirmGroup.classList.add('hidden');
-            confirmGroup.classList.remove('flex');
-            submitSettle.classList.remove('hidden');
-        });
-    });
-}
-
+ * */
 function deleteGroupHandler() {
     document.querySelectorAll('.deleteGroup').forEach(deleteGroup => {
         deleteGroup.addEventListener('click', function () {
-            let deleteGroupName = (this.id).replace('Delete', '');
-            let selectedGroup = document.getElementById(deleteGroupName + 'Selected');
-            console.log(deleteGroupName);
-            let confirmDeleteOptions = document.getElementById(deleteGroupName + 'ConfirmDeleteOptions');
-            let cancelDelete = document.getElementById(deleteGroupName + 'CancelDelete');
+            let deleteGroupId = (this.id).replace('Delete', '');
+            let selectedGroup = document.getElementById(deleteGroupId + 'Selected');
+            console.log(deleteGroupId);
+            let confirmDeleteOptions = document.getElementById(deleteGroupId + 'ConfirmDeleteOptions');
+            let cancelDelete = document.getElementById(deleteGroupId + 'CancelDelete');
             confirmDeleteOptions.classList.toggle('hidden');
             confirmDeleteOptions.classList.add('hideManually');
-            selectedGroup.value = deleteGroupName;
+            selectedGroup.value = deleteGroupId;
             setTimeout(() => {
                 confirmDeleteOptions.classList.toggle('hideManually');
             }, 10);
@@ -123,6 +108,36 @@ function deleteGroupHandler() {
                 confirmDeleteOptions.classList.remove('hideManually');
                 confirmDeleteOptions.classList.remove('flex');
                 selectedGroup.value = '';
+
+            });
+
+        });
+    });
+}
+
+/**
+ * This function is used to handle the delete a friend
+ * @balpreet787
+ * */
+function deleteFriendHandler() {
+    document.querySelectorAll('.deleteFriend').forEach(deleteFriend => {
+        deleteFriend.addEventListener('click', function () {
+            let deleteFriendPhone = (this.id).replace('Delete', '');
+            let selectedFriend = document.getElementById(deleteFriendPhone + 'Selected');
+            let confirmDeleteOptions = document.getElementById(deleteFriendPhone + 'ConfirmDeleteOptionsFriends');
+            let cancelDelete = document.getElementById(deleteFriendPhone + 'CancelDelete');
+            confirmDeleteOptions.classList.toggle('hidden');
+            confirmDeleteOptions.classList.add('hideManually');
+            selectedFriend.value = deleteFriendPhone;
+            setTimeout(() => {
+                confirmDeleteOptions.classList.toggle('hideManually');
+            }, 10);
+            confirmDeleteOptions.classList.toggle('flex');
+            cancelDelete.addEventListener('click', function () {
+                confirmDeleteOptions.classList.add('hidden');
+                confirmDeleteOptions.classList.remove('hideManually');
+                confirmDeleteOptions.classList.remove('flex');
+                selectedFriend.value = '';
 
             });
 
@@ -141,19 +156,19 @@ function formFieldsHandler(friendPhone) {
     const enterAmount = document.getElementById('enterAmount' + friendPhone);
     const amount = document.getElementById('amount' + friendPhone);
     const submitSettle = document.getElementById('submitSettle' + friendPhone);
-    const confirmGroup = document.getElementById('confirmGroup' + friendPhone);
+    const confirmfriend = document.getElementById('confirmfriend' + friendPhone);
     const cancelSettle = document.getElementById('cancelSettle' + friendPhone);
     const EnterAmountWarning = document.getElementById('EnterAmountWarning' + friendPhone);
     enterAmount.value = (amount.textContent).slice(2, amount.textContent.length);
     enterAmount.addEventListener('input', function () {
-        confirmGroup.classList.add('hidden');
-        confirmGroup.classList.remove('flex');
+        confirmfriend.classList.add('hidden');
+        confirmfriend.classList.remove('flex');
         submitSettle.classList.remove('hidden');
     });
     cancelSettle.addEventListener('click', function () {
 
-        confirmGroup.classList.add('hidden');
-        confirmGroup.classList.remove('flex');
+        confirmfriend.classList.add('hidden');
+        confirmfriend.classList.remove('flex');
         submitSettle.classList.remove('hidden');
         submitSettle.classList.add('hideManually');
 
@@ -173,12 +188,12 @@ function formFieldsHandler(friendPhone) {
         else {
             EnterAmountWarning.classList.add('hidden');
             submitSettle.classList.toggle('hidden');
-            confirmGroup.classList.remove('hidden');
-            confirmGroup.classList.add('hideManually');
+            confirmfriend.classList.remove('hidden');
+            confirmfriend.classList.add('hideManually');
             setTimeout(() => {
-                confirmGroup.classList.toggle('hideManually');
+                confirmfriend.classList.remove('hideManually');
             }, 10);
-            confirmGroup.classList.add('flex');
+            confirmfriend.classList.add('flex');
         }
 
     });
@@ -204,33 +219,35 @@ addGroupSecondary.addEventListener('mouseleave', function () {
 });
 
 
-document.querySelectorAll('.friend').forEach(friend => {
-    friend.addEventListener('click', function () {
-        const friendId = this.id;
-        friendPhone = friendId.substring(6, friendId.length);
-        const formFriend = document.getElementById("formFriend" + friendPhone);
-        formFriend.classList.toggle('hidden');
-        setTimeout(() => {
-            formFriend.classList.toggle('hideManually');
-        }, 10);
+function toggleFriendSettleUp() {
+    document.querySelectorAll('.friend').forEach(friend => {
+        friend.addEventListener('click', function () {
+            const friendId = this.id;
+            friendPhone = friendId.substring(6, friendId.length);
+            const formFriend = document.getElementById("formFriend" + friendPhone);
+            formFriend.classList.toggle('hidden');
+            setTimeout(() => {
+                formFriend.classList.toggle('hideManually');
+            }, 10);
 
-        if (!formFriend.classList.contains('hidden')) {
-            this.classList.add('bg-secondary');
-            this.classList.add('text-[#6E0924]');
-        }
-        else {
-            this.classList.remove('bg-secondary');
-            this.classList.remove('text-[#6E0924]');
-        }
-        formFieldsHandler(friendPhone);
-        groupSelectorHandler(friendPhone);
+            if (!formFriend.classList.contains('hidden')) {
+                this.classList.add('bg-secondary');
+                this.classList.add('text-[#6E0924]');
+            }
+            else {
+                this.classList.remove('bg-secondary');
+                this.classList.remove('text-[#6E0924]');
+            }
+            formFieldsHandler(friendPhone);
+        });
+
     });
-
-});
-
+}
 document.addEventListener('DOMContentLoaded', function () {
     removeSecondaryButtons();
     deleteGroupHandler();
+    toggleFriendSettleUp();
+    deleteFriendHandler();
     const profileImage = document.getElementById('homepagePic');
     const profileImageSrc = profileImage.getAttribute('data-src');
 
