@@ -56,12 +56,10 @@ function addFriendsToGroupHandler() {
                 console.log(addFriendbtnId)
             }
             else {
-                let friendInputValue = friendInput.value;
-                const idToRemove = friendId.replace("selectFriend", "") + ",";
-                friendInputValue = friendInputValue.split(',').filter(id => id && id !== idToRemove.replace(",", "")).join(',');
-
-                // Ensure no trailing comma if friendInputValue ends up empty
-                friendInput.value = friendInputValue.endsWith(',') ? friendInputValue.slice(0, -1) : friendInputValue;
+                let friendValue = friendId.replace("selectFriend", "");
+                let friendInputValueArray = friendInput.value.split(',').filter(id => id && id !== friendValue);
+    
+                friendInput.value = friendInputValueArray.join(',') + (friendInputValueArray.length ? ',' : '');
                 document.getElementById(addFriendbtnId).textContent = '+';
             }
         });
