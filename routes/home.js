@@ -46,15 +46,12 @@ router.get("/addFriend", (req, res) => {
 });
 router.get("/addGroup", async (req, res) => {
     let user = await getFriends(req);
-    console.log(user);
     res.render('addGroup', { path: '/home', friends: user.friends });
 });
 router.post('/addFriend', async (req, res) => {
-    console.log(req.body);
     let friend;
     if (req.body.friendEmail == "") {
         phoneNumber = req.body.friendPhone.replace(/[^\d]/g, '');
-        console.log(phoneNumber);
         friend = await User.findOne({ phone: phoneNumber });
         if (friend) {
             addFriend(friend, req);
@@ -66,7 +63,6 @@ router.post('/addFriend', async (req, res) => {
 
     }
     if (req.body.friendPhone == "") {
-        console.log('email');
         friend = await User.findOne({
             email: req.body.friendEmail
         });
@@ -83,7 +79,6 @@ router.post('/addFriend', async (req, res) => {
 router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res) => {
     try {
         let friends = (req.body.friends.split(',')).filter(friend => friend != '');
-        console.log(friends);
         let uniqueFriends = new Set(friends);
         let friendsinGroupID = [];
         for (let phoneNumber of uniqueFriends) {
@@ -107,7 +102,6 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
         });
 
         await User.updateMany({ _id: { $in: newGroup.members.map(member => member.user_id) } }, { $push: { groups: newGroup._id } });
-        console.log(newGroup);
         res.redirect('/home')
     } catch (error) {
         console.log(error);
@@ -116,9 +110,7 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
 
 router.post('/deleteGroup', async (req, res) => {
     try {
-        console.log(req.body);
         let groupID = new ObjectId(req.body.groupDeleteId);
-        console.log(groupID);
         await Group.findByIdAndDelete(groupID);
         await User.updateMany({ groups: groupID }, { $pull: { groups: groupID } });
     }
