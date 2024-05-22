@@ -1,0 +1,120 @@
+<%- include('templates/header') %>
+
+
+  <main class="flex-auto flex flex-col justify-between items-center p-4 bg-gray-100">
+    <div class="flex flex-row items-center justify-between relative w-full mb-4">
+      <h1 class="flex-1 text-center font-semibold text-gray-800">Add Expenses</h1>
+      <button onclick="window.history.back()" class="absolute right-0 p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="28" height="28"
+          viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M18 6l-12 12" />
+          <path d="M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+
+    <form id="expenseForm" class="flex items-center rounded-lg bg-white shadow-md p-6 w-full max-w-md">
+      <div class="w-full">
+        <div class="flex flex-col mb-4 justify-between w-full">
+          <label for="date" class="text-sm text-gray-600">Date</label>
+          <input type="date" id="date" name="date" class="border rounded-lg px-3 py-2 mt-1 w-full" />
+        </div>
+
+        <div class="w-full">
+
+
+          <div class="flex mb-4 justify-between items-center">
+            <div class="flex flex-col w-1/2 pr-2">
+              <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+                type="button">Category
+                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 10 6">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 1 4 4 4-4" />
+                </svg>
+              </button>
+              <span id="selectedCategory" class=" text-gray-600"></span>
+
+              <!-- Dropdown menu -->
+              <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-34">
+                <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdownDefaultButton">
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 ">category1</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 ">category2</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 ">category3</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 ">category4</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 ">category5</a>
+                  </li>
+
+                </ul>
+              </div>
+
+            </div>
+            <div class="flex flex-col w-1/2 pl-2 relative">
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                <input type="number" min="1" id="Amount" name="Amount" placeholder="10000"
+                  class="border rounded-lg px-3 py-2 pl-8 mt-1 w-full" />
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="flex justify-center mt-6">
+            <button type="submit" id="saveBudget"
+              class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium border">SAVE</button>
+          </div>
+
+        </div>
+      </div>
+
+
+    </form>
+
+
+
+    <div class="flex items-center rounded-lg bg-white shadow-md p-6 w-full max-w-md mt-6">
+      <div class="w-full">
+        <div class="flex flex-col mb-4 justify-between w-full">
+          <label for="date" class="text-sm text-gray-600">Expenses record</label>
+        </div>
+
+        <div class="w-full">
+          <table id="expenseTable" class="border rounded-lg px-1 py-2 mt-1 w-full">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="px-4 py-2 text-xs">Date</th>
+                <th class="px-4 py-2 text-xs">Category</th>
+                <th class="px-4 py-2 text-xs">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Expenses records -->
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+
+  <script src="/scripts/expensePersonal.js"></script>
+
+
+  <%- include('templates/footer') %>
