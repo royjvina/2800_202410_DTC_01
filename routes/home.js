@@ -3,7 +3,6 @@ const router = express.Router()
 
 
 router.get("/home", (req, res) => {
-    console.log(req.session.username);
     res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path });
 })
 router.get("/addFriend", (req, res) => {

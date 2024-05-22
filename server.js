@@ -100,15 +100,6 @@ app.use("/", sessionValidation, settingsRouter);
 app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, suggestedReimbursementsRouter);
 
-
-
-
-
-
-
-
-
-
 // all unrealated routes
 app.get('*', (req, res) => {
     res.render('404', {path: req.path});
