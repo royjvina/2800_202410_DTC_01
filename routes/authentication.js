@@ -69,7 +69,13 @@ router.post('/', async (req, res) => {
         req.session.loginEmail = '';
         req.session.userId = user._id;
         req.session.username = user.username;
-        req.session.profilePic = `data:${user.profileImage.contentType};base64,${user.profileImage.data.toString('base64')}`;
+        if (user.profileImage && user.profileImage.data) {
+            console.log(user.profileImage);
+            req.session.profilePic = `data:${user.profileImage.contentType};base64,${user.profileImage.data.toString('base64')}`
+        }
+        else {
+            req.session.profilePic = null;
+        }
         req.session.username = user.username;
         req.session.phoneNumber = user.phone;
         req.session.email = user.email;
@@ -106,7 +112,7 @@ router.get("/register", (req, res) => {
 
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
     var { email, phone, username, password } = req.body;
-
+    console.log(req.body);
     const incorrectFields = [];
 
     try {
@@ -146,7 +152,13 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
 
         req.session.userId = newUser._id;
         req.session.authenticated = true;
-        req.session.profilePic = `data:${newUser.profileImage.contentType};base64,${newUser.profileImage.data.toString('base64')}`
+        if (profileImage) {
+            console.log(newUser.profileImage);
+            req.session.profilePic = `data:${newUser.profileImage.contentType};base64,${newUser.profileImage.data.toString('base64')}`
+        }
+        else {
+            req.session.profilePic = null;
+        }
         req.session.username = newUser.username;
         req.session.phoneNumber = newUser.phone;
         req.session.email = newUser.email;
