@@ -68,13 +68,33 @@ router.post('/addFriend', async (req, res) => {
 });
 
 router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res) => {
-    console.log(req.body);
-    friends = req.body.friends.split(',');
-    friends
-    // newGroup = Group.create({
-    //     group_name: req.body.groupName,
-    //     members: [{ user_id: req.session.userId }, ...friends],
-    // });
-    res.redirect('/home')
+    try {
+        let friends = (req.body.friends.split(',')).filter(friend => friend != '');
+        console.log(friends);
+        let friendsinGroupID = [];
+        for (let phoneNumber of friends) {
+            let friend = await User.findOne({ phone: phoneNumber });
+            if (friend) {
+                friendsinGroupID.push({ user_id: friend._id });
+            }
+        }
+        console.log(friendsinGroupID);
+        let groupImage = null;
+        if (req.file) {
+            groupImage = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            };
+        }
+        newGroup = await Group.create({
+            group_name: req.body.groupName,
+            group_pic: groupImage,
+            members: [{ user_id: req.session.userId }, ...friendsinGroupID],
+        });
+        console.log(newGroup);
+        res.redirect('/home')
+    } catch (error) {
+        console.log(error);
+    }
 });
 module.exports = router

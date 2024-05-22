@@ -11,6 +11,6 @@ const groupSchema = new mongoose.Schema({
       user_id: { type:  mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     }],
   transactions: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Transaction' }]
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Group', groupSchema);
