@@ -39,7 +39,8 @@
                 <div class="flex flex-row justify-evenly gap-3">
                     <div class="flex flex-row w-1/2 items-center gap-1 justify-end">
                         <label class="text-xl" for="amount">$</label>
-                        <input class="text-center rounded-lg px-1 text-black w-full p-1 focus:outline-none focus:border-b focus:border-primary" type="number" id="enterAmount<%= friend.phone %>" name="enterAmount<%= friend.phone %>" value="52">
+                        <input class="text-center rounded-lg px-1 text-black w-full p-1 focus:outline-none focus:border-b focus:border-primary" type="number" id="enterAmount<%= friend.phone %>" name="enterAmount" value="52">
+                        <input type="text" name="friendPhone" class="hidden" id="" value="<%= friend.phone %">
                     </div>
                 </div>
                 <div class=" flex flex-row justify-center">

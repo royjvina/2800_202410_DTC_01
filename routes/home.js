@@ -4,7 +4,7 @@ const User = require('../models/User');
 const Group = require('../models/Group');
 const multer = require('multer');
 const { get } = require("http");
-const { ObjectId } = require('mongodb');
+const { ObjectId, Transaction } = require('mongodb');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -124,6 +124,26 @@ router.post('/deleteGroup', async (req, res) => {
         console.log(error);
     }
     res.redirect('/home');
+});
+
+router.post('/settleUp', async (req, res) => {
+    try {
+        let userPayeeTransactions = await Transaction.find({ payee: req.session.userId });
+        let friend = await User.findOne({ phone: req.body.friendPhone });
+        let friendID = friend._id;
+        let userPayerTransactions = await Transaction.find({ payments: { $elemMatch: { user_id: friendID } } });
+        let userPayerTotal = 0;
+        userPayerTransactions.forEach(transaction => {
+            transaction.payments.forEach(payment => {
+                if (payment.user_id == friendID) {
+                    userPayerTotal += payment.amount_paid;
+                }
+            });
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
 });
 
 module.exports = router
