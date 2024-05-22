@@ -67,8 +67,8 @@ router.get("/addGroup", async (req, res) => {
 
 router.post('/addFriend', async (req, res) => {
     let friend;
+    let phoneNumber = req.body.friendPhone.replace(/[^\d]/g, '');
     if (req.body.friendEmail == "") {
-        phoneNumber = req.body.friendPhone.replace(/[^\d]/g, '');
         friend = await User.findOne({ phone: phoneNumber });
         if (friend) {
             addFriend(friend, req);
@@ -104,7 +104,6 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
                 friendsinGroupID.push({ user_id: friend._id });
             }
         }
-        console.log(friendsinGroupID);
         let groupImage = null;
         if (req.file) {
             groupImage = {
@@ -112,13 +111,25 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
                 contentType: req.file.mimetype
             };
         }
-        newGroup = await Group.create({
+        if (!req.body.groupId) {
+            const newGroup = await Group.create({
             group_name: req.body.groupName,
             group_pic: groupImage,
             members: [{ user_id: req.session.userId }, ...friendsinGroupID],
         });
 
         await User.updateMany({ _id: { $in: newGroup.members.map(member => member.user_id) } }, { $push: { groups: newGroup._id } });
+    }
+    else {
+        const group = await Group.findByIdAndUpdate(req.body.groupId, {
+            group_name: req.body.groupName,
+            group_pic: groupImage,
+            $addToSet: { members: { $each: friendsinGroupID } }
+        }, { new: true });
+        await User.updateMany({ _id: { $in: group.members.map(member => member.user_id) } }, { $push: { groups: group._id } });
+        
+        
+    }
         res.redirect('/home')
     } catch (error) {
         console.log(error);
@@ -130,6 +141,7 @@ router.post('/deleteGroup', async (req, res) => {
         let groupID = new ObjectId(req.body.groupDeleteId);
         await Group.findByIdAndDelete(groupID);
         await User.updateMany({ groups: groupID }, { $pull: { groups: groupID } });
+        await Transaction.deleteMany({ group_id: groupID });
     }
     catch (error) {
         console.log(error);
