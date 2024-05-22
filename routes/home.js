@@ -121,15 +121,23 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
         await User.updateMany({ _id: { $in: newGroup.members.map(member => member.user_id) } }, { $push: { groups: newGroup._id } });
     }
     else {
+        if (groupImage) {
         const group = await Group.findByIdAndUpdate(req.body.groupId, {
             group_name: req.body.groupName,
             group_pic: groupImage,
             $addToSet: { members: { $each: friendsinGroupID } }
         }, { new: true });
         await User.updateMany({ _id: { $in: group.members.map(member => member.user_id) } }, { $push: { groups: group._id } });
-        
+    }
+    else {
+        const group = await Group.findByIdAndUpdate(req.body.groupId, {
+            group_name: req.body.groupName,
+            $addToSet: { members: { $each: friendsinGroupID } }
+        }, { new: true });
+        await User.updateMany({ _id: { $in: group.members.map(member => member.user_id) } }, { $push: { groups: group._id } });
         
     }
+}
         res.redirect('/home')
     } catch (error) {
         console.log(error);

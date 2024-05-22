@@ -57,8 +57,11 @@ function addFriendsToGroupHandler() {
             }
             else {
                 let friendInputValue = friendInput.value;
-                friendInputValue = friendInputValue.replace(friendId + ",", "");
-                friendInput.value = friendInputValue;
+                const idToRemove = friendId.replace("selectFriend", "") + ",";
+                friendInputValue = friendInputValue.split(',').filter(id => id && id !== idToRemove.replace(",", "")).join(',');
+
+                // Ensure no trailing comma if friendInputValue ends up empty
+                friendInput.value = friendInputValue.endsWith(',') ? friendInputValue.slice(0, -1) : friendInputValue;
                 document.getElementById(addFriendbtnId).textContent = '+';
             }
         });
