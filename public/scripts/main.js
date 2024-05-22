@@ -67,7 +67,7 @@ function removeSecondaryButtons() {
         addFriend.classList.add('hidden');
         addFriendSecondary.classList.remove('hidden');
     }
-    if (document.querySelectorAll('.group-container').length >= 5 && !groups.classList.contains('hidden')) {
+    if (document.querySelectorAll('.group').length >= 5 && !groups.classList.contains('hidden')) {
         console.log(document.querySelectorAll('.group').length);
         addGroupSecondary.classList.add('hidden');
         console.log('heree');
