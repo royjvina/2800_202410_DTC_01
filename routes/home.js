@@ -24,6 +24,11 @@ async function getFriends(req) {
     return user
 }
 
+router.get('/easterEgg', async (req, res) => {
+
+    res.render('easterEggPopUp', {path: req.path});
+});
+
 router.get("/home", async (req, res) => {
 
     let user = await getFriends(req);
@@ -120,4 +125,5 @@ router.post('/deleteGroup', async (req, res) => {
     }
     res.redirect('/home');
 });
+
 module.exports = router
