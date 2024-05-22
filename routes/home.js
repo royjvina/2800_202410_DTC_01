@@ -84,8 +84,9 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
     try {
         let friends = (req.body.friends.split(',')).filter(friend => friend != '');
         console.log(friends);
+        let uniqueFriends = new Set(friends);
         let friendsinGroupID = [];
-        for (let phoneNumber of friends) {
+        for (let phoneNumber of uniqueFriends) {
             let friend = await User.findOne({ phone: phoneNumber });
             if (friend) {
                 friendsinGroupID.push({ user_id: friend._id });
