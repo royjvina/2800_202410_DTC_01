@@ -10,7 +10,7 @@
                 </div>
             </div>
     </header>
-    <form action="/addGroup" method="post" id="addGroupForm" enctype="multipart/form-data" class="w-full ">
+    <form action="/addGroupSubmission" method="post" id="addGroupForm" enctype="multipart/form-data" class="w-full ">
         <div class="flex flex-col gap-5 w-full">
             <div class="flex flex-row gap-3 m-2 mt-5">
                 <div>
@@ -24,7 +24,7 @@
                     <span class="text-red-700 hidden" id="emptyGroupNameWarning">Please enter a group name</span>
                 </div>
             </div>
-            <div class="flex flex-col w-full p-3 gap-2">
+            <!-- <div class="flex flex-col w-full p-3 gap-2">
                 <div class="w-1/6" class=""><span class="text-2xl">Category</span></div>
                 <ul class="w-full flex flex-col gap-2" id="groupCategoryChoices">
                     <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="travel"><span><img class="w-8 h-8" src="/images/addGroupIcons/travelBlack.svg" alt=""></span><span>Travel</span></li>
@@ -34,29 +34,18 @@
                     <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="recreation"><span><img class="w-8 h-8" src="/images/addGroupIcons/recreationBlack.svg" alt=""></span><span>Recreation</span></li>
                     <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="misc"><span><img class="w-8 h-8" src="/images/addGroupIcons/miscBlack.svg" alt=""></span><span>Miscellaneous</span></li>
                 </ul>
-            </div>
+            </div> -->
             <div class="flex flex-col w-full p-3 gap-2 mb-[70px]">
                 <div class="" class=""><span class="text-2xl">Add members</span></div>
                 <span class="text-red-700 hidden" id="emptyFriendWarning">Please select at least one friend</span>
                 <ul class="w-full flex flex-col gap-2" id="groupFriendChoices">
-                    <li class="flex flex-row gap-1 justify-between items-center p-3 w-full bg-secondary rounded-xl" id="selectFriend11111"><div class="flex flex-row items-center gap-4">
-                        <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer"
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                        <div>Friend 1</div>
-                    </div><span id="addFriend11111">+</span></li>
-                    <li class="flex flex-row gap-1 justify-between items-center p-3 w-full bg-secondary rounded-xl" id="selectFriend22222"><div class="flex flex-row items-center gap-4">
-                        <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer"
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                        <div>Friend 2</div>
-                    </div><span id="addFriend22222">+</span></li>
-                    <li class="flex flex-row gap-1 justify-between items-center p-3 w-full bg-secondary rounded-xl" id="selectFriend33333"><div class="flex flex-row items-center gap-4">
-                        <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer"
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="">
-                        <div>Friend 3</div>
-                    </div><span id="addFriend33333">+</span></li>
+                    <% for(let i = 0; i< friends.length; i ++) {%>
+                        <%- include('templates/friendsAddGroup', {friend: friends[i]}) %>
+                    <% } %>
+                    
                 </ul>
-                <input type="text" name="category" id="categoryInput" class="hidden" value="misc" disabled>
-                <input type="text" name="category" id="friendInput" class="hidden" value="" disabled>
+                <!-- <input type="text" name="category" id="categoryInput" class="hidden" value="misc" disabled> -->
+                <input type="textBox" name="friends" id="friendInput" class="hidden" value="">
             </div>
             </div>
             

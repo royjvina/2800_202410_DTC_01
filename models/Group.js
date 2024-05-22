@@ -8,9 +8,9 @@ const groupSchema = new mongoose.Schema({
 },
   created_at: { type: Date, default: Date.now },
   members: [{
-      user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      user_id: { type:  mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     }],
-  transactions: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }]
-});
+  transactions: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Transaction' }]
+}, { timestamps: true });
 
 module.exports = mongoose.model('Group', groupSchema);
