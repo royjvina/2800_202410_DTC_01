@@ -25,11 +25,8 @@ async function getFriends(req) {
 }
 
 router.get('/easterEgg', async (req, res) => {
-    if (!req.session.userId) {
-        return res.redirect('/login');
-    }
 
-    res.render('easterEggPopUp');
+    res.render('easterEggPopUp', {path: req.path});
 });
 
 router.get("/home", async (req, res) => {
