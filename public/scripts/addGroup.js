@@ -71,7 +71,7 @@ document.getElementById("confirmAddGroup").addEventListener("click", function (e
         event.preventDefault();
         emptyGroupNameWarning.classList.remove("hidden");
     }
-    else if (friendInput.value === "") {
+    else if (friendInput.value === "" && checkGroup.value === "GroupDoesNotExist") {
         event.preventDefault();
         emptyFriendWarning.classList.remove("hidden");
 
