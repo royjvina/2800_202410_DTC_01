@@ -17,7 +17,7 @@
             <div>
                 <div class="flex flex-row items-center">
                     <p class="font-semibold text-xl mt-2 pr-2" id="groupNameHere"><%=group.group_name%></p>
-                    <a href="/addGroup"><img src="/images/otherIcons/editIcon.svg" alt="" class="h-4 w-4 mt-2"></a>
+                    <a href="/addGroup?groupId=<%=group._id%>"><img src="/images/otherIcons/editIcon.svg" alt="" class="h-4 w-4 mt-2"></a>
                 </div>
                 <p class="text-gray-400 text-xs" id="usersOfAGroupHere">
                     <% if (group.members.length > 3) { %>

@@ -50,10 +50,21 @@ router.get("/home", async (req, res) => {
 router.get("/addFriend", (req, res) => {
     res.render('addFriend', { path: '/home', error: req.query.error });
 });
+
 router.get("/addGroup", async (req, res) => {
     let user = await getFriends(req);
-    res.render('addGroup', { path: '/home', friends: user.friends });
+    let groupId = req.query.groupId;
+    let group = await Group.findOne({ _id: groupId }).populate('members.user_id');
+    if (group) {
+        if (group.group_pic && group.group_pic.data) {
+        group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
+        }
+    }
+
+    // res.render('addGroup', { path: `/groups?groupId=${groupId}`, group: group, friends: user.friends })
+    res.render('addGroup', { path: '/home', friends: user.friends , group: group});
 });
+
 router.post('/addFriend', async (req, res) => {
     let friend;
     if (req.body.friendEmail == "") {
