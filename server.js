@@ -7,6 +7,7 @@ const path = require('path');
 const session = require('express-session');
 const Mongostore = require('connect-mongo');
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
 const cors = require('cors')
 
 /* const saltRounds = */
@@ -109,7 +110,7 @@ app.use("/", sessionValidation, suggestedReimbursementsRouter);
 
 // all unrealated routes
 app.get('*', (req, res) => {
-    res.render('404', {path: req.path});
+    res.render('404', { path: req.path });
 })
 
 // Error handling middleware
@@ -117,9 +118,9 @@ app.use((err, req, res, next) => {
     console.error(err);
 
     if (err.status === 400) {
-        res.status(400).render('error400', {path: req.path});
+        res.status(400).render('error400', { path: req.path });
     } else {
-        res.status(500).render('error500', {path: req.path});
+        res.status(500).render('error500', { path: req.path });
     }
 });
 

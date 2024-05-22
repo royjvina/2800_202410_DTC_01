@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Group = require('../models/Group');
 const multer = require('multer');
 const { get } = require("http");
+const { ObjectId } = require('mongodb');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -26,7 +27,19 @@ async function getFriends(req) {
 router.get("/home", async (req, res) => {
 
     let user = await getFriends(req);
-    res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends });
+    let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
+    groups.forEach(group => {
+        if (group.group_pic && group.group_pic.data) {
+            group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
+        }
+        group.members.forEach(member => {
+
+            if (member.user_id.profileImage && member.user_id.profileImage.data) {
+                member.user_id.profileImageBase64 = `data:${member.user_id.profileImage.contentType};base64,${member.user_id.profileImage.data.toString('base64')}`;
+            }
+        });
+    });
+    res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups });
 })
 router.get("/addFriend", (req, res) => {
     res.render('addFriend', { path: '/home', error: req.query.error });
@@ -91,10 +104,26 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
             group_pic: groupImage,
             members: [{ user_id: req.session.userId }, ...friendsinGroupID],
         });
+
+        await User.updateMany({ _id: { $in: newGroup.members.map(member => member.user_id) } }, { $push: { groups: newGroup._id } });
         console.log(newGroup);
         res.redirect('/home')
     } catch (error) {
         console.log(error);
     }
+});
+
+router.post('/deleteGroup', async (req, res) => {
+    try {
+        console.log(req.body);
+        let groupID = new ObjectId(req.body.groupDeleteName);
+        console.log(groupID);
+        await Group.findByIdAndDelete(groupID);
+        await User.updateMany({ groups: groupID }, { $pull: { groups: groupID } });
+    }
+    catch (error) {
+        console.log(error);
+    }
+    res.redirect('/home');
 });
 module.exports = router
