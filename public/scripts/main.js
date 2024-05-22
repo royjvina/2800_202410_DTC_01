@@ -53,14 +53,15 @@ function friendsTabHandler() {
  * @balpreet787
  * */
 function removeSecondaryButtons() {
-    const addFriendSecondary = document.getElementById('addFriendSecondary');
-    const addGroupSecondary = document.getElementById('addGroupSecondary');
+    const addFriendSecondary = document.getElementById('addFriendSecondaryDiv');
+    const addGroupSecondary = document.getElementById('addGroupSecondaryDiv');
     const addFriend = document.getElementById('addFriend');
     const addGroup = document.getElementById('createGroup');
 
     if (document.querySelectorAll('.friend').length >= 5 && !friends.classList.contains('hidden')) {
         addFriendSecondary.classList.add('hidden');
         addFriend.classList.remove('hidden');
+
     }
     else {
         addFriend.classList.add('hidden');
@@ -72,9 +73,11 @@ function removeSecondaryButtons() {
         console.log('heree');
         addGroup.classList.remove('hidden');
     }
-    else {
+    else if (!groups.classList.contains('hidden')) {
+        addFriendSecondary.classList.add('hidden');
         addGroup.classList.add('hidden');
         addGroupSecondary.classList.remove('hidden');
+        addGroupSecondary.classList.add('flex');
         console.log('here');
     }
 }
@@ -103,12 +106,14 @@ function groupSelectorHandler(friendPhone) {
 function deleteGroupHandler() {
     document.querySelectorAll('.deleteGroup').forEach(deleteGroup => {
         deleteGroup.addEventListener('click', function () {
-            deleteGroupName = (this.id).replace('Delete', '');
+            let deleteGroupName = (this.id).replace('Delete', '');
+            let selectedGroup = document.getElementById(deleteGroupName + 'Selected');
             console.log(deleteGroupName);
-            confirmDeleteOptions = document.getElementById(deleteGroupName + 'ConfirmDeleteOptions');
-            cancelDelete = document.getElementById(deleteGroupName + 'CancelDelete');
+            let confirmDeleteOptions = document.getElementById(deleteGroupName + 'ConfirmDeleteOptions');
+            let cancelDelete = document.getElementById(deleteGroupName + 'CancelDelete');
             confirmDeleteOptions.classList.toggle('hidden');
             confirmDeleteOptions.classList.add('hideManually');
+            selectedGroup.value = deleteGroupName;
             setTimeout(() => {
                 confirmDeleteOptions.classList.toggle('hideManually');
             }, 10);
@@ -117,8 +122,10 @@ function deleteGroupHandler() {
                 confirmDeleteOptions.classList.add('hidden');
                 confirmDeleteOptions.classList.remove('hideManually');
                 confirmDeleteOptions.classList.remove('flex');
+                selectedGroup.value = '';
 
             });
+
         });
     });
 }
@@ -156,7 +163,7 @@ function formFieldsHandler(friendPhone) {
     });
     submitSettle.addEventListener('click', function (event) {
         event.preventDefault();
-        
+
         if (enterAmount.value === '' || isNaN(enterAmount.value)) {
             EnterAmountWarning.classList.toggle('hidden');
             setTimeout(() => {
