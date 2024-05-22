@@ -50,7 +50,7 @@ function addFriendsToGroupHandler() {
             friend.classList.toggle("text-white");
 
             if (friend.classList.contains("bg-primary")) {
-                friendInput.value += friendId;
+                friendInput.value += friendId.replace("selectFriend", "");
                 friendInput.value += ",";
                 document.getElementById(addFriendbtnId).textContent = '-';
                 console.log(addFriendbtnId)
