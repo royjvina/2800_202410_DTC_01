@@ -49,15 +49,8 @@ router.post('/addExpenses', async (req, res) => {
         // Prepare payment data
         const payments = [];
         group.members.forEach(member => {
-            if (member.user_id._id.toString() === selectedPaidBy) {
-                // Payee's payment
-                payments.push({
-                    user_id: member.user_id._id,
-                    amount_paid: selectedExpenseAmount
-                });
-            } else {
-                paymentName = group._id + member.user_id._id +"AmountEqual";
-                console.log(req.body[paymentName])
+            paymentName = group._id + member.user_id._id +"AmountEqual";
+            if (req.body[paymentName]) {
                 paymentValue = req.body[paymentName];
                 console.log(paymentValue)
                 payments.push({
