@@ -5,6 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
     settingsProfilePic.src = settingsProfilePicSrc;
 
     settingsProfilePic.onerror = function () {
-        settingsProfilePic.src = '/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg';
+        settingsProfilePic.src = '/images/homepageIconsAndPlaceholders/profilePicPlaceholderSettings.svg';
     };
 });

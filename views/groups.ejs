@@ -1,18 +1,27 @@
 <%- include('templates/header') %>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css">
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<style>
-    .chart-container {
-        width: 600px;
-        margin: auto;
-    }
-</style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        .chart-container {
+            width: 600px;
+            margin: auto;
+        }
+    </style>
     <div class="fixed w-full bg-white pb-2">
         <div class="flex flex-row">
             <img class="m-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="75" width="75">
             <div>
-                <p class="font-semibold text-xl mt-2" id="groupNameHere">Group 1</p>
-                <p class="text-gray-400 text-xs" id="usersOfAGroupHere">User 1, User 2, User 3, and 4 more</p>
+                <div class="flex flex-row items-center">
+                    <p class="font-semibold text-xl mt-2 pr-2" id="groupNameHere">Group 1</p>
+                    <a href="/addGroup"><img src="/images/otherIcons/editIcon.svg" alt="" class="h-4 w-4 mt-2"></a>
+                </div>
+                <p class="text-gray-400 text-xs pb-2" id="usersOfAGroupHere">User 1, User 2, User 3, and 4 more</p>
+                <a href="/suggestedReimbursements" class="flex justify-center font-medium">
+                    <p class="px-2 text-[#4b061a] outline outline-1 outline-[#4b061a] hover:bg-[#4b061a] hover:text-white rounded-lg flex flex-row items-center">
+                        <span class="text-sm">Suggested Reimbursements</span>
+                        <span class="pl-2 text-2xl mb-1">&#8250;</span>
+                    </p>
+                </a>
             </div>
         </div>
         <div class="text-black mt-2 flex mx-2 justify-center">
@@ -153,8 +162,7 @@
         </div>
     </div>
 
-    <div id="balances" class="overflow-auto mt-[135px] mb-[70px] hidden">
-
+    <div id="balances" class="overflow-auto mb-[70px] mt-[135px] hidden">
     </div>
 
     <script src="/scripts/groups.js"></script>

@@ -13,11 +13,11 @@ router.get('/history', async (req, res) => {
     }
 
     const chatHistories = await ChatHistory.find({ userId: req.session.userId });
-    res.render('aiLog', { chatHistories });
+    res.render('aiLog', { chatHistories, path: '/AI' });
 });
 
 router.get('/AI', (req, res) => {
-    res.render('aiAdvisor', {username : req.session.username});
+    res.render('aiAdvisor', { username: req.session.username, path: req.path });
 });
 
 router.post('/advisor', async function (req, res) {
@@ -60,9 +60,9 @@ router.post('/advisor', async function (req, res) {
     }
 
     let chatGPTResult = completion.choices[0].message.content;
-    console.log(`Question: ${messages.at(-1).content}\nAnswer: ${chatGPTResult}`);
+    console.log(`Question: ${messages.at(-2).content}\nAnswer: ${chatGPTResult}`);
 
-    let question = messages.at(-1).content;
+    let question = messages.at(-2).content;
     let answer = chatGPTResult;
 
     if (!req.session.chatHistory) {
@@ -107,7 +107,7 @@ router.post('/saveChat/:id', async (req, res) => {
                 return res.status(500).send('Error saving file');
             }
             res.download(filePath, () => {
-                fs.unlinkSync(filePath); 
+                fs.unlinkSync(filePath);
             });
         });
     } else {

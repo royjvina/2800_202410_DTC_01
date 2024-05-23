@@ -9,6 +9,7 @@ const { google } = require('googleapis');
 const crypto = require('crypto');
 const saltRounds = 12;
 const multer = require('multer');
+const path = require("path");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -44,7 +45,7 @@ async function createTransporter() {
 router.get("/", (req, res) => {
     const errorMessage = req.query.error;
     const loginEmail = req.session.loginEmail || '';
-    res.render('index.ejs', { error: errorMessage, loginEmail });
+    res.render('index.ejs', { error: errorMessage, loginEmail, path: req.path });
 })
 
 router.post('/', async (req, res) => {
@@ -68,9 +69,16 @@ router.post('/', async (req, res) => {
         req.session.loginEmail = '';
         req.session.userId = user._id;
         req.session.username = user.username;
-        req.session.profilePic = `/profileImage/${user._id}`;
+        if (user.profileImage && user.profileImage.data) {
+            console.log(user.profileImage);
+            req.session.profilePic = `data:${user.profileImage.contentType};base64,${user.profileImage.data.toString('base64')}`
+        }
+        else {
+            req.session.profilePic = null;
+        }
         req.session.username = user.username;
         req.session.phoneNumber = user.phone;
+        req.session.email = user.email;
         req.session.authenticated = true;
         req.session.authorisation = user.authorisation;
         res.redirect('/home')
@@ -99,12 +107,12 @@ router.get("/register", (req, res) => {
         signUpFields[field] = '';
     });
 
-    res.render('register.ejs', { error: incorrectFields, signUpFields });
+    res.render('register.ejs', { error: incorrectFields, signUpFields, path: req.path });
 });
 
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
     var { email, phone, username, password } = req.body;
-
+    console.log(req.body);
     const incorrectFields = [];
 
     try {
@@ -144,9 +152,16 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
 
         req.session.userId = newUser._id;
         req.session.authenticated = true;
-        req.session.profilePic = `/profileImage/${newUser._id}`;
+        if (profileImage) {
+            console.log(newUser.profileImage);
+            req.session.profilePic = `data:${newUser.profileImage.contentType};base64,${newUser.profileImage.data.toString('base64')}`
+        }
+        else {
+            req.session.profilePic = null;
+        }
         req.session.username = newUser.username;
         req.session.phoneNumber = newUser.phone;
+        req.session.email = newUser.email;
         req.session.authorisation = newUser.authorisation;
         delete req.session.signUpFields;
         res.redirect('/home');
@@ -156,100 +171,11 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
     }
 });
 
-router.get("/register", (req, res) => {
-    const incorrectFields = req.query.error ? req.query.error.split(',') : [];
-    res.render('register.ejs', { error: incorrectFields });
-});
 
-// Handle registration form submission
-router.post('/submitRegistration', async (req, res) => {
-    const { email, phone, username, password } = req.body;
-    const incorrectFields = [];
-
-    try {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            incorrectFields.push('email');
-        }
-
-        const { error } = registrationSchema.validate({ email, phone, username, password }, { abortEarly: false });
-        if (error) {
-            const validationErrors = error.details.map(detail => detail.context.key);
-            incorrectFields.push(...validationErrors);
-        }
-
-        if (incorrectFields.length > 0) {
-            return res.redirect(`/register?error=${incorrectFields.join(',')}`);
-        }
-        let profileImage = null;
-        if (req.file) {
-            profileImage = {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            };
-        }
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const newUser = new User({ email, phone, username, password: hashedPassword, profileImage });
-
-        await newUser.save();
-
-        req.session.userId = newUser._id;
-        req.session.authenticated = true;
-        req.session.profilePic = `/profileImage/${newUser._id}`;
-        req.session.username = newUser.username;
-        req.session.authorisation = newUser.authorisation;
-
-        res.redirect('/home');
-    } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).send('Error registering user.');
-    }
-});
-
-router.get("/register", (req, res) => {
-    const incorrectFields = req.query.error ? req.query.error.split(',') : [];
-    res.render('register.ejs', { error: incorrectFields });
-});
-
-// Handle registration form submission
-router.post('/submitRegistration', async (req, res) => {
-    const { email, phone, username, password } = req.body;
-    const incorrectFields = [];
-
-    try {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            incorrectFields.push('email');
-        }
-
-        const { error } = registrationSchema.validate({ email, phone, username, password }, { abortEarly: false });
-        if (error) {
-            const validationErrors = error.details.map(detail => detail.context.key);
-            incorrectFields.push(...validationErrors);
-        }
-
-        if (incorrectFields.length > 0) {
-            return res.redirect(`/register?error=${incorrectFields.join(',')}`);
-        }
-
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const newUser = new User({ email, phone, username, password: hashedPassword });
-
-        await newUser.save();
-
-        req.session.userId = newUser._id;
-        req.session.authenticated = true;
-        req.session.authorisation = newUser.authorisation;
-        res.redirect('/home');
-    } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).send('Error registering user.');
-    }
-});
 
 router.get("/reset", (req, res) => {
     const message = req.query.message;
-    res.render('reset.ejs', { message });
+    res.render('reset.ejs', { message, path: req.path });
 });
 
 router.post('/reset', async (req, res) => {
