@@ -74,7 +74,7 @@ router.post('/addExpenses', async (req, res) => {
 
         // Save transaction
         await newTransaction.save();
-
+        await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
         res.redirect('/home');
     } catch (error) {
         console.error(error);
