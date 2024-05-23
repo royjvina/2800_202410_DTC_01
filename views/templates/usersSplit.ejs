@@ -1,0 +1,12 @@
+<li>
+    <% if (payments.amount_paid > 0) { %>
+    <div class="flex flex-row items-center justify-between m-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+        <% if (payments.user_id.equals(userId)) { %>
+        <p class="font-medium">Your Split:</p>
+        <% } else { %>
+        <p class="font-medium"><%= payments.user_id.username %>'s Split:</p>
+        <% } %>
+        <p class="font-medium">$<%= payments.amount_paid %></p>
+    </div>
+    <% } %>
+</li>
