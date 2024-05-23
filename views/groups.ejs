@@ -10,9 +10,9 @@
     <div class="fixed w-full bg-white pb-2">
         <div class="flex flex-row">
             <% if(group.group_picBase64) { %>
-            <img class="m-3" src="<%= group.group_picBase64%>" alt="" height="75" width="75">
+            <img class="m-3 rounded-md h-20 w-20" src="<%= group.group_picBase64%>" alt="">
             <% } else { %>  
-            <img class="m-3" src="/images/navbarIcons/groups.svg" alt="" height="75" width="75">
+            <img class="m-3 rounded-md h-20 w-20" src="/images/navbarIcons/groups.svg" alt="">
             <% } %>
             <div>
                 <div class="flex flex-row items-center">
@@ -21,10 +21,10 @@
                 </div>
                 <p class="text-gray-400 text-xs" id="usersOfAGroupHere">
                     <% if (group.members.length > 3) { %>
-                    <div id="moreThanThreeUsers" class="text-gray-400 text-xs pb-2 moreUsers">
+                    <div id="moreThanThreeUsers" class="text-gray-400 text-xs pb-1 moreUsers">
                         <%= group.members[0].user_id.username%>, <%=group.members[1].user_id.username%>, <%=group.members[2].user_id.username%> and <%=group.members.length - 3%> more
                     </div>
-                    <div id="allUsers" class="hidden text-gray-400 text-xs pb-2 moreUsers">
+                    <div id="allUsers" class="hidden text-gray-400 text-xs pb-1 moreUsers">
                         <% for (let i=0; i < group.members.length; i++) { %>
                             <% if (i == group.members.length - 1) { %>
                                 <%= group.members[i].user_id.username %>
@@ -34,7 +34,7 @@
                         <% } %>
                     </div>
                     <% } %>
-                    <div id="lessThanThreeUsers" class="text-gray-400 text-xs pb-2 moreUsers">
+                    <div id="lessThanThreeUsers" class="text-gray-400 text-xs pb-1 moreUsers">
                         <% for (let i=0; i < group.members.length; i++) { %>
                             <% if (i == group.members.length - 1) { %>
                                 <%= group.members[i].user_id.username %>
@@ -60,134 +60,13 @@
         </div>
     </div>
     <div id="expenses" class="overflow-auto mt-[146px] mb-[70px] flex-col">
-        <a href="/individualExpense" class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>16</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Wi-Fi</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 1</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$95.97</p>
-            </div>
-        </a>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>14</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Aquarium Tickets</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 1</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$80.50</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>12</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Concert Tickets</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 2</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$208.96</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>11</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Amazon Order</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 5</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$30.40</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>11</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Restaurant 2</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 5</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$80.88</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>09</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Reimbursement</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 2</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$90.44</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>09</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Bubble Tea</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 3</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$12.12</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>09</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Ice Cream</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 3</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$11.74</p>
-            </div>
-        </div>
+        <ul>
+            <% if (expense) { %>
+            <% for (i=0; i < group.transactions.length; i++) { %>
+                <%- include('templates/groupExpense', { expense: expense }) %>
+            <% } %>
+            <% } %>
+        </ul>
     </div>
 
     <div id="balances" class="overflow-auto mb-[70px] mt-[135px] hidden">

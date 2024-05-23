@@ -14,5 +14,14 @@ router.get('/groups', async (req, res) => {
     res.render('groups', { path: '/home', group: group });
 })
 
+// router.get('/individualExpense', async (req, res) => {
+//     let groupId = req.query.groupId;
+//     let group = await Group.findOne({ _id: groupId }).populate('members.user_id');
+//     let expenseId = req.query.expenseId;
+//     let expense = await Transaction.findOne({ _id: expenseId });
+
+//     res.render('individualExpense', { path: '/groups', expense: expense })
+// })
+
 
 module.exports = router
