@@ -195,7 +195,7 @@ function categoryHandler() {
             let categoryId = category.id;
 
             if (category.classList.contains("bg-primary")) {
-                categoryInput.value = category.textContent;
+                categoryInput.value = categoryId
                 img.src = `/images/addGroupIcons/${categoryId}White.svg`;
                 categoryHeader.textContent = category.textContent;
                 categoryHeader.classList.add("text-primary");
