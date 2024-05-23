@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Group = require('../models/Group');
 const Transaction = require('../models/Transaction');
+const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
 // Route for rendering the add expenses page
@@ -35,12 +36,12 @@ router.post('/addExpenses', async (req, res) => {
     try {
         
         // Extract form data
-        const { selectedGroup, selectedDate, selectedExpenseName, selectedExpenseAmount, selectedPaidBy, } = req.body;
+        const { selectedGroup, selectedDate, selectedExpenseName, selectedExpenseAmount, selectedCategory, selectedPaidBy, } = req.body;
         console.log(req.body);
         // Get group by ID to check if it exists
         let groupsData = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
-
-        const group = await Group.findOne({ group_name: selectedGroup });
+        let groupId = new ObjectId(req.body.selectedGroup);
+        const group = await Group.findOne({ _id: groupId });
 
         if (!group) {
             return res.status(400).json({ error: 'Group not found' });
@@ -64,6 +65,7 @@ router.post('/addExpenses', async (req, res) => {
         const newTransaction = new Transaction({
             name: selectedExpenseName,
             group_id: group._id,
+            category: selectedCategory,
             total_cost: selectedExpenseAmount,
             date: selectedDate,
             payee: selectedPaidBy,
@@ -73,7 +75,7 @@ router.post('/addExpenses', async (req, res) => {
         // Save transaction
         await newTransaction.save();
 
-        res.status(201).json({ message: 'Expense added successfully' });
+        res.redirect('/home');
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

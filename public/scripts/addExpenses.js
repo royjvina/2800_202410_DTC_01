@@ -7,6 +7,7 @@
  * This function is used to handle the click event on the split expenses equal tab    
  * @claaudiaale
  */
+let GlobalGroupId;
 function equalExpenseTabHandler(event) {
     event.preventDefault();
     showPercentageExpense.classList.remove('bg-[#4b061a]');
@@ -78,7 +79,7 @@ function checkSplitMethod() {
 function addExpenseToPaidByUser() {
     let splitMethod = checkSplitMethod();
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
-    let paidByUser = document.getElementById('selectedPaidBy').value;
+    let paidByUser = GlobalGroupId + document.getElementById('selectedPaidBy').value;
 
     document.querySelectorAll('.user' + splitMethod + 'Split').forEach(user => {
         user.checked = false;
@@ -112,7 +113,7 @@ function addExpenseToPaidByUser() {
 function calculateExpenseEqually() {
     var expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     var selectedGroup = document.getElementById('selectedGroup');
-    var groupId = document.getElementsByClassName(selectedGroup.value)[0].id;
+    var groupId = selectedGroup.value;
     
     // Query the users within the selected group's split container
     let usersToSplitFor = document.querySelectorAll(`.userEqualSplit:checked`);
@@ -156,6 +157,56 @@ function calculateUsersPercentage() {
         }
     }) 
     return totalPercentage;
+}
+
+/**
+ * Function to handle the category selection in the add group form
+ * @balpreet787
+ */
+function categoryHandler() {
+    const categories = document.querySelectorAll("#groupCategoryChoices li");
+    groupDroupDown.addEventListener("click", function () {
+        if (groupCategoryChoices.classList.contains("hidden")) {
+            groupCategoryChoices.classList.remove("hidden");
+            groupCategoryChoices.classList.add("flex");
+            categoryArrow.src = "/images/otherIcons/upArrow.svg";
+
+        }
+        else {
+            groupCategoryChoices.classList.add("hidden");
+            groupCategoryChoices.classList.remove("flex");
+            categoryArrow.src = "/images/otherIcons/downArrow.svg";
+        }
+    });
+    categories.forEach(category => {
+        category.addEventListener("click", function () {
+            categories.forEach(category => {
+                category.classList.remove("bg-primary");
+                category.classList.add("bg-secondary");
+                category.classList.remove("text-white");
+                let img = category.querySelector('img');
+                let categoryId = category.id;
+                img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
+            });
+            category.classList.toggle("bg-secondary");
+            category.classList.toggle("bg-primary");
+            category.classList.toggle("text-white");
+            let img = category.querySelector('img');
+            let categoryId = category.id;
+
+            if (category.classList.contains("bg-primary")) {
+                categoryInput.value = category.textContent;
+                img.src = `/images/addGroupIcons/${categoryId}White.svg`;
+                categoryHeader.textContent = category.textContent;
+                categoryHeader.classList.add("text-primary");
+            }
+            else {
+                categoryInput.value = "miscellaneous";
+                categoryHeader.textContent = "miscellaneous";
+
+            }
+        });
+    });
 }
 
 
@@ -269,14 +320,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Function to get group ID from group name
-async function getGroupIdFromName(groupName) {
+async function getGroupIdFromName(groupId) {
     try {
         for (let i = 0; i < groupsData.length; i++) {
-            if (groupsData[i].group_name === groupName) {
+            if (groupsData[i]._id === groupId) {
                 return groupsData[i]._id;
             }
         }
-        console.log(`Group with name '${groupName}' not found.`);
+        console.log(`Group with ID '${groupId}' not found.`);
         return null;
     } catch (error) {
         console.error('Error:', error);
@@ -286,6 +337,7 @@ async function getGroupIdFromName(groupName) {
 
 // Function to get group index by ID
 function getGroupById(groupId) {
+    console.log(groupId);
     for (let i = 0; i < groupsData.length; i++) {
         if (groupsData[i]._id === groupId) {
             return groupsData[i];
@@ -311,7 +363,7 @@ function populateUsersDropdown(groupId) {
             console.log(member); // Log the member object
             const option = document.createElement('option');
             option.value = member.user_id._id;
-            option.textContent = member.user_id.username; // Assuming username is a property of the member object
+            option.textContent = member.user_id.username; 
             selectElement.appendChild(option);
         });
 
@@ -321,10 +373,11 @@ function populateUsersDropdown(groupId) {
 document.getElementById('selectedGroup').addEventListener('change', function() {
     var selectedGroupId;
     for (i = 0; i < groupsData.length; i++) {
-        if (groupsData[i].group_name === document.getElementById('selectedGroup').value) {
+        if (groupsData[i]._id === document.getElementById('selectedGroup').value) {
             selectedGroupId = groupsData[i]._id;
         }
     }
+    GlobalGroupId = selectedGroupId;
     populateUsersDropdown(selectedGroupId);
 });
 
@@ -381,5 +434,5 @@ percentageInputs.forEach(input => {
 
 confirmAddExpense.addEventListener('click', function(event) {displayEmptyFieldModal(event)});
 closeExpenseError.addEventListener('click', function() {errorModal.close()})
-
+categoryHandler();
 
