@@ -14,29 +14,32 @@
     </header>
 
     <div class="flex flex-row bg-primary pb-6 rounded-b-3xl p-4 fixed top-14 w-full">
-        <img class="p-2" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="70" width="70">
+        <% let transactionCategory = transaction.category %>
+        <img class="p-2" src="/images/addGroupIcons/<%= transactionCategory %>Black.svg" alt="" height="85" width="85">
         <div class="flex flex-col pl-2 w-full">
             <div class="flex flex-row justify-between leading-4 text-white pb-1">
-                <p class="text-xl font-semibold">Expense Name</p>
-                <p class="text-xl font-semibold">$95.97</p>
+                <p class="text-xl font-semibold"><%= transaction.name %></p>
+                <p class="text-xl font-semibold">$<%= transaction.total_cost %></p>
             </div>
-            <p class="text-sm text-white font-normal leading-4">May 16, 2024</p>
-            <p class="text-sm text-white font-normal leading-4">Paid By: User 2</p>
+            <% let transactionDateString = transaction.date.toString() %>
+            <p class="text-sm text-white font-normal leading-4"><%= transactionDateString.substring(4, 10) + ", " + transactionDateString.substring(11, 15) %></p>
+            <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Paid By:</span> 
+                <% if (transaction.payee._id == userId) { %>
+                    <%= transaction.payee.username %> (You)
+                    <% } else { %>
+                    <%= transaction.payee.username %>
+                <% } %>
+            </p>
+            <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Category:</span> <%= transaction.category.toString()[0].toUpperCase() + transaction.category.toString().substring(1) %></p>
         </div>
     </div>
-    <div class="overflow-auto mb-[70px] mt-[105px]">
-        <div class="flex flex-row items-center justify-between m-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
-            <p class="font-medium">User 1's Split:</p>
-            <p class="font-medium">$31.99</p>
-        </div>
-        <div class="flex flex-row items-center justify-between m-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
-            <p class="font-medium">Your Split:</p>
-            <p class="font-medium">$31.99</p>
-        </div>
-        <div class="flex flex-row items-center justify-between m-2 p-3 rounded-lg shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
-            <p class="font-medium">User 3's Split:</p>
-            <p class="font-medium">$31.99</p>
-        </div>
+    <div class="overflow-auto mb-[90px] mt-[120px]">
+        <ul>
+            <% let payments = transaction.payments %>
+            <% for (let i = 0; i < payments.length; i++) { %>
+                <%- include('templates/usersSplit', { payments: payments[i], userId: userId}) %>
+            <% } %>
+        </ul>
     </div>
 
 <%- include('templates/footer') %>
