@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             makeImageAppearBigger(image);
             pennyWiseDialog('I am leaving since you are gonna behave like this!', clickCount);
             setTimeout(function() {
+                window.open('https://www.youtube.com/watch?v=KkB6WUaCOqw&ab_channel=Merfish', '_blank');
                 logout();
             }, 4000);
         }
