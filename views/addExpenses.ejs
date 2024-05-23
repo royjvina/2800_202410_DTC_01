@@ -1,32 +1,42 @@
+<!-- <div class="flex flex-col w-full p-3 gap-2">
+    <div class="w-1/6" class=""><span class="text-2xl">Category</span></div>
+        <ul class="w-full flex flex-col gap-2" id="groupCategoryChoices">
+            <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="travel"><span><img class="w-8 h-8" src="/images/addGroupIcons/travelBlack.svg" alt=""></span><span>Travel</span></li>
+            <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="home"><span><img class="w-8 h-8" src="/images/addGroupIcons/homeBlack.svg" alt=""></span><span>Home</span></li>
+            <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="food"><span><img class="w-8 h-8" src="/images/addGroupIcons/foodBlack.svg" alt=""></span><span>Food</span></li>
+            <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="entertainment"><span><img class="w-8 h-8" src="/images/addGroupIcons/entertainmentBlack.svg" alt=""></span><span>Entertainment</span></li>
+            <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="recreation"><span><img class="w-8 h-8" src="/images/addGroupIcons/recreationBlack.svg" alt=""></span><span>Recreation</span></li>
+            <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="misc"><span><img class="w-8 h-8" src="/images/addGroupIcons/miscBlack.svg" alt=""></span><span>Miscellaneous</span></li>
+        </ul>
+    </div>
+</div>
+<input type="text" name="category" id="categoryInput" class="hidden" value="misc" disabled> -->
 <%- include('templates/HeadTags') %>
-
-<body class="bg-gradient-to-b from-white to-primary">
-    <header class="sticky top-0">
-        <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
-            <div><a href="/home" id="cancelAddExpense" href="/home">
-                    Cancel
-                </a></div>
-
-            <div class="">
-                <a href="/home"><button type="submit" form="addExpenseForm" id="confirmAddExpense">Done</button></a>
-            </div>
-        </div>
-    </header>
-
+<body class="">
     <div>
-        <form action="/addExpensePage" id="addExpenseForm" method="post">
+        <form action="/addExpenses" id="addExpenseForm" method="post">
+            <header class="sticky top-0">
+                <div class="flex flex-row justify-between font-bold px-3 pb-3 bg-primary items-center text-white h-[68px]">
+                    <div><a href="/home" id="cancelAddExpense" href="/home" class = "">
+                            Cancel
+                        </a></div>
+        
+                    <div class="">
+                        <a href="/home"><button type="submit" form="addExpenseForm" id="confirmAddExpense">Done</button></a>
+                    </div>
+                </div>
+            </header>
             <div class="fixed top-14 w-full bg-white z-10">
                 <div class="m-2 p-3 outline outline-1 rounded-xl">
                     <label class="font-semibold" for="selectedGroup">For:</label>
                     <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
                         <option value="" selected disabled class="hidden">Select A Group</option>
-                        <option class="text-center" value="group1">Group 1</option>
-                        <option class="text-center" value="group2">Group 2</option>
-                        <option class="text-center" value="group3">Group 3</option>
-                        <option class="text-center" value="group4">Group 4</option>
-                        <option class="text-center" value="group5">Group 5</option>
+                        <% for(let i = 0; i < groups.length; i++) {%>
+                            <%- include('templates/nameExpense', { option: groups[i].group_name }) %>
+                        <% } %>
                     </select>
                 </div>
+                
                 <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
                     <div class="flex flex-col">
                         <input type="date" id="selectedDate" name="selectedDate"
@@ -50,13 +60,6 @@
                             <select class="float-right px-4 rounded-lg m-2 text-black" name="selectedPaidBy"
                                 id="selectedPaidBy" placeholder="Select User">
                                 <option value="text-black" selected disabled class="hidden">User</option>
-                                <option class="text-black" value="user1">User 1</option>
-                                <option class="text-black" value="user2">User 2</option>
-                                <option class="text-black" value="user3">User 3</option>
-                                <option class="text-black" value="user4">User 4</option>
-                                <option class="text-black" value="user5">User 5</option>
-                                <option class="text-black" value="user6">User 6</option>
-                                <option class="text-black" value="user7">User 7</option>
                             </select>
                         </div>
                     </div>
@@ -72,355 +75,33 @@
             </div>
 
             <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[300px] mb-[70px]">
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user1" name="userEqualSplit" value="user1" class="userEqualSplit">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 1</p>
-                        </div>
-                        <p class="w-full font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user1AmountEqual" name="user1AmountEqual" min="0" placeholder="$0.00">$0.00</p>
+                <% for(let i = 0; i < groups.length; i++) { %>
+                    <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
+                        <% for(let j = 0; j < groups[i].members.length; j++) { %>
+                            <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id }) %>
+                        <% } %>
                     </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user2" name="userEqualSplit" value="user2" class="userEqualSplit">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 2</p>
-                        </div>
-                        <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user2AmountEqual" name="user2AmountEqual" min="0" placeholder="$0.00">$0.00</p>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user3" name="userEqualSplit" value="user3" class="userEqualSplit">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 3</p>
-                        </div>
-                        <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user3AmountEqual" name="user3AmountEqual" min="0" placeholder="$0.00">$0.00</p>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user4" name="userEqualSplit" value="user4" class="userEqualSplit">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 4</p>
-                        </div>
-                        <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user4AmountEqual" name="user4AmountEqual" min="0" placeholder="$0.00">$0.00</p>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user5" name="userEqualSplit" value="user5" class="userEqualSplit">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 5</p>
-                        </div>
-                        <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user5AmountEqual" name="user5AmountEqual" min="0" placeholder="$0.00">$0.00</p>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user6" name="userEqualSplit" value="user6" class="userEqualSplit">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 6</p>
-                        </div>
-                        <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user6AmountEqual" name="user6AmountEqual" min="0" placeholder="$0.00">$0.00</p>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user7" name="userEqualSplit" value="user7" class="userEqualSplit">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 7</p>
-                        </div>
-                        <p class="w-1/2 font-semibold text-xl text-right ml-8 focus:outline-none focus:border-b-2 px-2 text-gray-400"
-                            type="number" id="user7AmountEqual" name="user7AmountEqual" min="0" placeholder="$0.00">$0.00</p>
-                    </div>
-                </div>
+                <% } %>
             </div>
-
+            
             <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[300px] mb-[70px] hidden">
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user1" name="userPercentageSplit" value="user1" class="userPercentageSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 1</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex flex-row">
-                                <input
-                                    class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                                    type="number" id="user1Percentage" name="user1Percentage" min="0" placeholder="0">
-                                <p class="text-gray-400 text-xl font-semibold px-2">%</p>
-                            </div>
-                            <span class="ml-auto text-sm text-gray-500 px-2" id="user1AmountPercentage" name="user1AmountPercentage">$0.00</span>
-                        </div>
+                <% for(let i = 0; i < groups.length; i++) { %>
+                    <div id="<%= groups[i].group_name %>-percentage" class="split-container hidden">
+                        <% for(let j = 0; j < groups[i].members.length; j++) { %>
+                            <%- include('templates/friendsPercentExpense', { friend: groups[i].members[j].user_id }) %>
+                        <% } %>
                     </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user2" name="userPercentageSplit" value="user2" class="userPercentageSplit hidden">
-                        <div class="w-3/4 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 2</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex flex-row">
-                                <input
-                                    class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                                    type="number" id="user2Percentage" name="user2Percentage" min="0" placeholder="0">
-                                <p class="text-gray-400 text-xl font-semibold px-2">%</p>
-                            </div>
-                            <span class="ml-auto text-sm text-gray-500 px-2" id="user2AmountPercentage" name="user2AmountPercentage">$0.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user3" name="userPercentageSplit" value="user3" class="userPercentageSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 3</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex flex-row">
-                                <input
-                                    class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                                    type="number" id="user3Percentage" name="user3Percentage" min="0" placeholder="0">
-                                <p class="text-gray-400 text-xl font-semibold px-2">%</p>
-                            </div>
-                            <span class="ml-auto text-sm text-gray-500 px-2" id="user3AmountPercentage" name="user3AmountPercentage">$0.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user4" name="userPercentageSplit" value="user4" class="userPercentageSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 4</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex flex-row">
-                                <input
-                                    class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                                    type="number" id="user4Percentage" name="user4Percentage" min="0" placeholder="0">
-                                <p class="text-gray-400 text-xl font-semibold px-2">%</p>
-                            </div>
-                            <span class="ml-auto text-sm text-gray-500 px-2" id="user4AmountPercentage" name="user4AmountPercentage">$0.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user5" name="userPercentageSplit" value="user5" class="userPercentageSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 5</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex flex-row">
-                                <input
-                                    class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                                    type="number" id="user5Percentage" name="user5Percentage" min="0" placeholder="0">
-                                <p class="text-gray-400 text-xl font-semibold px-2">%</p>
-                            </div>
-                            <span class="ml-auto text-sm text-gray-500 px-2" id="user5AmountPercentage" name="user5AmountPercentage">$0.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user6" name="userPercentageSplit" value="user6" class="userPercentageSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 6</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex flex-row">
-                                <input
-                                    class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                                    type="number" id="user6Percentage" name="user6Percentage" min="0" placeholder="0">
-                                <p class="text-gray-400 text-xl font-semibold px-2">%</p>
-                            </div>
-                            <span class="ml-auto text-sm text-gray-500 px-2" id="user6AmountPercentage" name="user6AmountPercentage">$0.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2">
-                        <input type="checkbox" id="user7" name="userPercentageSplit" value="user7" class="userPercentageSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 7</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex flex-row">
-                                <input
-                                    class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                                    type="number" id="user7Percentage" name="user7Percentage" min="0" placeholder="0">
-                                <p class="text-gray-400 text-xl font-semibold px-2">%</p>
-                            </div>
-                            <span class="ml-auto text-sm text-gray-500 px-2" id="user7AmountPercentage" name="user7AmountPercentage">$0.00</span>
-                        </div>
-                    </div>
-                </div>
+                <% } %>
             </div>
-
+            
             <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[300px] mb-[70px] hidden">
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user1" name="user1" value="user1" class="userManualSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 1</p>
-                        </div>
-                        <div class="relative w-1/2">
-                            <input type="number" id="user1AmountManual" name="user1AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 z-0 w-full ml-auto manual userAmountManual"
-                                placeholder="0.00">
-                            <div class="absolute inset-y-0 start-0 flex items-center">
-                                <span class="text-gray-400 text-xl font-semibold">$</span>
-                            </div>
-                        </div>
+                <% for(let i = 0; i < groups.length; i++) { %>
+                    <div id="<%= groups[i].group_name %>-manually" class="split-container hidden">
+                        <% for(let j = 0; j < groups[i].members.length; j++) { %>
+                            <%- include('templates/friendsManualExpense', { friend: groups[i].members[j].user_id }) %>
+                        <% } %>
                     </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user2" name="user2" value="user2" class="userManualSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 2</p>
-                        </div>
-                        <div class="relative w-1/2">
-                            <input type="number" id="user2AmountManual" name="user2AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
-                                placeholder="0.00">
-                            <div class="absolute inset-y-0 start-0 flex items-center">
-                                <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user3" name="user3" value="user3" class="userManualSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 3</p>
-                        </div>
-                        <div class="relative w-1/2">
-                            <input type="number" id="user3AmountManual" name="user3AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
-                                placeholder="0.00">
-                            <div class="absolute inset-y-0 start-0 flex items-center">
-                                <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user4" name="user4" value="user4" class="userManualSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 4</p>
-                        </div>
-                        <div class="relative w-1/2">
-                            <input type="number" id="user4AmountManual" name="user4AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
-                                placeholder="0.00">
-                            <div class="absolute inset-y-0 start-0 flex items-center">
-                                <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user5" name="user5" value="user5" class="userManualSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 5</p>
-                        </div>
-                        <div class="relative w-1/2">
-                            <input type="number" id="user5AmountManual" name="user5AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
-                                placeholder="0.00">
-                            <div class="absolute inset-y-0 start-0 flex items-center">
-                                <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user6" name="user6" value="user6" class="userManualSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 6</p>
-                        </div>
-                        <div class="relative w-1/2">
-                            <input type="number" id="user6AmountManual" name="user6AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
-                                placeholder="0.00">
-                            <div class="absolute inset-y-0 start-0 flex items-center">
-                                <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="bg-white rounded-2xl m-2 mt-0 flex flex-row items-center p-2 w-full">
-                        <input type="checkbox" id="user7" name="user7" value="user7" class="userManualSplit hidden">
-                        <div class="w-1/2 flex flex-row items-center">
-                            <img class="p-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt=""
-                                height="50" width="50">
-                            <p class="font-semibold px-2">User 7</p>
-                        </div>
-                        <div class="relative w-1/2">
-                            <input type="number" id="user7AmountManual" name="user7AmountManual" min="0"
-                                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 w-full z-0 manual userAmountManual"
-                                placeholder="0.00">
-                            <div class="absolute inset-y-0 start-0 flex items-center">
-                                <span class="text-gray-400 ml-auto text-xl font-semibold">$</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <% } %>
             </div>
         </form>
 
@@ -432,7 +113,121 @@
                 </div>
             </div>
         </dialog>
-
+        <% for(let i = 0; i < groups.length; i++) { %>
+            <%- include('templates/keyExpense', { group: groups[i] }) %>
+        <% } %>
+        <div id="groupsData" style="display: none;" data-groups='<%= JSON.stringify(groups) %>'></div>
     </div>
+
+
+    <script>
+        const groupsDataElement = document.getElementById('groupsData');
+        const groupsData = JSON.parse(groupsDataElement.dataset.groups);
+
+        // Function to execute when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the current date and set it in the date input field
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('selectedDate').value = formattedDate;
+        });
+
+        // Function to get group ID from group name
+        async function getGroupIdFromName(groupName) {
+            try {
+                for (let i = 0; i < groupsData.length; i++) {
+                    if (groupsData[i].group_name === groupName) {
+                        return groupsData[i]._id;
+                    }
+                }
+                console.log(`Group with name '${groupName}' not found.`);
+                return null;
+            } catch (error) {
+                console.error('Error:', error);
+                return null;
+            }
+        }
+        
+        console.log(groupsData)
+        
+        // Function to get group index by ID
+        function getGroupById(groupId) {
+            for (let i = 0; i < groupsData.length; i++) {
+                if (groupsData[i]._id === groupId) {
+                    return groupsData[i];
+                }
+            }
+            console.log(`Group with ID '${groupId}' not found.`);
+            return null;
+        }
+
+        // Function to populate the dropdown menu with users from the selected group
+        function populateUsersDropdown(groupId) {
+            // Clear existing options
+            const selectElement = document.getElementById('selectedPaidBy');
+            selectElement.innerHTML = '<option value="" selected disabled class="hidden">Select User</option>';
+
+            // Get the group by ID
+            const group = getGroupById(groupId);
+
+            // Check if group exists
+            if (group) {
+                // Iterate through members and add them to the dropdown
+                group.members.forEach(member => {
+                    console.log(member); // Log the member object
+                    const option = document.createElement('option');
+                    option.value = member.user_id._id;
+                    option.textContent = member.user_id.username; // Assuming username is a property of the member object
+                    selectElement.appendChild(option);
+                });
+
+            }
+        }
+
+        document.getElementById('selectedGroup').addEventListener('change', function() {
+            var selectedGroupId;
+            for (i = 0; i < groupsData.length; i++) {
+                if (groupsData[i].group_name === document.getElementById('selectedGroup').value) {
+                    selectedGroupId = groupsData[i]._id;
+                }
+            }
+            populateUsersDropdown(selectedGroupId);
+        });
+
+        // Function to toggle visibility of split based on selected group
+        async function toggleSplitVisibility() {
+            const selectedGroup = await getGroupIdFromName(document.getElementById('selectedGroup').value);
+            const allSplits = document.querySelectorAll('.split-container');
+
+            resetCheckboxes(); // Reset checkboxes when switching groups            
+
+            allSplits.forEach(split => {
+                // Check if the split id matches the selected group
+                if (split.id === `${selectedGroup}-equally` || 
+                    split.id === `${selectedGroup}-percentage` || 
+                    split.id === `${selectedGroup}-manually`) {
+                    split.classList.remove('hidden');
+                } else {
+                    split.classList.add('hidden');
+                }
+            });
+        }
+
+        // Function to reset checkboxes
+        function resetCheckboxes() {
+            let checkboxes = document.querySelectorAll('.userEqualSplit');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+
+        // Add onchange event listener to selectedGroup dropdown
+        document.getElementById('selectedGroup').addEventListener('change', toggleSplitVisibility);
+
+        // Call toggleSplitVisibility once initially to set the initial state based on the default selected group
+        toggleSplitVisibility();
+
+    </script>
+    
     <script src="/scripts/addExpenses.js"></script>
     <%- include('templates/footer') %>

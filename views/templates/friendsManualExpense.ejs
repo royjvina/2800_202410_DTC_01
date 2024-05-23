@@ -1,0 +1,18 @@
+<div class="flex flex-row">
+    <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2 w-full">
+        <input type="checkbox" id="<%= friend.name %>" name="<%= friend.name %>" value="<%= friend.name %>" class="friendManualSplit hidden">
+        <div class="w-1/2 flex flex-row items-center">
+            <img class="p-3" src="<%= friend.profileImageBase64 %>>" alt=""
+                height="50" width="50">
+            <p class="font-semibold px-2"><%= friend.username %></p>
+        </div>
+        <div class="relative w-1/2">
+            <input type="number" id="friend1AmountManual" name="friend1AmountManual" min="0"
+                class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 z-0 w-full ml-auto manual friendAmountManual"
+                placeholder="0.00">
+            <div class="absolute inset-y-0 start-0 flex items-center">
+                <span class="text-gray-400 text-xl font-semibold">$</span>
+            </div>
+        </div>
+    </div>
+</div>

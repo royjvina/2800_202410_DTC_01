@@ -110,28 +110,35 @@ function addExpenseToPaidByUser() {
  */
 
 function calculateExpenseEqually() {
-    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
-    let usersToSplitFor = document.querySelectorAll('.userEqualSplit:checked');
-    let usersNotIncluded = document.querySelectorAll('.userEqualSplit:not(:checked)');
-    let numberOfUsers = usersToSplitFor.length;
+    var expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
+    var selectedGroup = document.getElementById('selectedGroup');
+    var groupId = document.getElementsByClassName(selectedGroup.value)[0].id;
+    
+    // Query the users within the selected group's split container
+    let usersToSplitFor = document.querySelectorAll(`.userEqualSplit:checked`);
+    let usersNotToSplitFor = document.querySelectorAll(`.userEqualSplit:not(:checked)`);
+    var numberOfUsers = usersToSplitFor.length;
 
+    // Reset amounts for all users
+    usersNotToSplitFor.forEach(user => {
+        let userId = user.getAttribute('data-user-id');
+        document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$0.00';
+        document.getElementById(`${groupId}${userId}AmountEqualInput`).value = '0.00'; // Reset input value
+    });
+    
     if (expenseTotal > 0 && numberOfUsers > 0) {
-        let splitAmount = (expenseTotal / numberOfUsers).toFixed(2);
+        var splitAmount = (expenseTotal / numberOfUsers).toFixed(2);
+        
+        // Set amounts for users who are checked
         usersToSplitFor.forEach(user => {
-            let userId = user.id
-            document.getElementById(userId + 'AmountEqual').innerHTML = ('$' + splitAmount);
-        })
-        usersNotIncluded.forEach(user => {
-            let userId = user.id
-            document.getElementById(userId + 'AmountEqual').innerHTML = '$0.00';
-        })
-    } else if (numberOfUsers == 0) {
-        usersNotIncluded.forEach(user => {
-            let userId = user.id
-            document.getElementById(userId + 'AmountEqual').innerHTML = '$0.00';
-        })
+            let userId = user.getAttribute('data-user-id');
+            document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$' + splitAmount;
+            document.getElementById(`${groupId}${userId}AmountEqualInput`).value = splitAmount; // Update input value
+        });
     }
 }
+
+
 
 /**
  * This function is used to handle computation of calculating the total percentage that a user inputs for an expense
@@ -255,7 +262,7 @@ showEqualExpense.addEventListener('click', function (event) {equalExpenseTabHand
 showPercentageExpense.addEventListener('click', function (event) {percentageExpenseTabHandler(event)});
 showManualExpense.addEventListener('click', function (event) {manualExpenseTabHandler(event)});
 document.querySelectorAll('.userEqualSplit').forEach(user => {
-    user.addEventListener('click', calculateExpenseEqually);
+    user.addEventListener('change', calculateExpenseEqually);
 });
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
 selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("")});
