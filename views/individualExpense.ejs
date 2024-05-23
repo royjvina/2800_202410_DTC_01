@@ -1,14 +1,13 @@
 <%- include('templates/HeadTags') %>
-<body>
     <header class="sticky top-0">
         <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
             <div>
-                <a href="/groups" class="text-4xl flex flex-row items-center pl-1 mb-2" id="backIndividualExpense">
+                <a id="goBack" class="text-4xl flex flex-row items-center pl-1 mb-2" id="backIndividualExpense">
                     &#8249;
                 </a>
             </div>
             <div class="">
-                <a href="/addExpenses"><button type="submit" id="editExpense">Edit</button></a>
+                <a href="/addExpenses?expenseId=<%= transaction._id %>"><button type="submit" id="editExpense">Edit</button></a>
             </div>
         </div>
     </header>
@@ -42,4 +41,5 @@
         </ul>
     </div>
 
+<script src="/scripts/individualExpense.js"></script>
 <%- include('templates/footer') %>
