@@ -6,6 +6,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const fs = require('fs');
 const path = require('path');
 const ChatHistory = require('../models/chatHistory');
+const { getUserGroups, getUserTransactions, getUserDetails } = require('../models/dataFetcher.js');
 
 router.get('/history', async (req, res) => {
     if (!req.session.userId) {
@@ -26,6 +27,29 @@ router.post('/advisor', async function (req, res) {
     let messages = [
         { role: "system", content: constants.SYSTEM_COMMENT }
     ];
+
+    // const userId = req.session.userId;
+
+    // const [userGroups, userTransactions, userDetails] = await Promise.all([
+    //     getUserGroups(userId),
+    //     getUserTransactions(userId),
+    //     getUserDetails(userId)
+    // ]);
+
+    // const userContext = `
+    // **User Details:**
+    // - **Username:** ${userDetails.username}
+    // - **Email:** ${userDetails.email}
+    // - **Phone:** ${userDetails.phone}
+
+    // **Groups:**
+    // ${userGroups.map(group => `- ${group.group_name}`).join('\n')}
+
+    // **Transactions:**
+    // ${userTransactions.map(transaction => `- ${transaction.name}: $${transaction.total_cost}`).join('\n')}
+    // `;
+
+    // messages.push({ role: "system", content: userContext });
 
     while (userMessages.length != 0 || assistantMessages.length != 0) {
         if (userMessages.length != 0) {
