@@ -5,7 +5,7 @@ const transactionSchema = new mongoose.Schema({
     group_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', required: true },
     total_cost: { type: Number, required: true },
     date: { type: Date, default: Date.now },
-    categories: [{ type: String }],
+    category: { type: String },
     payee: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     payments: [
         {
