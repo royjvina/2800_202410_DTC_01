@@ -15,8 +15,6 @@ function startChat() {
     document.getElementById("chat").style.display = "block";
     inputContainer.style.display = "flex";
     username = messageBox.getAttribute('data-src');
-    let welcomeMsg = `Hello ${username}!, I am PennyWise. How can I help you with your finances today?`;
-    appendMessage(welcomeMsg, 'bot');
 }
 
 function noStartChat() {

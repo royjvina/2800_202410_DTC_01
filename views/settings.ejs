@@ -18,17 +18,36 @@
             <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Profile Picture">
           </div>
           <div class="ml-4 flex items-center justify-between flex-auto p-4">
-            <div>
-              <h3 class="text-lg font-semibold"><%= username %></h3>
-              <p class="text-gray-600"><%= email %></p>
-              <p class="text-gray-600"><%= phoneNumber %></p>
-            </div>
-            <div>
-              <form action="/logout" method="POST">
-                <button type="submit" class="text-blue-600 mt-2 inline-block">LOGOUT</button>
+            <% if (!editMode) { %>
+              <div id="userInfo">
+                <h3 class="w-3/4 border border-white text-lg font-semibold"><%= username %></h3>
+                <p class="w-3/4 border border-white text-gray-600"><%= email %></p>
+                <p class="w-3/4 border border-white text-gray-600"><%= phoneNumber %></p>
+              </div>
+            <% } else { %>
+              <form id="editUserInfo" action="/settings" method="POST" class = "flex flex-col justify-center">
+                <input type="text" name="username" value="<%= username %>" class="w-3/4 focus:outline-none border border-gray-400 text-lg font-semibold" />
+                <input type="email" name="email" value="<%= email %>" class="w-3/4 focus:outline-none border border-gray-400 text-gray-600" />
+                <input type="text" name="phone" value="<%= phoneNumber %>" class="w-3/4 focus:outline-none border border-gray-400 text-gray-600" />
+                <button type="submit" class="hidden">Save</button>
               </form>
+            <% } %>
+            <div>
+              <% if (!editMode) { %>
+                <form action="/settings/edit" method="GET">
+                  <button type="submit">
+                    <!-- Pencil -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                      <path d="M13.5 6.5l4 4" />
+                    </svg>
+                  </button>
+                </form>
+              <% } else { %>
+                <button type="submit" form="editUserInfo" class = "font-bold text-lg pr-2">Save</button>
+              <% } %>
             </div>
-
           </div>
         </div>
 
