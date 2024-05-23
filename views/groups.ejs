@@ -59,17 +59,20 @@
             </div>
         </div>
     </div>
-    <div id="expenses" class="overflow-auto mt-[146px] mb-[70px] flex-col">
+    <div id="expenses" class="overflow-auto mt-[150px] mb-[90px] flex-col">
         <ul>
-            <% if (expense) { %>
-            <% for (i=0; i < group.transactions.length; i++) { %>
-                <%- include('templates/groupExpense', { expense: expense }) %>
-            <% } %>
+            <% if (group.transactions) { %>
+                <% let sortedTransactions = group.transactions.sort((a, b) => {
+                    return new Date(b.date) - new Date(a.date)
+                }) %>
+                <% for (i=0; i < sortedTransactions.length; i++) { %>
+                    <%- include('templates/groupExpense', { transaction: sortedTransactions[i] }) %> 
+                <% } %>
             <% } %>
         </ul>
     </div>
 
-    <div id="balances" class="overflow-auto mb-[70px] mt-[135px] hidden">
+    <div id="balances" class="overflow-auto mb-[90px] mt-[135px] hidden">
     </div>
 
     <script src="/scripts/groups.js"></script>
