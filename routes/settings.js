@@ -12,7 +12,7 @@ router.get('/settings', async (req, res) => {
         res.render('settings', { 
             username: user.username, 
             phoneNumber: formattedPhoneNumber, 
-            profilePic: `data:${user.profileImage.contentType};base64,${user.profileImage.data.toString('base64')}`, 
+            profilePic: req.session.profilePic, 
             email: user.email, 
             editMode: false,
             path: req.path 
