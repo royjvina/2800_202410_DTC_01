@@ -56,25 +56,31 @@ function removeSecondaryButtons() {
 
     if (document.querySelectorAll('.friend').length >= 5 && !friends.classList.contains('hidden')) {
         addFriendSecondary.classList.add('hidden');
+        addGroupSecondary.classList.add('hidden');
+        addGroup.classList.add('hidden');
         addFriend.classList.remove('hidden');
 
     }
-    else {
+    else if (!friends.classList.contains('hidden')) {
         addFriend.classList.add('hidden');
         addFriendSecondary.classList.remove('hidden');
+        addFriendSecondary.classList.add('flex');
+        addGroup.classList.add('hidden');
+        addGroupSecondary.classList.add('hidden');
+
     }
     if (document.querySelectorAll('.group').length >= 5 && !groups.classList.contains('hidden')) {
-        console.log(document.querySelectorAll('.group').length);
+        addFriendSecondary.classList.add('hidden');
+        addFriend.classList.add('hidden');
         addGroupSecondary.classList.add('hidden');
-        console.log('heree');
         addGroup.classList.remove('hidden');
     }
     else if (!groups.classList.contains('hidden')) {
         addFriendSecondary.classList.add('hidden');
+        addFriend.classList.add('hidden');
         addGroup.classList.add('hidden');
         addGroupSecondary.classList.remove('hidden');
         addGroupSecondary.classList.add('flex');
-        console.log('here');
     }
 }
 
