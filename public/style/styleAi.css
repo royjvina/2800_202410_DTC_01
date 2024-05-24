@@ -153,6 +153,7 @@ button[disabled] {
 #loading {
   padding-bottom: 10px;
   display: none;
+  color: black
 }
 
 /* #introMessage {
