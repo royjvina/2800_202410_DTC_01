@@ -295,15 +295,4 @@ router.post('/settleUp', async (req, res) => {
     }
 });
 
-// for (let group of commonGroups) {
-//     let reimbursement = new Transaction({
-//         name: "Reimbursement",
-//         group_id: group._id,
-//         category: "miscellaneous",
-//         total_cost: amount / commonGroups.length,
-//         payee: req.session.userId,
-//         payments: [{ user_id: friend._id, amount_paid: amount / commonGroups.length}]
-//     });
-//     await reimbursement.save();
-// }
 module.exports = router
