@@ -1,9 +1,5 @@
-<% if (transaction) { %>
-    <% if (transaction.group_id.group_name == option) { %>
-        <option class="text-center" value="<%= id %>" selected><%= option %></option>
-    <% } else { %>
-        <option class="text-center" value="<%= id %>"><%= option %></option>
-    <% } %>
+<% if (transaction && transaction.group_id.group_name == option) { %>
+    <option class="text-center" value="<%= id %>" selected><%= option %></option>
 <% } else { %>
-    <option value="" selected disabled class="hidden">Select A Group</option>
+    <option class="text-center" value="<%= id %>"><%= option %></option>
 <% } %>

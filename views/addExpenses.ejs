@@ -88,9 +88,11 @@
                             <label class="font-semibold my-2 text-base" for="selectedPaidBy">Paid By:</label>
                             <select class="float-right px-4 rounded-lg m-2 text-black" name="selectedPaidBy"
                                 id="selectedPaidBy" placeholder="Select User">
-                                <% let selectedGroup = transaction.group_id %>
-                                <% for(let i = 0; i < selectedGroup.members.length; i++) {%>
-                                    <%- include('templates/usersForExpense', {  option: selectedGroup.members[i], transaction: transaction  }) %>
+                                <% if (transaction) { %>
+                                    <% let selectedGroup = transaction.group_id %>
+                                    <% for(let i = 0; i < selectedGroup.members.length; i++) {%>
+                                        <%- include('templates/usersForExpense', {  option: selectedGroup.members[i], transaction: transaction  }) %>
+                                    <% } %>
                                 <% } %>
                             </select>
                         </div>
@@ -110,7 +112,11 @@
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
                         <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                            <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j] }) %>
+                            <% if (transaction) { %>
+                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j] }) %>
+                            <% } else { %>
+                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: null }) %>
+                            <% } %>
                         <% } %>
                     </div>
                 <% } %>

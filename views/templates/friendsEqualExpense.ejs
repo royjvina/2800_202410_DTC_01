@@ -1,6 +1,6 @@
 <div class="flex flex-row">
     <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2 w-full">
-        <% if (transaction.user_id.equals(friend._id) && transaction.amount_paid > 0) { %>
+        <% if (transaction && transaction.user_id.equals(friend._id) && transaction.amount_paid > 0) { %>
         <input type="checkbox" id="<%= group._id %><%= friend._id %>" name="userEqualSplit" value="true" data-user-id="<%= friend._id %>" class="userEqualSplit" checked="checked"> 
         <div class="w-1/2 flex flex-row items-center">
             <% if (friend.profileImageBase64) { %>
