@@ -12,6 +12,8 @@ let assistantMessages = [];
 function startChat() {
     document.getElementById("introContainer").style.display = "none";
     document.getElementById("introQuestion").style.display = "none";
+    document.getElementById("saveBtn").style.display = "block";
+    document.getElementById("toDo").style.display = "block";
     document.getElementById("chat").style.display = "block";
     inputContainer.style.display = "flex";
     username = messageBox.getAttribute('data-src');

@@ -1,33 +1,39 @@
 <%- include('templates/header') %>
 <link rel="stylesheet" href="/style/styleAi.css">
-<div class="wrapper">
-    <div class="chatContainer">
-        <div class="chatHeader">
-            <i href="#" class="fas fa-history history-icon"></i>
+<div id="wrapper" class = "">
+    <div id="chatContainer" class = "">
+        <div id="chatHeader" class = "shadow-lg flex flex-row items-center justify-between w-full bg-primary rounded-t-xl h-16">
+            <div class = "pl-2">
+                <i href="#" class="fas fa-history history-icon"></i>
+            </div>
+            <div class = "">
+                <p id="toDo" class = "translate-x-4 text-lg hidden text-center mx-auto font-semibold">Ask me anything!</p>
+            </div>
+            <div>
+                <button id="saveBtn" class = "hidden font-semibold text-lg" onclick="saveConversation()">Save</button>
+            </div class = "pr-2">
         </div>
-        <div class="chatContent">
-            <div id="introContainer" class="introContainer">
-                <p id="introMessage"><strong>Heads up!</strong></p>
-                <br>
-                <p id="introMessage">This AI advisor can provide personalized advice, but it will need
-                    some information from you first. Are you comfortable sharing that information?</p>
+        <div id="chatContent" class = "">
+            <div id="introContainer" class = "h-full flex flex-col items-center justify-center text-black">
+                <p id="introMessage" class = "text-xl font-bold">Heads up!</p>
+                <p id="introMessage" class = "text-center text-lg pt-4" >This AI advisor can provide personalized advice, but it will need
+                    some information from you first.</p>
+                <p id="introMessage" class = "text-center text-lg pt-4" >Are you comfortable sharing that information?</p>
+                    
             </div>
             <div id="introQuestion">
-                <button id="startBtn" onclick="startChat()">Yes</button>
-                <button id="noBtn" onclick="noStartChat()">No</button>
+                <button id="startBtn" class = "text-lg font-semibold shadow-lg" onclick="startChat()">Yes</button>
             </div>
-            <p>Ask me anything!</p>
             <div id="chat" class="overflow-auto">
                 
                 <div class="messages" id="messageBox" data-src="<%= username %>"></div>
                 <div id="loading" class="fa-2x"><i class="fa-solid fa-spinner fa-spin-pulse"></i></div>
             </div>
         </div>
-        <div class="inputContainer" id="inputContainer">
+        <div class="rounded-b-xl shadow-lg" id="inputContainer">
             <input type="text" id="userInput" placeholder="Type here">
             <button id="sendBtn" onclick="sendMessage()"><i class="fa-regular fa-message"></i></button>
         </div>
-        <button id="saveBtn" onclick="saveConversation()">Save</button>
     </div>
 </div>
 <script src="/scripts/ai.js"></script>
