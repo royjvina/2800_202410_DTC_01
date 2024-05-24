@@ -18,7 +18,7 @@
         <div class="flex flex-col pl-2 w-full">
             <div class="flex flex-row justify-between leading-4 text-white pb-1">
                 <p class="text-xl font-semibold"><%= transaction.name %></p>
-                <p class="text-xl font-semibold">$<%= transaction.total_cost %></p>
+                <p class="text-xl font-semibold">$<%= transaction.total_cost.toFixed(2) %></p>
             </div>
             <% let transactionDateString = transaction.date.toString() %>
             <p class="text-sm text-white font-normal leading-4"><%= transactionDateString.substring(4, 10) + ", " + transactionDateString.substring(11, 15) %></p>

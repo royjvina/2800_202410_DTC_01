@@ -37,7 +37,7 @@
                                 <span class="text-gray-400 text-xl">$</span>
                                 <% if (transaction) { %>
                                     <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0"
-                                   value="<%= transaction.total_cost %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
+                                   value="<%= transaction.total_cost.toFixed(2) %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
                                  <% } else { %>   
                                     <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0"
                                     placeholder="Expense Total" class="focus:outline-none focus:border-b-2 px-2 m-1">

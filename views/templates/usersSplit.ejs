@@ -6,7 +6,7 @@
         <% } else { %>
         <p class="font-medium"><%= payments.user_id.username %>'s Split:</p>
         <% } %>
-        <p class="font-medium">$<%= payments.amount_paid %></p>
+        <p class="font-medium">$<%= payments.amount_paid.toFixed(2) %></p>
     </div>
     <% } %>
 </li>
