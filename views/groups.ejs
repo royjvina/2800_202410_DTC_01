@@ -1,18 +1,55 @@
 <%- include('templates/header') %>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css">
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<style>
-    .chart-container {
-        width: 600px;
-        margin: auto;
-    }
-</style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        .chart-container {
+            width: 600px;
+            margin: auto;
+        }
+    </style>
     <div class="fixed w-full bg-white pb-2">
         <div class="flex flex-row">
-            <img class="m-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="75" width="75">
+            <% if(group.group_picBase64) { %>
+            <img class="m-3 rounded-md h-20 w-20" src="<%= group.group_picBase64%>" alt="">
+            <% } else { %>  
+            <img class="m-3 rounded-md h-20 w-20" src="/images/navbarIcons/groups.svg" alt="">
+            <% } %>
             <div>
-                <p class="font-semibold text-xl mt-2" id="groupNameHere">Group 1</p>
-                <p class="text-gray-400 text-xs" id="usersOfAGroupHere">User 1, User 2, User 3, and 4 more</p>
+                <div class="flex flex-row items-center">
+                    <p class="font-semibold text-xl mt-2 pr-2" id="groupNameHere"><%=group.group_name%></p>
+                    <a href="/addGroup?groupId=<%=group._id%>"><img src="/images/otherIcons/editIcon.svg" alt="" class="h-4 w-4 mt-2"></a>
+                </div>
+                <p class="text-gray-400 text-xs" id="usersOfAGroupHere">
+                    <% if (group.members.length > 3) { %>
+                    <div id="moreThanThreeUsers" class="text-gray-400 text-xs pb-1 moreUsers">
+                        <%= group.members[0].user_id.username%>, <%=group.members[1].user_id.username%>, <%=group.members[2].user_id.username%> and <%=group.members.length - 3%> more
+                    </div>
+                    <div id="allUsers" class="hidden text-gray-400 text-xs pb-1 moreUsers">
+                        <% for (let i=0; i < group.members.length; i++) { %>
+                            <% if (i == group.members.length - 1) { %>
+                                <%= group.members[i].user_id.username %>
+                            <% } else { %>
+                                <%= group.members[i].user_id.username %>, 
+                            <% } %>
+                        <% } %>
+                    </div>
+                    <% } %>
+                    <div id="lessThanThreeUsers" class="text-gray-400 text-xs pb-1 moreUsers">
+                        <% for (let i=0; i < group.members.length; i++) { %>
+                            <% if (i == group.members.length - 1) { %>
+                                <%= group.members[i].user_id.username %>
+                            <% } else { %>
+                                <%= group.members[i].user_id.username %>, 
+                            <% } %>
+                        <% } %>
+                    </div>
+                </p>
+                <a href="/suggestedReimbursements?groupId=<%=group._id%>" class="flex justify-start font-medium">
+                    <p class="px-2 text-[#4b061a] outline outline-1 outline-[#4b061a] hover:bg-[#4b061a] hover:text-white rounded-lg flex flex-row items-center">
+                        <span class="text-sm">Suggested Reimbursements</span>
+                        <span class="pl-2 text-2xl mb-1">&#8250;</span>
+                    </p>
+                </a>
             </div>
         </div>
         <div class="text-black mt-2 flex mx-2 justify-center">
@@ -22,140 +59,21 @@
             </div>
         </div>
     </div>
-    <div id="expenses" class="overflow-auto mt-[146px] mb-[70px] flex-col">
-        <a href="/individualExpense" class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>16</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Wi-Fi</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 1</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$95.97</p>
-            </div>
-        </a>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>14</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Aquarium Tickets</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 1</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$80.50</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>12</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Concert Tickets</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 2</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$208.96</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>11</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Amazon Order</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 5</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$30.40</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>11</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Restaurant 2</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 5</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$80.88</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>09</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Reimbursement</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 2</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$90.44</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>09</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Bubble Tea</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 3</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$12.12</p>
-            </div>
-        </div>
-        <div class="m-2 flex flex-row outline outline-2 p-3 rounded-xl">
-            <div class="flex flex-col items-center">
-                <p>May</p>
-                <p>09</p>
-            </div>
-            <img class="mx-3" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="40" width="40">
-            <div>
-                <div class="flex flex-row justify-between">
-                    <p class="font-semibold">Ice Cream</p>
-                </div>
-                <p class="text-sm text-gray-400 leading-3">Paid by: User 3</p>
-            </div>
-            <div class="flex flex-col ml-auto justify-center">
-                <p class="flex font-medium text-xl">$11.74</p>
-            </div>
-        </div>
+    <div id="expenses" class="overflow-auto mt-[150px] mb-[90px] flex-col">
+        <ul>
+            <% if (group.transactions) { %>
+                <% let sortedTransactions = group.transactions.sort((a, b) => {
+                    return new Date(b.date) - new Date(a.date)
+                }) %>
+                <% for (i=0; i < sortedTransactions.length; i++) { %>
+                    <%- include('templates/groupExpense', { transaction: sortedTransactions[i] }) %> 
+                <% } %>
+            <% } %>
+        </ul>
     </div>
 
-    <div id="balances" class="overflow-auto mt-[135px] mb-[70px] hidden">
-
+    <div id="balances" class="overflow-auto mb-[90px] mt-[135px] hidden" data-friend-debt='<%= JSON.stringify(friendDebt) %>'>
     </div>
 
     <script src="/scripts/groups.js"></script>
-    <%- include('templates/footer') %>
+<%- include('templates/footer') %>

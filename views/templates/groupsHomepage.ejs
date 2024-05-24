@@ -1,0 +1,49 @@
+<li>
+    <div class="flex flex-col">
+        <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group" id="<%= group._id %>">
+            <!-- Group clickable area -->
+            <a href="/groups?groupId=<%= group._id %>" class="flex flex-row items-center gap-4 w-full">
+                <div class="flex flex-row items-center gap-4 w-full justify-between">
+                    <div class="flex flex-row items-center gap-4">
+                        <% if(!group.group_picBase64) { %>
+                            <img class="w-10 h-10 rounded-full hover:cursor-pointer" src="/images/navbarIcons/groups.svg" alt="Group Image">
+                        <% } else { %>
+                        <img class="w-10 h-10 rounded-full hover:cursor-pointer" src="<%= group.group_picBase64 %>" alt="Group Image">
+                        <% } %>
+                        <div class="flex flex-col gap-3 p-2 pb-4">
+                            <span><%= group.group_name%></span>
+                            <div class="relative flex items-center">
+                                <% for(let i = 0; i < (group.members).length; i++) { %>
+                                    <% if (i > 5) { %>
+                                        <div class="w-4 h-4 rounded-full border-2 border-white absolute left-<%= i*3 %> bg-primary text-white flex justify-center items-center">+<%= group.members.length - 3 %></div>
+                                        <% break; %>
+                                    <% } %>
+                                    <% if (!group.members[i].user_id.profileImageBase64) { %>
+                                        <img src="/images/homepageIconsAndPlaceholders/profilePicPlaceholderSettings.svg" alt="" class="w-4 h-4 rounded-full border-2 border-white absolute left-<%= i*3 %>">
+                                    <% } else { %>
+                                    <img src="<%= group.members[i].user_id.profileImageBase64 %>" alt="" class="w-4 h-4 rounded-full border-2 border-white absolute left-<%= i*3 %>">
+                                    <% } %>
+                                <% } %>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <% if(groupDebt[group._id] > 0) { %>
+                        <div class="flex flex-col text-gray-400">
+                            <div class="text-sm text-center">Owed:</div>
+                            <div class=" mr-10 text-black text-center w-full"> $<%= groupDebt[group._id].toFixed(2)  %></div>
+                        </div>
+                    <% } else if(groupDebt[group._id] < 0) { %>
+                        <div class="flex flex-col text-gray-400">
+                            <div class="text-sm text-center">You owe:</div>
+                            <div class="mr-10 text-black text-center w-full">$<%= Math.abs(groupDebt[group._id]).toFixed(2) %></div>
+                        </div>
+                    <% } %>
+                </div>
+                <span class="pl-2 text-2xl mb-1">&#8250;</span>
+            </a>
+                       
+        </div>
+    </div>
+    
+</li>

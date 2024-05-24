@@ -23,17 +23,18 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#6E0924",
+                        primary: "<%= path === '/easterEgg' ? '#FF0000' : '#6E0924' %>",
                         secondary: "#D3D0CB",
                     },
                 },
             },
         }
     </script>
+    <script src="/scripts/easterEgg.js"></script>
 </head>
 
 <body>
-    <header class="sticky top-0 ">
+    <header class="sticky top-0">
         <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center">
             <img src="/images/navbarIcons/logo.png" class="w-8 h-8 hover:cursor-pointer" id="logo" alt="logo">
             <% if (typeof groupName !=='undefined' ) { %>
@@ -41,12 +42,16 @@
                     <%= groupName %>
                 </div>
                 <% } else { %>
-                    <div class="text-white" style="font-family: Georgia, 'Times New Roman', Times, serif;">PennyWise
+                    <div id="pennywise" class="text-white" style="font-family: Georgia, 'Times New Roman', Times, serif;">PennyWise
                     </div>
                     <% } %>
-                        <div class="">
-                            <a id="settingsButton" href="/settings"><img id="settingsIcon"
-                                    src="/images/navbarIcons/settings.svg" class="w-9 h-9" alt=""></a>
+                        <div>
+                            <a id="settingsButton" href="/settings">
+                                <img id="settingsIcon" src="/images/navbarIcons/settings.svg" class="w-9 h-9" alt="">
+                            </a>
                         </div>
         </div>
     </header>
+</body>
+
+</html>
