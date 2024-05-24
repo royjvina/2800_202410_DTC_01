@@ -34,6 +34,7 @@ async function getRecentActivities(userId) {
             expenseName: transaction.name,
             paidBy: transaction.payee.username,
             paidFor: transaction.payments.map(payment => payment.user_id._id.toString() === userId.toString() ? 'You' : payment.user_id.username),
+            date: transaction.date
         };
     });
 }
