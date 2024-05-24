@@ -132,8 +132,9 @@ function calculateExpenseEqually() {
     var numberOfUsers = usersToSplitFor.length;
 
     // Reset amounts for all users
-    usersNotToSplitFor.forEach(user => {
+    document.querySelectorAll(`.userEqualSplit`).forEach(user => {
         let userId = user.getAttribute('data-user-id');
+        console.log(`${groupId}${userId}AmountEqual`);
         document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$0.00';
         document.getElementById(`${groupId}${userId}AmountEqualInput`).value = '0.00'; // Reset input value
     });
@@ -144,6 +145,7 @@ function calculateExpenseEqually() {
         // Set amounts for users who are checked
         usersToSplitFor.forEach(user => {
             let userId = user.getAttribute('data-user-id');
+            console.log(toString(groupId) + toString(userId) + 'AmountEqual');
             document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$' + splitAmount;
             document.getElementById(`${groupId}${userId}AmountEqualInput`).value = splitAmount; // Update input value
         });
