@@ -3,7 +3,11 @@
     <% recentActivities.forEach(activity => { %>
     <% if (activity.splitAmount > 0) { %>
     <a href="/individualExpense" class="usersActivity flex flex-row rounded-xl m-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
-        <img class="ml-4" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="50" width="50">
+        <% if (activity.groupPic) { %>
+        <img class="ml-4 rounded-full" src="<%= activity.groupPic %>" alt="Group Pic" height="50" width="50">
+        <% } else { %>
+        <img class="ml-4" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="Default Pic" height="50" width="50">
+        <% } %>
         <div class="flex flex-col text-xs m-4 text-gray-500 w-full mt-2">
             <div class="flex flex-row justify-between text-black">
                 <p class="text-lg font-semibold flex items-center"><%= activity.groupName %></p>
