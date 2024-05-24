@@ -59,7 +59,7 @@ router.post('/', async (req, res) => {
             return res.redirect('/?error=invalidLogin');
         }
 
-        var passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
             req.session.loginEmail = email;
@@ -70,23 +70,22 @@ router.post('/', async (req, res) => {
         req.session.userId = user._id;
         req.session.username = user.username;
         if (user.profileImage && user.profileImage.data) {
-            console.log(user.profileImage);
-            req.session.profilePic = `data:${user.profileImage.contentType};base64,${user.profileImage.data.toString('base64')}`
-        }
-        else {
+            req.session.profilePic = `data:${user.profileImage.contentType};base64,${user.profileImage.data.toString('base64')}`;
+        } else {
             req.session.profilePic = null;
         }
-        req.session.username = user.username;
+
         req.session.phoneNumber = user.phone;
         req.session.email = user.email;
         req.session.authenticated = true;
         req.session.authorisation = user.authorisation;
-        res.redirect('/home')
+        console.log()   
+        return res.redirect('/home');
     } catch (error) {
-        console.error('Error logging in:', error)
-        res.status(500).send('Error logging in')
+        console.error('Error logging in:', error);
+        res.status(500).send('Error logging in');
     }
-})
+});
 
 
 router.post('/logout', (req, res) => {

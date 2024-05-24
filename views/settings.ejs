@@ -1,127 +1,116 @@
 <%- include('templates/header') %>
 
-
-  <main class="bg-gray-50">
-    <div class="max-w-md mx-auto bg-white shadow-xl rounded-lg overflow-hidden h-dvh w-dvw">
-      <div class="p-4 flex items-center justify-between shadow border-b">
-        <a href="/home" class="text-gray-600 hover:text-gray-800">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </a>
-        <h2 class="text-lg font-semibold text-center flex-1">Setting</h2>
-      </div>
-
-      <div class="p-4 bg-gray-50">
-        <div class="flex items-center mb-4 shadow-sm rounded-xl bg-white px-4">
-          <div class="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center">
-            <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Profile Picture">
-          </div>
-          <div class="ml-4 flex items-center justify-between flex-auto p-4">
-            <% if (!editMode) { %>
-              <div id="userInfo">
-                <h3 class="w-3/4 border border-white text-lg font-semibold"><%= username %></h3>
-                <p class="w-3/4 border border-white text-gray-600"><%= email %></p>
-                <p class="w-3/4 border border-white text-gray-600"><%= phoneNumber %></p>
-              </div>
-            <% } else { %>
-              <form id="editUserInfo" action="/settings" method="POST" class = "flex flex-col justify-center">
-                <input type="text" name="username" value="<%= username %>" class="w-3/4 focus:outline-none border border-gray-400 text-lg font-semibold" />
-                <input type="email" name="email" value="<%= email %>" class="w-3/4 focus:outline-none border border-gray-400 text-gray-600" />
-                <input type="text" name="phone" value="<%= phoneNumber %>" class="w-3/4 focus:outline-none border border-gray-400 text-gray-600" />
-                <button type="submit" class="hidden">Save</button>
-              </form>
-            <% } %>
-            <div>
-              <% if (!editMode) { %>
-                <form action="/settings/edit" method="GET">
-                  <button type="submit">
-                    <!-- Pencil -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                      <path d="M13.5 6.5l4 4" />
-                    </svg>
-                  </button>
-                </form>
-              <% } else { %>
-                <button type="submit" form="editUserInfo" class = "font-bold text-lg pr-2">Save</button>
-              <% } %>
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-4">
-          <h4 class="font-semibold text-gray-700">Group </h4>
-          <ul>
-            <li
-              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-              <span class="text-gray-700">Friends Edit</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </li>
-            <li
-              class="flex items-center justify-between  p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-              <span class="text-gray-700">Group activities</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-semibold text-gray-700">Account settings</h4>
-          <ul>
-            <li
-              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-              <span class="text-gray-700">Change password</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </li>
-            <li
-              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100  rounded-lg mt-2 border-b">
-              <span class="text-gray-700">Set budget</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </li>
-            <li
-              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100  rounded-lg mt-2 border-b">
-              <span class="text-gray-700">Notifications</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </li>
-            <li
-              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100  rounded-lg mt-2 border-b">
-              <span class="text-gray-700">Display</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </li>
-            <li
-              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100  rounded-lg mt-2 border-b">
-              <span class="text-gray-700">Chat</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </li>
-
-          </ul>
-        </div>
-      </div>
+<main class="bg-gray-50">
+  <div class="mx-auto bg-white shadow-xl rounded-lg overflow-hidden h-dvh">
+    <div class="p-4 flex items-center justify-between shadow border-b">
+      <h2 class="text-lg font-semibold text-center flex-1">Settings</h2>
     </div>
 
-  </main>
-  <script src="/scripts/settings.js"></script>
-  <%- include('templates/footer') %>
+    <div class="p-4 bg-gray-50 h-dvh">
+      <div class="flex justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
+          <% if (!editMode) { %>
+            <div class="w-16 min-w-16 h-16 flex items-center justify-center">
+              <label for="profileImage" id="profileImage" class="">
+                <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Image" class="max-w-full max-h-full">
+              </label>
+            </div>
+            <div id="userInfo" class="w-full flex flex-col items-center justify-center">
+              <h3 class="w-4/5 border border-white text-lg font-semibold"><%= username %></h3>
+              <p class="w-4/5 border border-white text-gray-600"><%= email %></p>
+              <p class="w-4/5 border border-white text-gray-600"><%= phoneNumber %></p>
+            </div>
+          <% } else { %>
+            <form id="editUserInfo" action="/settings" method="POST" enctype="multipart/form-data" class="flex justify-between items-center">              <div class="w-16 min-w-16 h-16 border border-gray-400 flex items-center justify-center">
+                <label for="profileImage" class="cursor-pointer">
+                  <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Image" class="max-w-full max-h-full">
+                  <input id="profileImage" type="file" name="profileImage" capture class="hidden">
+                </label>
+              </div>
+              <div class="w-full flex flex-col items-center justify-center">
+                <input type="text" name="username" value="<%= username %>" class="w-4/5 focus:outline-none border border-gray-400 text-lg font-semibold" />
+                <p name="email" value="<%= email %>" class="w-4/5 border border-white text-gray-600"><%= email %></p>
+                <p name="phone" value="<%= phoneNumber %>" class="w-4/5 border border-white text-gray-600"><%= phoneNumber %></p>
+              </div>
+            </form>
+          <% } %>
+          <div class="w-16 h-16 flex flex-row items-center">
+          <% if (!editMode) { %>
+            <form action="/settings/edit" method="GET" class="h-full w-full">
+              <button type="submit" class="h-full w-full">
+                <!-- Pencil -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full icon icon-tabler icon-tabler-pencil" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                  <path d="M13.5 6.5l4 4" />
+                </svg>
+              </button>
+            </form>
+          <% } else { %>
+            <button type="submit" form="editUserInfo" class="w-16 h-16 font-bold text-lg">Save</button>
+          <% } %>
+        </div>
+      </div>
+    
+      <div class="w-full flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+        <form action="/logout" method="POST" class = "w-full">
+          <button type="submit" class="mx-auto font-bold w-full text-center text-red-500">LOGOUT</button>
+          </form>
+      </div>
+
+      <!-- <div class="mb-4">
+        <h4 class="font-semibold text-gray-700">Group</h4>
+        <ul>
+          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <span class="text-gray-700">Friends Edit</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <span class="text-gray-700">Group activities</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+        </ul>
+      </div> -->
+
+      <div>
+        <h4 class="font-semibold text-gray-700">Account settings</h4>
+        <ul>
+          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <span class="text-gray-700">Change password</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <span class="text-gray-700">Set budget</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <span class="text-gray-700">Notifications</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <span class="text-gray-700">Display</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <span class="text-gray-700">Chat</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+        </ul>
+      </div>
+  </div>
+</main>
+<script src="/scripts/settings.js"></script>
+<%- include('templates/footer') %>
