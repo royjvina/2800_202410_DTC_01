@@ -52,6 +52,7 @@ router.post('/reimburse', async (req, res) => {
         payee: req.session.userId,
         payments: [{ user_id: friendId, amount_paid: amountTobePaid}]
     });
+    await Group.updateOne({ _id: groupId }, { $push: { transactions: reimbursements._id } });
     console.log(reimbursements);
     res.redirect('/home')
 })
