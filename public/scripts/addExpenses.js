@@ -136,7 +136,7 @@ function calculateExpenseEqually() {
             document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$' + splitAmount;
             document.getElementById(`${groupId}${userId}AmountEqualInput`).value = splitAmount; // Update input value
         });
-    }
+    } 
 }
 
 
@@ -304,6 +304,10 @@ function displayEmptyFieldModal(event) {
     } else if (splitMethod == 'Manual' && calculateExpenseManual()) {
         event.preventDefault();
         let errorMessage = 'Please ensure that your manual inputs are equal to the total expense amount.';
+        displayErrorModal(errorMessage);
+    } else if (splitMethod == 'Equal' && selectedExpenseAmount.value == 0) {
+        event.preventDefault();
+        let errorMessage = 'Please ensure that the expense amount is greater than 0.';
         displayErrorModal(errorMessage);
     }
 }
