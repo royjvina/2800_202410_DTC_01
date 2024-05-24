@@ -37,15 +37,15 @@ router.post('/advisor', async function (req, res) {
     ]);
 
     const userContext = `
-    **User Details:**
-    - **Username:** ${userDetails.username}
-    - **Email:** ${userDetails.email}
-    - **Phone:** ${userDetails.phone}
+    User Details:
+    - Username: ${userDetails.username}
+    - Email: ${userDetails.email}
+    - Phone: ${userDetails.phone}
 
-    **Groups:**
+    Groups:
     ${userGroups.map(group => `- ${group.group_name}`).join('\n')}
 
-    **Transactions:**
+    Transactions:
     ${userTransactions.map(transaction => `- ${transaction.name}: $${transaction.total_cost}`).join('\n')}
     `;
 
@@ -84,10 +84,10 @@ router.post('/advisor', async function (req, res) {
     }
 
     let chatGPTResult = completion.choices[0].message.content;
-    console.log(`Question: ${messages.at(-2).content}\nAnswer: ${chatGPTResult}`);
+    console.log(`Question: ${messages.at(-1).content}\nAnswer: ${chatGPTResult}`);
     console.log(`${messages}`)
 
-    let question = messages.at(-2).content;
+    let question = messages.at(-1).content;
     let answer = chatGPTResult;
 
     if (!req.session.chatHistory) {
