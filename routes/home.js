@@ -96,9 +96,16 @@ async function getFriendDebt(req) {
 
 router.get("/home", async (req, res) => {
 
-    let user = await getFriends(req);
+    try{
+        let user = await getFriends(req);
     let groupDebt = await getGroupDebt(req);
     let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
+    if (groups.length == 0) {
+        groups = [];
+    }
+    else if (groups.length == 1) {
+        groups = [groups];
+    }
     groups.forEach(group => {
         if (group.group_pic && group.group_pic.data) {
             group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
@@ -110,7 +117,11 @@ router.get("/home", async (req, res) => {
             }
         });
     });
-    res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: groupDebt, friendDebt: await getFriendDebt(req)});
+    res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: groupDebt, friendDebt: await getFriendDebt(req)});}
+   catch (error) {
+    console.log(error);
+    res.render('/main');
+   } 
 });
 
 router.get("/addFriend", (req, res) => {
@@ -223,24 +234,60 @@ router.post('/deleteGroup', async (req, res) => {
     res.redirect('/home');
 });
 
+async function getGroupDebtForFriends(group, req) {
+    let userOwesTo = {};
+
+    group.members.forEach(member => {
+        userOwesTo[member.user_id._id] = { amount: 0, name: member.user_id.username, group_id: group._id};
+    });
+
+    for (const transaction of group.transactions) {
+        if (transaction.payee.equals(req.session.userId)) {
+            transaction.payments.forEach(payment => {
+                if (!payment.user_id.equals(req.session.userId) && userOwesTo[payment.user_id]) {
+                    userOwesTo[payment.user_id].amount += payment.amount_paid;
+                }
+            });
+        } else {
+            const userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));
+            if (userPayment && userOwesTo[transaction.payee]) {
+                userOwesTo[transaction.payee].amount -= userPayment.amount_paid;
+            }
+        }
+    }
+
+    return userOwesTo;
+}
+
 router.post('/settleUp', async (req, res) => {
     try {
         console.log(req.body);
         let friend = await User.findOne({ phone: req.body.friendPhone });
         let amount = req.body.enterAmount;
-        let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } });
+        let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } }).populate('transactions').populate({path: 'members.user_id', select: 'username'});
         for (let group of commonGroups) {
-            let reimbursement = new Transaction({
-                name: "Reimbursement",
-                group_id: group._id,
-                category: "miscellaneous",
-                total_cost: amount / commonGroups.length,
-                payee: req.session.userId,
-                payments: [{ user_id: friend._id, amount_paid: amount / commonGroups.length}]
-            });
-            await reimbursement.save();
+            let friendsDebt = (await getGroupDebtForFriends(group, req));
+            amountTobePaid = Math.min(amount, Math.abs(friendsDebt[friend._id].amount));
+            let reimbursement;
+            if (amountTobePaid > 0) {
+                
+                    reimbursement = new Transaction({
+                    name: "Reimbursement",
+                    group_id: group._id,
+                    category: "miscellaneous",
+                    total_cost: amountTobePaid,
+                    payee: req.session.userId,
+                    payments: [{ user_id: friend._id, amount_paid: amountTobePaid}]
+                });
+                await reimbursement.save();
+                await Group.findByIdAndUpdate(group._id, { $push: { transactions: reimbursement._id } });
+                amount = Math.abs(amount) - amountTobePaid;
+            }
+            
+            console.log(friendsDebt[friend._id].amount);
         }
-        console.log(commonGroups.length);
+
+
         res.redirect('/home');
     }
     catch (error) {
@@ -248,4 +295,15 @@ router.post('/settleUp', async (req, res) => {
     }
 });
 
+// for (let group of commonGroups) {
+//     let reimbursement = new Transaction({
+//         name: "Reimbursement",
+//         group_id: group._id,
+//         category: "miscellaneous",
+//         total_cost: amount / commonGroups.length,
+//         payee: req.session.userId,
+//         payments: [{ user_id: friend._id, amount_paid: amount / commonGroups.length}]
+//     });
+//     await reimbursement.save();
+// }
 module.exports = router
