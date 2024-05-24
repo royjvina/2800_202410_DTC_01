@@ -80,36 +80,6 @@ function removeSecondaryButtons() {
 
 
 
-/**
- * This function is used to handle the delete a groups
- * @balpreet787
- * */
-function deleteGroupHandler() {
-    document.querySelectorAll('.deleteGroup').forEach(deleteGroup => {
-        deleteGroup.addEventListener('click', function () {
-            let deleteGroupId = (this.id).replace('Delete', '');
-            let selectedGroup = document.getElementById(deleteGroupId + 'Selected');
-            console.log(deleteGroupId);
-            let confirmDeleteOptions = document.getElementById(deleteGroupId + 'ConfirmDeleteOptions');
-            let cancelDelete = document.getElementById(deleteGroupId + 'CancelDelete');
-            confirmDeleteOptions.classList.toggle('hidden');
-            confirmDeleteOptions.classList.add('hideManually');
-            selectedGroup.value = deleteGroupId;
-            setTimeout(() => {
-                confirmDeleteOptions.classList.toggle('hideManually');
-            }, 10);
-            confirmDeleteOptions.classList.toggle('flex');
-            cancelDelete.addEventListener('click', function () {
-                confirmDeleteOptions.classList.add('hidden');
-                confirmDeleteOptions.classList.remove('hideManually');
-                confirmDeleteOptions.classList.remove('flex');
-                selectedGroup.value = '';
-
-            });
-
-        });
-    });
-}
 
 /**
  * This function is used to handle the delete a friend
@@ -149,13 +119,15 @@ function deleteFriendHandler() {
  * @param {string} friendPhone 
  */
 function formFieldsHandler(friendPhone) {
+    const totalPayable = document.getElementById('payAmount' + friendPhone);
+    
     const enterAmount = document.getElementById('enterAmount' + friendPhone);
-    const amount = document.getElementById('amount' + friendPhone);
     const submitSettle = document.getElementById('submitSettle' + friendPhone);
     const confirmfriend = document.getElementById('confirmfriend' + friendPhone);
     const cancelSettle = document.getElementById('cancelSettle' + friendPhone);
     const EnterAmountWarning = document.getElementById('EnterAmountWarning' + friendPhone);
-    enterAmount.value = (amount.textContent).slice(2, amount.textContent.length);
+    console.log(totalPayable);
+    enterAmount.value = totalPayable.textContent;
     enterAmount.addEventListener('input', function () {
         confirmfriend.classList.add('hidden');
         confirmfriend.classList.remove('flex');
@@ -175,7 +147,7 @@ function formFieldsHandler(friendPhone) {
     submitSettle.addEventListener('click', function (event) {
         event.preventDefault();
 
-        if (enterAmount.value === '' || isNaN(enterAmount.value)) {
+        if (enterAmount.value === '' || Number(enterAmount.value) === 0 || Number(enterAmount.value) > Number(totalPayable.textContent) || Number(enterAmount.value) < 0){
             EnterAmountWarning.classList.toggle('hidden');
             setTimeout(() => {
                 EnterAmountWarning.classList.toggle('hideManually');
@@ -217,9 +189,10 @@ addGroupSecondary.addEventListener('mouseleave', function () {
 
 function toggleFriendSettleUp() {
     document.querySelectorAll('.friend').forEach(friend => {
-        friend.addEventListener('click', function () {
-            const friendId = this.id;
-            friendPhone = friendId.substring(6, friendId.length);
+        const friendId = friend.id;
+        let friendPhone = friendId.substring(6, friendId.length);
+        if(document.getElementById("payAmount" + friendPhone)){
+            friend.addEventListener('click', function () {
             const formFriend = document.getElementById("formFriend" + friendPhone);
             formFriend.classList.toggle('hidden');
             setTimeout(() => {
@@ -235,13 +208,12 @@ function toggleFriendSettleUp() {
                 this.classList.remove('text-[#6E0924]');
             }
             formFieldsHandler(friendPhone);
-        });
+        });}
 
     });
 }
 document.addEventListener('DOMContentLoaded', function () {
     removeSecondaryButtons();
-    deleteGroupHandler();
     toggleFriendSettleUp();
     deleteFriendHandler();
     const profileImage = document.getElementById('homepagePic');
@@ -254,22 +226,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 
-/**
- * This function is used to handle the click event on a certain group in order to redirect to the correct group's page  
- * @claaudiaale
- */
-
-function groupClickHandler() {
-    let groups = document.querySelectorAll('.group-container')
-    groups.forEach(group => {
-        group.addEventListener('click', function () {
-            let groupId = group.id;
-            
-        })
-    })
-}
-
-groupClickHandler();
 
 
 
