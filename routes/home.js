@@ -43,8 +43,6 @@ async function getGroupDebt(req) {
             
 
             if (transaction.payee == req.session.userId) {
-                console.log(transaction, "transaction");
-                console.log(req.session.userId, "payee");
                 let userPayment = transaction.payments.find(payment => payment.user_id == req.session.userId);
                 
                 if (userPayment) {
@@ -68,6 +66,7 @@ async function getGroupDebt(req) {
 async function getFriendDebt(req) {
     let user = await getFriends(req);
     let friendDebt = {};
+
     user.friends.forEach(friend => {
         friendDebt[friend._id] = 0;
     });
@@ -77,17 +76,29 @@ async function getFriendDebt(req) {
             { payee: req.session.userId },
             { payments: { $elemMatch: { user_id: req.session.userId } } }
         ]
-    });    
+    });
+
     for (const transaction of transactions) {
         if (transaction.payee == req.session.userId) {
             transaction.payments.forEach(payment => {
-                friendDebt[payment.user_id] += payment.amount_paid;
+                if (payment.user_id != req.session.userId) {
+                    if (friendDebt[payment.user_id] !== undefined) {
+                        friendDebt[payment.user_id] += payment.amount_paid;
+                    }
+                }
             });
+        } else {
+            let userPayment = transaction.payments.find(payment => payment.user_id == req.session.userId);
+            if (userPayment) {
+                if (friendDebt[transaction.payee] !== undefined) {
+                    friendDebt[transaction.payee] -= userPayment.amount_paid;
+                }
+            }
         }
     }
-
     return friendDebt;
 }
+
 
 router.get("/home", async (req, res) => {
 
@@ -105,7 +116,7 @@ router.get("/home", async (req, res) => {
             }
         });
     });
-    res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: groupDebt});
+    res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: groupDebt, friendDebt: await getFriendDebt(req)});
 });
 
 router.get("/addFriend", (req, res) => {
@@ -220,18 +231,23 @@ router.post('/deleteGroup', async (req, res) => {
 
 router.post('/settleUp', async (req, res) => {
     try {
-        let userPayeeTransactions = await Transaction.find({ payee: req.session.userId });
+        console.log(req.body);
         let friend = await User.findOne({ phone: req.body.friendPhone });
-        let friendID = friend._id;
-        let userPayerTransactions = await Transaction.find({ payments: { $elemMatch: { user_id: friendID } } });
-        let userPayerTotal = 0;
-        userPayerTransactions.forEach(transaction => {
-            transaction.payments.forEach(payment => {
-                if (payment.user_id == friendID) {
-                    userPayerTotal += payment.amount_paid;
-                }
+        let amount = req.body.enterAmount;
+        let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } });
+        for (let group of commonGroups) {
+            let reimbursement = new Transaction({
+                name: "Reimbursement",
+                group_id: group._id,
+                category: "miscellaneous",
+                total_cost: amount / commonGroups.length,
+                payee: req.session.userId,
+                payments: [{ user_id: friend._id, amount_paid: amount / commonGroups.length}]
             });
-        });
+            await reimbursement.save();
+        }
+        console.log(commonGroups.length);
+        res.redirect('/home');
     }
     catch (error) {
         console.log(error);

@@ -29,9 +29,9 @@
                         </div>
                     </div>
                     <% if(groupDebt[group._id] > 0) { %>
-                        <div class=" mr-10">$<%= groupDebt[group._id].toFixed(2)  %></div>
+                        <div class=" mr-10">Owed: $<%= groupDebt[group._id].toFixed(2)  %></div>
                     <% } else if(groupDebt[group._id] < 0) { %>
-                        <div class="mr-10">-$<%= Math.abs(groupDebt[group._id]).toFixed(2) %></div>
+                        <div class="mr-10">You owe:$<%= Math.abs(groupDebt[group._id]).toFixed(2) %></div>
                     <% } %>
                 </div>
             </a>
