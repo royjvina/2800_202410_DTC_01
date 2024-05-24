@@ -33,18 +33,12 @@ router.get('/easterEgg', async (req, res) => {
 async function getGroupDebt(req) {
     let individualGroupCummalation = {};
     let user = await getFriends(req);
-
     for (const group of user.groups) {
         individualGroupCummalation[group._id] = 0;
-
         let transactions = await Transaction.find({ group_id: group._id });
-        
         for (const transaction of transactions) {
-            
-
-            if (transaction.payee == req.session.userId) {
-                let userPayment = transaction.payments.find(payment => payment.user_id == req.session.userId);
-                
+            if (transaction.payee.equals(req.session.userId)) {
+                let userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));                
                 if (userPayment) {
                     individualGroupCummalation[group._id] += transaction.total_cost - userPayment.amount_paid;
                 } else {
@@ -52,7 +46,7 @@ async function getGroupDebt(req) {
                 }
             }
             else {
-                let userPayment = transaction.payments.find(payment => payment.user_id == req.session.userId);
+                let userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));
                 if (userPayment) {
                     individualGroupCummalation[group._id] -= userPayment.amount_paid;
                 }
@@ -79,7 +73,7 @@ async function getFriendDebt(req) {
     });
 
     for (const transaction of transactions) {
-        if (transaction.payee == req.session.userId) {
+        if (transaction.payee.equals(req.session.userId)) {
             transaction.payments.forEach(payment => {
                 if (payment.user_id != req.session.userId) {
                     if (friendDebt[payment.user_id] !== undefined) {
@@ -88,7 +82,7 @@ async function getFriendDebt(req) {
                 }
             });
         } else {
-            let userPayment = transaction.payments.find(payment => payment.user_id == req.session.userId);
+            let userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));
             if (userPayment) {
                 if (friendDebt[transaction.payee] !== undefined) {
                     friendDebt[transaction.payee] -= userPayment.amount_paid;
