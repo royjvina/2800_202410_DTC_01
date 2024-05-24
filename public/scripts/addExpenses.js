@@ -2,6 +2,17 @@
  * This script is used to handle adding expenses javascript functionalities
  */
 
+/**
+ * This function is used to handle the click event on cancel button in the add expense form   
+ * @claaudiaale
+ */
+
+function goBackFromAddExpenses() {
+    document.querySelector('.addExpenseCancelButton').addEvenetListener('click', () => {
+        history.back();
+    })
+}
+
 
 /**
  * This function is used to handle the click event on the split expenses equal tab    
@@ -170,7 +181,6 @@ function categoryHandler() {
             groupCategoryChoices.classList.remove("hidden");
             groupCategoryChoices.classList.add("flex");
             categoryArrow.src = "/images/otherIcons/upArrow.svg";
-
         }
         else {
             groupCategoryChoices.classList.add("hidden");
@@ -390,7 +400,7 @@ async function toggleSplitVisibility() {
     const selectedGroup = await getGroupIdFromName(document.getElementById('selectedGroup').value);
     const allSplits = document.querySelectorAll('.split-container');
 
-    resetCheckboxes(); // Reset checkboxes when switching groups            
+    // resetCheckboxes(); // Reset checkboxes when switching groups            
 
     allSplits.forEach(split => {
         // Check if the split id matches the selected group
@@ -439,4 +449,5 @@ percentageInputs.forEach(input => {
 confirmAddExpense.addEventListener('click', function(event) {displayEmptyFieldModal(event)});
 closeExpenseError.addEventListener('click', function() {errorModal.close()})
 categoryHandler();
+// goBackFromAddExpenses();
 
