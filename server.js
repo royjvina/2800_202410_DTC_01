@@ -11,6 +11,8 @@ const { ObjectId } = require('mongodb');
 const cors = require('cors')
 
 
+
+
 const port = process.env.PORT || 3000;
 const expireTime = 1 * 60 * 60 * 1000;
 
@@ -53,6 +55,7 @@ app.use(session({
     }
 }));
 
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
@@ -87,8 +90,7 @@ const settingsRouter = require("./routes/settings");
 const suggestedReimbursementsRouter = require("./routes/suggestedReimbursements")
 const expensePersonalRouter = require("./routes/expensePersonal");
 const recentActivityRouter = require("./routes/recentActivity");
-
-
+const insightRouter = require("./routes/insight");
 
 
 app.use("/", authRouter);
@@ -104,7 +106,7 @@ app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, suggestedReimbursementsRouter);
 app.use("/", sessionValidation, expensePersonalRouter);
 app.use("/", sessionValidation, recentActivityRouter);
-
+app.use("/", sessionValidation, insightRouter);
 
 
 
