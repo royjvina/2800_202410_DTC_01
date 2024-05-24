@@ -80,36 +80,6 @@ function removeSecondaryButtons() {
 
 
 
-/**
- * This function is used to handle the delete a groups
- * @balpreet787
- * */
-function deleteGroupHandler() {
-    document.querySelectorAll('.deleteGroup').forEach(deleteGroup => {
-        deleteGroup.addEventListener('click', function () {
-            let deleteGroupId = (this.id).replace('Delete', '');
-            let selectedGroup = document.getElementById(deleteGroupId + 'Selected');
-            console.log(deleteGroupId);
-            let confirmDeleteOptions = document.getElementById(deleteGroupId + 'ConfirmDeleteOptions');
-            let cancelDelete = document.getElementById(deleteGroupId + 'CancelDelete');
-            confirmDeleteOptions.classList.toggle('hidden');
-            confirmDeleteOptions.classList.add('hideManually');
-            selectedGroup.value = deleteGroupId;
-            setTimeout(() => {
-                confirmDeleteOptions.classList.toggle('hideManually');
-            }, 10);
-            confirmDeleteOptions.classList.toggle('flex');
-            cancelDelete.addEventListener('click', function () {
-                confirmDeleteOptions.classList.add('hidden');
-                confirmDeleteOptions.classList.remove('hideManually');
-                confirmDeleteOptions.classList.remove('flex');
-                selectedGroup.value = '';
-
-            });
-
-        });
-    });
-}
 
 /**
  * This function is used to handle the delete a friend
@@ -244,7 +214,6 @@ function toggleFriendSettleUp() {
 }
 document.addEventListener('DOMContentLoaded', function () {
     removeSecondaryButtons();
-    deleteGroupHandler();
     toggleFriendSettleUp();
     deleteFriendHandler();
     const profileImage = document.getElementById('homepagePic');
