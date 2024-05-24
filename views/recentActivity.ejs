@@ -2,11 +2,11 @@
 <div id="recentActivity" class="overflow-auto mb-[90px]">
     <% recentActivities.forEach(activity => { %>
     <% if (activity.splitAmount > 0) { %>
-    <a href="/individualExpense" class="usersActivity flex flex-row rounded-xl m-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+    <a href="/individualExpense" class="usersActivity flex items-center flex-row rounded-xl m-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
         <% if (activity.groupPic) { %>
-        <img class="ml-4 rounded-full" src="<%= activity.groupPic %>" alt="Group Pic" height="50" width="50">
+        <img class="ml-4 rounded-full w-12 h-12" src="<%= activity.groupPic %>" alt="Group Pic" >
         <% } else { %>
-        <img class="ml-4" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="Default Pic" height="50" width="50">
+        <img class="ml-4 rounded-full w-12 h-12" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="Default Pic" >
         <% } %>
         <div class="flex flex-col text-xs m-4 text-gray-500 w-full mt-2">
             <div class="flex flex-row justify-between text-black">
@@ -16,10 +16,7 @@
                     <p class="text-xl font-semibold text-center">$<%= activity.splitAmount.toFixed(2) %></p>
                 </div>
             </div>
-            <p class="leading-4">Expense Total: $<%= activity.totalCost.toFixed(2) %></p>
-            <p class="leading-4">Expense: <%= activity.expenseName %></p>
-            <p class="leading-4">Paid By: <%= activity.paidBy %></p>
-            <p class="leading-4">Paid for: <%= activity.paidFor.join(', ') %></p>
+            <div class="flex flex-row flex-wrap w-5/6"><%= activity.paidBy %> paid $<%= activity.totalCost.toFixed(2) %> for <%= activity.expenseName %> on behalf of <%= activity.paidFor.join(', ')%></div> 
             <p class="leading-4">Date: <%= new Date(activity.date).toLocaleDateString() %></p>
         </div>
     </a>
