@@ -3,12 +3,19 @@
 id="usernameAndPic">
 <div>
     <h1>Hi, <span class="" id="namegoesHere"><%= username %></span>!</h1>
-    <div class="text-sm text-[#d3d0cb]">Ready to settle up?</div>
+    <% if (debtInfo.TotalpositiveDebt > debtInfo.TotalnegativeDebt) { %>
+        <p class="text-sm text-secondary italic"> Overall, you are owed $<%= debtInfo.TotalpositiveDebt - debtInfo.TotalnegativeDebt %> among your friends.</p>
+    <% } else if (debtInfo.TotalpositiveDebt < debtInfo.TotalnegativeDebt) { %>
+        <p class="text-sm text-secondary italic"> Overall, you owe $<%= debtInfo.TotalnegativeDebt - debtInfo.TotalpositiveDebt %> to your friends.</p>
+    <% } else { %>
+        <p class="text-sm text-secondary italic"> You are all settled up with your friends!</p>
+    <% } %>
 </div>
-<img class="w-16 h-16 ml-auto rounded-full hover:cursor-pointer" id="homepagePic" data-src="<%= profilePic %>" alt="">
+<img class="w-20 h-20 ml-auto rounded-full hover:cursor-pointer" id="homepagePic" data-src="<%= profilePic %>" alt="">
 </div>
 <div class="mb-[102px]">
-    <div class="flex justify-start mt-[100px] mx-3" id="AddButtonsDiv">
+
+    <div class="flex justify-start mt-[104px] mx-3" id="AddButtonsDiv">
         <a class="hidden self-start" href="addGroup" id="createGroup">+ create group</a>
         <a class="hidden" href="/addFriend" id="addFriend">+ add friend</a>
         </div>
