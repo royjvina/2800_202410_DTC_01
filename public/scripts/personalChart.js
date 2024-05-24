@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const getChartOptions = () => {
     return {
       series: spendingData,
-      colors: ["#1C64F2", "#16BDCA", "#FDBA8C", "#E74694"],
+      colors: ["#1C64F2", "#16BDCA", "#FDBA8C", "#E74694", "#6C5DD3, #F9A8D4"],
       chart: {
         height: 320,
         width: "100%",
