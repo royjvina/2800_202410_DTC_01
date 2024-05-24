@@ -12,10 +12,11 @@
     
     <ul>
         <% Object.keys(debtInGroup).forEach(function(userId) { %>
-            <%- include('templates/suggestedReimbursementsTemplate.ejs', {friendDebt : debtInGroup[userId], loggedUser: loggedUsername})%>
+            <%- include('templates/suggestedReimbursementsTemplate.ejs', {friendDebt : debtInGroup[userId], loggedUser: loggedUsername, userId: userId, groupId: groupId})%>
         <% }); %>  
     </ul>
 
+    <script src="/scripts/reimbursement.js"></script>
     
 
 <%- include('templates/footer') %>
