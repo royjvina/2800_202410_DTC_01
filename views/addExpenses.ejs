@@ -1,11 +1,10 @@
 
 <%- include('templates/headTags') %>
-<body class="">
-    <div>
+    <div class="bg-primary">
         <form action="/addExpenses" id="addExpenseForm" method="post">
             <header class="sticky top-0">
                 <div class="flex flex-row justify-between font-bold px-3 pb-3 bg-primary items-center text-white h-[68px]">
-                    <div><a href="/home" id="cancelAddExpense" href="/home" class = "">
+                    <div><a id="cancelAddExpense" href="/home" class = "addExpenseCancelButton">
                             Cancel
                         </a></div>
         
@@ -16,45 +15,72 @@
             </header>
             <div class="fixed top-14 w-full bg-white z-10">
                 <div class="m-2 p-3 outline outline-1 rounded-xl">
-                    <label class="font-semibold" for="selectedGroup">For:</label>
+                    <label class="font-semibold" for="selectedGroup">Group: </label>
                     <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
-                        <option value="" selected disabled class="hidden">Select A Group</option>
                         <% for(let i = 0; i < groups.length; i++) {%>
-                            <%- include('templates/nameExpense', { id: groups[i]._id, option: groups[i].group_name }) %>
+                            <%- include('templates/nameExpense', { id: groups[i]._id, option: groups[i].group_name, transaction: transaction }) %>
                         <% } %>
                     </select>
                 </div>
                 
                 <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
                     <div class="flex flex-col gap-4">
-                        
+                        <% if (transaction) { %>
+                            <input type="text" id="selectedExpenseName" name="selectedExpenseName"
+                            value="<%= transaction.name %>" class="focus:outline-none focus:border-b-2 px-4 m-1">
+                        <% } else { %>
                         <input type="text" id="selectedExpenseName" name="selectedExpenseName"
                             placeholder="Expense Name" class="focus:outline-none focus:border-b-2 px-4 m-1">
+                        <% } %> 
                         <div class="flex flex-row px-2">
-                            <div class="flex flex-row px-2">
+                            <div class="flex flex-row px-2 justify-between">
                                 <span class="text-gray-400 text-xl">$</span>
-                                <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0"
+                                <% if (transaction) { %>
+                                    <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0"
+                                   value="<%= transaction.total_cost.toFixed(2) %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
+                                 <% } else { %>   
+                                    <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0"
                                     placeholder="Expense Total" class="focus:outline-none focus:border-b-2 px-2 m-1">
+                                <% } %>    
                             </div>
-                            <input type="date" id="selectedDate" name="selectedDate"
+                            <% if (transaction) { %>
+                                <% let transactionDate = new Date(transaction.date) %>
+                                <% let year = transactionDate.getYear() %>
+                                <% let month = transactionDate.getMonth() + 1 %>
+                                <% let day = transactionDate.getDay() %>
+                                <input type="date" id="selectedDate" name="selectedDate"
+                                value="<%= year + "-" + month + "-" + day %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
+                            <% } else { %>    
+                                <input type="date" id="selectedDate" name="selectedDate"
                                 class="focus:outline-none focus:border-b-2 px-2 m-1">
+                            <% } %>    
                         </div>
                     </div>
-                    <img class="flex justify-center items-center ml-auto pr-5"
-                        src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="90" width="90">
                 </div>
                 <div class="flex flex-col w-full p-3 gap-2">
-                    <div class="w-full flex flex-row items-center justify-between px-2" id="groupDroupDown"><span id="categoryHeader" class="text-2xl">Category</span><span><img id="categoryArrow" class="w-6 h-6" src="/images/otherIcons/downArrow.svg" alt=""></span> </div>
+                    <% if (transaction) { %>
+                        <div class="w-full flex flex-row items-center justify-between px-2" id="groupDroupDown"><span id="categoryHeader" class="text-2xl text-primary"><%= transaction.category[0].toUpperCase() + transaction.category.substring(1) %></span><span><img id="categoryArrow" class="w-6 h-6" src="/images/otherIcons/downArrow.svg" alt=""></span> </div>
+                    <% } else { %>
+                        <div class="w-full flex flex-row items-center justify-between px-2" id="groupDroupDown"><span id="categoryHeader" class="text-2xl">Category</span><span><img id="categoryArrow" class="w-6 h-6" src="/images/otherIcons/downArrow.svg" alt=""></span> </div>
+                    <% } %>
                     <ul class="w-full flex-col gap-2 hidden" id="groupCategoryChoices">
-                        <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="travel"><span><img class="w-8 h-8" src="/images/addGroupIcons/travelBlack.svg" alt=""></span><span>Travel</span></li>
-                        <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="home"><span><img class="w-8 h-8" src="/images/addGroupIcons/homeBlack.svg" alt=""></span><span>Home</span></li>
-                        <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="food"><span><img class="w-8 h-8" src="/images/addGroupIcons/foodBlack.svg" alt=""></span><span>Food</span></li>
-                        <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="entertainment"><span><img class="w-8 h-8" src="/images/addGroupIcons/entertainmentBlack.svg" alt=""></span><span>Entertainment</span></li>
-                        <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="recreation"><span><img class="w-8 h-8" src="/images/addGroupIcons/recreationBlack.svg" alt=""></span><span>Recreation</span></li>
-                        <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="miscellaneous"><span><img class="w-8 h-8" src="/images/addGroupIcons/miscellaneousBlack.svg" alt=""></span><span>Miscellaneous</span></li>
-                    </ul>
+                        <% if (transaction) { %>
+                            <% let categories = ['travel', 'home', 'food', 'entertainment', 'recreation', 'miscellaneous'] %>
+                            <% for (category of categories) { %>
+                                <%- include('templates/categoryCards', {transaction: transaction, category: category}) %>
+                            <% } %>
+                        <% } else { %>   
+                                <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="travel"><span><img class="w-8 h-8" src="/images/addGroupIcons/travelBlack.svg" alt=""></span><span>Travel</span></li>
+                                <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="home"><span><img class="w-8 h-8" src="/images/addGroupIcons/homeBlack.svg" alt=""></span><span>Home</span></li>
+                                <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="food"><span><img class="w-8 h-8" src="/images/addGroupIcons/foodBlack.svg" alt=""></span><span>Food</span></li>
+                                <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="entertainment"><span><img class="w-8 h-8" src="/images/addGroupIcons/entertainmentBlack.svg" alt=""></span><span>Entertainment</span></li>
+                                <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="recreation"><span><img class="w-8 h-8" src="/images/addGroupIcons/recreationBlack.svg" alt=""></span><span>Recreation</span></li>
+                                <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="miscellaneous"><span><img class="w-8 h-8" src="/images/addGroupIcons/miscellaneousBlack.svg" alt=""></span><span>Miscellaneous</span></li>
+                            </ul> 
+                        <% } %>               
+                    
                     <input type="text" id="categoryInput" class="hidden" value="miscellaneous" name="selectedCategory">
-                    </div>
+                </div>
                 <div class="bg-primary mt-4 p-3 rounded-t-3xl">
                     <div class="flex flex-row text-white">
                         <p class="font-semibold text-3xl px-4">Split</p>
@@ -62,7 +88,10 @@
                             <label class="font-semibold my-2 text-base" for="selectedPaidBy">Paid By:</label>
                             <select class="float-right px-4 rounded-lg m-2 text-black" name="selectedPaidBy"
                                 id="selectedPaidBy" placeholder="Select User">
-                                <option value="text-black" selected disabled class="hidden">User</option>
+                                <% let selectedGroup = transaction.group_id %>
+                                <% for(let i = 0; i < selectedGroup.members.length; i++) {%>
+                                    <%- include('templates/usersForExpense', {  option: selectedGroup.members[i], transaction: transaction  }) %>
+                                <% } %>
                             </select>
                         </div>
                     </div>
@@ -81,7 +110,7 @@
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
                         <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                            <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id }) %>
+                            <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j] }) %>
                         <% } %>
                     </div>
                 <% } %>

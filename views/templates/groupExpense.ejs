@@ -19,7 +19,7 @@
             <% } %>
         </div>
         <div class="flex flex-col ml-auto justify-center">
-            <p class="flex font-medium text-xl">$<%= transaction.total_cost %></p>
+            <p class="flex font-medium text-xl">$<%= transaction.total_cost.toFixed(2) %></p>
         </div>
     </a>
 </li>

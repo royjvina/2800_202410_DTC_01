@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 // Route for rendering the add expenses page
 router.get('/addExpenses', async (req, res) => {
     try {
+        let transactionId = req.query.expenseId;
+        let transaction = await Transaction.findOne({ _id: transactionId }).populate({path: 'group_id', select: 'group_name', select: 'members'}).populate({path: 'payee', select: 'username'}).populate('payments').populate({path: 'group_id', populate: {path: 'members.user_id'}});
         // Retrieve groups data for the current user
         let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
         
@@ -22,9 +24,9 @@ router.get('/addExpenses', async (req, res) => {
                 }
             });
         });
-        
+        console.log(transaction)
         // Render the add expenses page with groups data
-        res.render('addExpenses', { path: req.path, groups: groups });
+        res.render('addExpenses', { path: req.path, groups: groups, transaction: transaction});
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

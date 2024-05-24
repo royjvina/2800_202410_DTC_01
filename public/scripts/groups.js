@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var options = {
         chart: {
             type: 'bar',
-            height: 400,
+            height: 200,
             toolbar: {
                 show: false
             },
