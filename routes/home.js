@@ -25,10 +25,6 @@ async function getFriends(req) {
     return user
 }
 
-router.get('/easterEgg', async (req, res) => {
-
-    res.render('easterEggPopUp', {path: req.path});
-});
 
 async function getGroupDebt(req) {
     let individualGroupCummalation = {};
@@ -98,26 +94,39 @@ router.get("/home", async (req, res) => {
 
     try{
         let user = await getFriends(req);
-    let groupDebt = await getGroupDebt(req);
-    let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
-    if (groups.length == 0) {
-        groups = [];
-    }
-    else if (groups.length == 1) {
-        groups = [groups];
-    }
-    groups.forEach(group => {
-        if (group.group_pic && group.group_pic.data) {
-            group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
+        let groupDebt = await getGroupDebt(req);
+        let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
+        if (groups.length == 0) {
+            groups = [];
         }
-        group.members.forEach(member => {
-
-            if (member.user_id.profileImage && member.user_id.profileImage.data) {
-                member.user_id.profileImageBase64 = `data:${member.user_id.profileImage.contentType};base64,${member.user_id.profileImage.data.toString('base64')}`;
+        else if (groups.length == 1) {
+            groups = [groups];
+        }
+        groups.forEach(group => {
+            if (group.group_pic && group.group_pic.data) {
+                group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
             }
+            group.members.forEach(member => {
+
+                if (member.user_id.profileImage && member.user_id.profileImage.data) {
+                    member.user_id.profileImageBase64 = `data:${member.user_id.profileImage.contentType};base64,${member.user_id.profileImage.data.toString('base64')}`;
+                }
+            });
         });
-    });
-    res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: groupDebt, friendDebt: await getFriendDebt(req)});}
+        let friendDebt = await getFriendDebt(req);
+        let TotalpositiveDebt = 0;
+        let TotalnegativeDebt = 0;
+        for (friend in friendDebt) {
+            if (friendDebt[friend] > 0) {
+                TotalpositiveDebt += friendDebt[friend];
+            }
+            else {
+                TotalnegativeDebt += friendDebt[friend];
+            }
+        }
+        let debtInfo = { TotalpositiveDebt: TotalpositiveDebt, TotalnegativeDebt: Math.abs(TotalnegativeDebt) };
+        console.log(debtInfo);
+        res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: groupDebt, friendDebt: friendDebt, debtInfo: debtInfo});}
    catch (error) {
     console.log(error);
     res.render('/main');
