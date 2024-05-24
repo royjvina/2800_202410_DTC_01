@@ -70,7 +70,8 @@ router.post('/', async (req, res) => {
         req.session.userId = user._id;
         req.session.username = user.username;
         if (user.profileImage && user.profileImage.data) {
-            req.session.profilePic = `data:${user.profileImage.contentType};base64,${user.profileImage.data.toString('base64')}`;
+            const profileImageBase64 = user.profileImage.data.toString('base64');
+            req.session.profilePic = `data:${user.profileImage.contentType};base64,${profileImageBase64}`;
         } else {
             req.session.profilePic = null;
         }
