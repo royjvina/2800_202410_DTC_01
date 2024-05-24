@@ -1,8 +1,8 @@
 <li>
     <div class="flex flex-col">
-        <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group-container" id="<%= group._id %>">
+        <div class="flex flex-row shadow-md w-full justify-between p-3 rounded-lg items-center group" id="<%= group._id %>">
             <!-- Group clickable area -->
-            <a href="/groups" class="flex flex-row items-center gap-4 w-full">
+            <a href="/groups?groupId=<%= group._id %>" class="flex flex-row items-center gap-4 w-full">
                 <div class="flex flex-row items-center gap-4 w-full justify-between">
                     <div class="flex flex-row items-center gap-4">
                         <% if(!group.group_picBase64) { %>
@@ -28,25 +28,22 @@
                             
                         </div>
                     </div>
-                    <div class=" mr-10">-$50</div>
+                    <% if(groupDebt[group._id] > 0) { %>
+                        <div class="flex flex-col text-gray-400">
+                            <div class="text-sm text-center">Owed:</div>
+                            <div class=" mr-10 text-black text-center w-full"> $<%= groupDebt[group._id].toFixed(2)  %></div>
+                        </div>
+                    <% } else if(groupDebt[group._id] < 0) { %>
+                        <div class="flex flex-col text-gray-400">
+                            <div class="text-sm text-center">You owe:</div>
+                            <div class="mr-10 text-black text-center w-full">$<%= Math.abs(groupDebt[group._id]).toFixed(2) %></div>
+                        </div>
+                    <% } %>
                 </div>
+                <span class="pl-2 text-2xl mb-1">&#8250;</span>
             </a>
-            <!-- Delete button -->
-            <button id="<%= group._id %>Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">
-                Delete
-            </button>
+                       
         </div>
     </div>
-    <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="<%= group._id %>ConfirmDeleteOptions">
-        <form action="/deleteGroup" method="post">
-            <div class="text-red-600 text-center text-sm mb-2">
-                All the transactions and debts will also be deleted. Are you sure you want to delete this group?
-            </div>
-            <div class="flex flex-row justify-center gap-2">
-                <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="<%= group._id %>ConfirmDelete" value="Confirm">
-                <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="<%= group._id %>CancelDelete" value="Cancel">
-                <input type="text" class="hidden" name="groupDeleteId" id="<%= group._id %>Selected">
-            </div>
-        </form>
-    </div>
+    
 </li>

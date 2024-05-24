@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const cors = require('cors')
 
-/* const saltRounds = */
+
 const port = process.env.PORT || 3000;
 const expireTime = 1 * 60 * 60 * 1000;
 
@@ -83,10 +83,11 @@ const personalRouter = require("./routes/personal");
 const addExpenseRouter = require("./routes/addExpenses");
 const groupsRouter = require("./routes/groups");
 const individualExpenseRouter = require("./routes/individualExpense");
-const recentActivityRouter = require("./routes/recentActivity");
 const settingsRouter = require("./routes/settings");
 const suggestedReimbursementsRouter = require("./routes/suggestedReimbursements")
 const expensePersonalRouter = require("./routes/expensePersonal");
+const recentActivityRouter = require("./routes/recentActivity");
+
 
 
 
@@ -102,6 +103,7 @@ app.use("/", sessionValidation, settingsRouter);
 app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, suggestedReimbursementsRouter);
 app.use("/", sessionValidation, expensePersonalRouter);
+app.use("/", sessionValidation, recentActivityRouter);
 
 
 

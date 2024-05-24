@@ -23,13 +23,14 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#6E0924",
+                        primary: "<%= path === '/easterEgg' ? '#FF0000' : '#6E0924' %>",
                         secondary: "#D3D0CB",
                     },
                 },
             },
         }
     </script>
+    <script src="/scripts/easterEgg.js"></script>
 </head>
 
 <body>
@@ -41,7 +42,7 @@
                     <%= groupName %>
                 </div>
                 <% } else { %>
-                    <div class="text-white" style="font-family: Georgia, 'Times New Roman', Times, serif;">PennyWise
+                    <div id="pennywise" class="text-white" style="font-family: Georgia, 'Times New Roman', Times, serif;">PennyWise
                     </div>
                     <% } %>
                         <div class="">
