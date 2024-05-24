@@ -1,6 +1,7 @@
 <%- include('templates/header') %>
 <div id="recentActivity" class="overflow-auto mb-[70px]">
     <% recentActivities.forEach(activity => { %>
+    <% if (activity.splitAmount > 0) { %>
     <a href="/individualExpense" class="usersActivity flex flex-row rounded-xl m-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
         <img class="ml-4" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="" height="50" width="50">
         <div class="flex flex-col text-xs m-4 text-gray-500 w-full mt-2">
@@ -8,15 +9,16 @@
                 <p class="text-lg font-semibold flex items-center"><%= activity.groupName %></p>
                 <div class="flex ml-auto flex-col">
                     <p class="text-gray-500 text-center">Your split:</p>
-                    <p class="text-xl font-semibold text-center"><%= activity.splitAmount %></p>
+                    <p class="text-xl font-semibold text-center">$<%= activity.splitAmount.toFixed(2) %></p>
                 </div>
             </div>
-            <p class="leading-4">Expense Total: $<%= activity.totalCost %></p>
+            <p class="leading-4">Expense Total: $<%= activity.totalCost.toFixed(2) %></p>
             <p class="leading-4">Expense: <%= activity.expenseName %></p>
             <p class="leading-4">Paid By: <%= activity.paidBy %></p>
             <p class="leading-4">Paid for: <%= activity.paidFor.join(', ') %></p>
         </div>
     </a>
+    <% } %>
     <% }) %>
 </div>
 <%- include('templates/footer') %>
