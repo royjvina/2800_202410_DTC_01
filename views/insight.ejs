@@ -1,17 +1,17 @@
-<%- include('templates/header') %>
+<%- include('templates/header', { path: path }) %>
 
-  <main class="flex flex-col h-screen">
-    <div class="flex flex-col items-center justify-center bg-gray-100 p-8 h-screen">
+  <main class="flex flex-col ">
+    <div class="flex items-center justify-center bg-gray-100 px-8 h-screen">
       <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 mb-4">
         <div class="flex justify-between mb-3 flex-auto items-center">
           <div class="flex flex-auto justify-between items-center">
             <div class="flex items-center py-2 mb-4">
-              <h5 class="text-xl font-bold leading-none text-gray-900 pe-1 items-center">Spending</h5>
+              <h5 class="text-xl font-bold leading-none text-gray-900 pe-1 items-center">Group Expenses</h5>
             </div>
           </div>
         </div>
 
-        <div class="py-6" id="donut-chart"></div>
+        <div class="pb-6" id="donut-chart"></div>
       </div>
     </div>
   </main>
