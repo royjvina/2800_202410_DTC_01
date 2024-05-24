@@ -17,10 +17,11 @@
                 <div class="m-2 p-3 outline outline-1 rounded-xl">
                     <label class="font-semibold" for="selectedGroup">Group: </label>
                     <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
+                        <option value="" selected disabled class="hidden">Select A Group</option>
                         <% for(let i = 0; i < groups.length; i++) {%>
                             <%- include('templates/nameExpense', { id: groups[i]._id, option: groups[i].group_name, transaction: transaction }) %>
                         <% } %>
-                    </select>
+                    </select> 
                 </div>
                 
                 <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
