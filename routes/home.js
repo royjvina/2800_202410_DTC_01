@@ -154,6 +154,10 @@ router.get("/addGroup", async (req, res) => {
 router.post('/addFriend', async (req, res) => {
     let friend;
     let phoneNumber = req.body.friendPhone.replace(/[^\d]/g, '');
+    if (phoneNumber.length < 10) {
+        phoneNumber = "";
+    }
+    console.log(phoneNumber);
     if (req.body.friendEmail == "") {
         friend = await User.findOne({ phone: phoneNumber });
         if (friend) {
@@ -165,7 +169,7 @@ router.post('/addFriend', async (req, res) => {
         }
 
     }
-    if (req.body.friendPhone == "") {
+    else if (phoneNumber == "") {
         friend = await User.findOne({
             email: req.body.friendEmail
         });
@@ -176,6 +180,9 @@ router.post('/addFriend', async (req, res) => {
         else {
             res.redirect('/addFriend?error=UserNotFound');
         }
+    }
+    else {
+        res.redirect('/addFriend?error=UserNotFound');
     }
 });
 
