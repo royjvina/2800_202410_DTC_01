@@ -11,9 +11,18 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 async function addFriend(friend, req) {
-    loggedInUser = await User.findOneAndUpdate({ email: req.session.email }, { $push: { friends: friend._id } }, { new: true });
-    await User.updateOne({ email: friend.email }, { $push: { friends: loggedInUser._id } });
+    const loggedInUser = await User.findOneAndUpdate(
+        { email: req.session.email },
+        { $addToSet: { friends: friend._id } },
+        { new: true }
+    );
+
+    await User.updateOne(
+        { email: friend.email },
+        { $addToSet: { friends: loggedInUser._id } }
+    );
 }
+
 
 async function getFriends(req) {
     let user = await User.findOne({ email: req.session.email }).populate('friends').populate('groups');
