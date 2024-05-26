@@ -1,6 +1,6 @@
-const Transaction = require('./Transaction');
-const Group = require('./Group');
-const User = require('./User');
+const Transaction = require('../models/Transaction');
+const Group = require('../models/Group');
+const User = require('../models/User');
 
 async function getRecentActivities(userId) {
     const transactions = await Transaction.find({ 'payments.user_id': userId })

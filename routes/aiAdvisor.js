@@ -6,7 +6,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const fs = require('fs');
 const path = require('path');
 const ChatHistory = require('../models/chatHistory');
-const { getUserGroups, getUserTransactions, getUserDetails } = require('../models/dataFetcher.js');
+const { getUserGroups, getUserTransactions, getUserDetails } = require('../controllers/dataFetcherController');
 
 router.get('/history', async (req, res) => {
     if (!req.session.userId) {

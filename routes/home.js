@@ -6,98 +6,10 @@ const multer = require('multer');
 const { get } = require("http");
 const { ObjectId } = require('mongodb');
 const Transaction = require('../models/Transaction');
-
+const { addFriend, getFriends, getFriendDebt } = require('../controllers/friendController');
+const { getGroupDebt, getGroupDebtForFriends } = require('../controllers/groupController');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
-async function addFriend(friend, req) {
-    const loggedInUser = await User.findOneAndUpdate(
-        { email: req.session.email },
-        { $addToSet: { friends: friend._id } },
-        { new: true }
-    );
-
-    await User.updateOne(
-        { email: friend.email },
-        { $addToSet: { friends: loggedInUser._id } }
-    );
-}
-
-
-async function getFriends(req) {
-    let user = await User.findOne({ email: req.session.email }).populate('friends').populate('groups');
-    user.friends.forEach(friend => {
-        if (friend.profileImage && friend.profileImage.data) {
-            friend.profileImageBase64 = `data:${friend.profileImage.contentType};base64,${friend.profileImage.data.toString('base64')}`;
-        }
-    });
-    return user
-}
-
-
-async function getGroupDebt(req) {
-    let individualGroupCummalation = {};
-    let user = await getFriends(req);
-    for (const group of user.groups) {
-        individualGroupCummalation[group._id] = 0;
-        let transactions = await Transaction.find({ group_id: group._id });
-        for (const transaction of transactions) {
-            if (transaction.payee.equals(req.session.userId)) {
-                let userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));                
-                if (userPayment) {
-                    individualGroupCummalation[group._id] += transaction.total_cost - userPayment.amount_paid;
-                } else {
-                    individualGroupCummalation[group._id] += transaction.total_cost;
-                }
-            }
-            else {
-                let userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));
-                if (userPayment) {
-                    individualGroupCummalation[group._id] -= userPayment.amount_paid;
-                }
-            }
-        }
-    }
-
-    return individualGroupCummalation;
-}
-
-async function getFriendDebt(req) {
-    let user = await getFriends(req);
-    let friendDebt = {};
-
-    user.friends.forEach(friend => {
-        friendDebt[friend._id] = 0;
-    });
-
-    let transactions = await Transaction.find({
-        $or: [
-            { payee: req.session.userId },
-            { payments: { $elemMatch: { user_id: req.session.userId } } }
-        ]
-    });
-
-    for (const transaction of transactions) {
-        if (transaction.payee.equals(req.session.userId)) {
-            transaction.payments.forEach(payment => {
-                if (payment.user_id != req.session.userId) {
-                    if (friendDebt[payment.user_id] !== undefined) {
-                        friendDebt[payment.user_id] += payment.amount_paid;
-                    }
-                }
-            });
-        } else {
-            let userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));
-            if (userPayment) {
-                if (friendDebt[transaction.payee] !== undefined) {
-                    friendDebt[transaction.payee] -= userPayment.amount_paid;
-                }
-            }
-        }
-    }
-    return friendDebt;
-}
-
 
 router.get("/home", async (req, res) => {
 
@@ -259,30 +171,6 @@ router.post('/deleteGroup', async (req, res) => {
     res.redirect('/home');
 });
 
-async function getGroupDebtForFriends(group, req) {
-    let userOwesTo = {};
-
-    group.members.forEach(member => {
-        userOwesTo[member.user_id._id] = { amount: 0, name: member.user_id.username, group_id: group._id};
-    });
-
-    for (const transaction of group.transactions) {
-        if (transaction.payee.equals(req.session.userId)) {
-            transaction.payments.forEach(payment => {
-                if (!payment.user_id.equals(req.session.userId) && userOwesTo[payment.user_id]) {
-                    userOwesTo[payment.user_id].amount += payment.amount_paid;
-                }
-            });
-        } else {
-            const userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));
-            if (userPayment && userOwesTo[transaction.payee]) {
-                userOwesTo[transaction.payee].amount -= userPayment.amount_paid;
-            }
-        }
-    }
-
-    return userOwesTo;
-}
 
 router.post('/settleUp', async (req, res) => {
     try {

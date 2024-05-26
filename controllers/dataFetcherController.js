@@ -1,7 +1,7 @@
 
-const Group = require('./Group');
-const Transaction = require('./Transaction');
-const User = require('./User');
+const Group = require('../models/Group');
+const Transaction = require('../models/Transaction');
+const User = require('../models/User');
 const NodeCache = require('node-cache');
 const cache = new NodeCache({ stdTTL: 600 });
 

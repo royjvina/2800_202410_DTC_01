@@ -2,43 +2,10 @@ const express = require("express")
 const router = express.Router()
 const Group = require('../models/Group');
 const { get } = require("http");
+const { getEveryFriendDebt } = require("../controllers/friendController");
 
 
 
-async function getEveryFriendDebt(group) {
-    try {
-        let friendDebt = {};
-
-        group.members.forEach(member => {
-            friendDebt[member.user_id._id] = { amount: 0, name: member.user_id.username };
-        });
-
-        for (const transaction of group.transactions) {
-            for (const member of group.members) {
-                if (transaction.payee.equals(member.user_id._id)) {
-                    let userPayment = transaction.payments.find(payment => payment.user_id.equals(member.user_id._id));
-                    if (userPayment) {
-                        friendDebt[member.user_id._id].amount += transaction.total_cost - userPayment.amount_paid;
-                    } else {
-                        friendDebt[member.user_id._id].amount += transaction.total_cost;
-                    }
-                } else {
-                    let userPayment = transaction.payments.find(payment => payment.user_id.equals(member.user_id._id));
-                    if (userPayment) {
-                        friendDebt[member.user_id._id].amount -= userPayment.amount_paid;
-                    }
-                }
-            }
-        }
-
-        return friendDebt;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Failed to calculate friend debt');
-    }
-
-
-}
 
 router.get('/groups', async (req, res) => {
     let groupId = req.query.groupId;

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getRecentActivities } = require('../models/recentActivityFetcher');
+const { getRecentActivities } = require('../controllers/recentActivityFetcherController');
 
 router.get('/recentActivity', async (req, res) => {
     try {
