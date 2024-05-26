@@ -28,20 +28,23 @@ id="usernameAndPic">
         </div>
         
             <div id="groups" class="flex-col m-3 mt-6 gap-3 flex">
-                <ul>
+                <ul class="flex flex-col gap-2">
                     <% for(let i = 0; i < groups.length; i++) {%>
                         <%- include('templates/groupsHomepage', { group: groups[i] }) %>
                     <% } %>
+                    <button class="text-primary pt-4 text-right underline hidden pr-8" id="showMoreGroups">Show more</button>
+                    <button class="text-primary pt-4 text-right underline hidden pr-8" id="showLessGroups">Show less</button>
                 </ul>
                 
-                            
             </div>
             <div id="friends" class="hidden flex-col m-3 mt-6 gap-3">
                 <ul class="flex flex-col gap-2">
                     <% for(let i = 0; i < friends.length; i++ ) { %>
                         <%- include('templates/friendsHomepage', { friend: friends[i] }) %>
-                    <% } %>
-                </ul>
+                        <% } %>
+                        <button class="text-primary pt-4 text-right underline hidden pr-8" id="showMoreFriends">Show more</button>
+                        <button class="text-primary pt-4 text-right underline hidden pr-8" id="showLessFriends">Show less</button>
+                    </ul>
             </div>
                 
             

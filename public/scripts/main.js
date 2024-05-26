@@ -3,6 +3,7 @@
  */
 
 
+
 /**
  * This function is used to handle the click event on the groups tab    
  * @balpreet787
@@ -126,14 +127,14 @@ function deleteFriendHandler() {
  */
 function formFieldsHandler(friendPhone) {
     const totalPayable = document.getElementById('payAmount' + friendPhone);
-    
+
     const enterAmount = document.getElementById('enterAmount' + friendPhone);
     const submitSettle = document.getElementById('submitSettle' + friendPhone);
     const confirmfriend = document.getElementById('confirmfriend' + friendPhone);
     const cancelSettle = document.getElementById('cancelSettle' + friendPhone);
     const EnterAmountWarning = document.getElementById('EnterAmountWarning' + friendPhone);
-    console.log(totalPayable);
-    enterAmount.value = totalPayable.textContent;
+    console.log(totalPayable.textContent);
+    enterAmount.value = totalPayable.textContent.slice(1);
     enterAmount.addEventListener('input', function () {
         confirmfriend.classList.add('hidden');
         confirmfriend.classList.remove('flex');
@@ -153,7 +154,7 @@ function formFieldsHandler(friendPhone) {
     submitSettle.addEventListener('click', function (event) {
         event.preventDefault();
 
-        if (enterAmount.value === '' || Number(enterAmount.value) === 0 || Number(enterAmount.value) > Number(totalPayable.textContent) || Number(enterAmount.value) < 0){
+        if (enterAmount.value === '' || Number(enterAmount.value) === 0 || Number(enterAmount.value) > Number(totalPayable.textContent) || Number(enterAmount.value) < 0) {
             EnterAmountWarning.classList.toggle('hidden');
             setTimeout(() => {
                 EnterAmountWarning.classList.toggle('hideManually');
@@ -197,28 +198,77 @@ function toggleFriendSettleUp() {
     document.querySelectorAll('.friend').forEach(friend => {
         const friendId = friend.id;
         let friendPhone = friendId.substring(6, friendId.length);
-        if(document.getElementById("payAmount" + friendPhone)){
+        if (document.getElementById("payAmount" + friendPhone)) {
             friend.addEventListener('click', function () {
-            const formFriend = document.getElementById("formFriend" + friendPhone);
-            formFriend.classList.toggle('hidden');
-            setTimeout(() => {
-                formFriend.classList.toggle('hideManually');
-            }, 10);
+                const formFriend = document.getElementById("formFriend" + friendPhone);
+                console.log(settleArrow.src);
+                if (settleArrow.src.includes('downArrow')) {
+                    settleArrow.src = settleArrow.src.replace('downArrow', 'upArrow');
+                    console.log(settleArrow.src);
+                }
+                else {
+                    settleArrow.src = settleArrow.src.replace('upArrow', 'downArrow');
+                    console.log(settleArrow.src, 'rrrrr');
+                }
+                formFriend.classList.toggle('hidden');
+                setTimeout(() => {
+                    formFriend.classList.toggle('hideManually');
+                }, 10);
 
-            if (!formFriend.classList.contains('hidden')) {
-                this.classList.add('bg-secondary');
-                this.classList.add('text-[#6E0924]');
-            }
-            else {
-                this.classList.remove('bg-secondary');
-                this.classList.remove('text-[#6E0924]');
-            }
-            formFieldsHandler(friendPhone);
-        });}
+                if (!formFriend.classList.contains('hidden')) {
+                    this.classList.add('bg-secondary');
+                    this.classList.add('text-[#6E0924]');
+                }
+                else {
+                    this.classList.remove('bg-secondary');
+                    this.classList.remove('text-[#6E0924]');
+                }
+                formFieldsHandler(friendPhone);
+            });
+        }
 
     });
 }
+
+function settledUpFriendAndGroupHandler(entity) {
+    const parentDivs = document.querySelectorAll(`.parentDiv${entity}`);
+    const showMore = document.getElementById(`showMore${entity}`);
+    const showLess = document.getElementById(`showLess${entity}`);
+    let balanceZeroParentDivs = [];
+    parentDivs.forEach(parentDiv => {
+        const balanceZeroDiv = parentDiv.querySelector('.balanceZero');
+
+        if (balanceZeroDiv) {
+            balanceZeroParentDivs.push(parentDiv);
+            parentDiv.classList.add('hidden');
+            showMore.classList.remove('hidden');
+        }
+    });
+    showMore.addEventListener('click', function () {
+        balanceZeroParentDivs.forEach(parentDiv => {
+            parentDiv.classList.remove('hidden');
+            parentDiv.classList.add('hideManually');
+            setTimeout(() => {
+                parentDiv.classList.remove('hideManually');
+            });
+            showMore.classList.add('hidden');
+            showLess.classList.remove('hidden');
+        });
+    });
+    showLess.addEventListener('click', function () {
+        balanceZeroParentDivs.forEach(parentDiv => {
+            parentDiv.classList.add('hidden');
+            showMore.classList.remove('hidden');
+            showLess.classList.add('hidden');
+        });
+    });
+}
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
+    settledUpFriendAndGroupHandler('Groups');
+    settledUpFriendAndGroupHandler('Friends');
     removeSecondaryButtons();
     toggleFriendSettleUp();
     deleteFriendHandler();
@@ -230,6 +280,8 @@ document.addEventListener('DOMContentLoaded', function () {
     profileImage.onerror = function () {
         profileImage.src = '/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg';
     };
+
+    
 });
 
 
