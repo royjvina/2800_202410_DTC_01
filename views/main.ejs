@@ -3,13 +3,11 @@
 id="usernameAndPic">
 <div>
     <h1>Hi, <span class="" id="namegoesHere"><%= username %></span>!</h1>
-    <% if (debtInfo.TotalpositiveDebt > debtInfo.TotalnegativeDebt) { %>
-        <p class="text-sm text-secondary italic"> Overall, you are owed $<%= debtInfo.TotalpositiveDebt - debtInfo.TotalnegativeDebt %> among your friends.</p>
-    <% } else if (debtInfo.TotalpositiveDebt < debtInfo.TotalnegativeDebt) { %>
-        <p class="text-sm text-secondary italic"> Overall, you owe $<%= debtInfo.TotalnegativeDebt - debtInfo.TotalpositiveDebt %> to your friends.</p>
-    <% } else { %>
-        <p class="text-sm text-secondary italic"> You are all settled up with your friends!</p>
-    <% } %>
+    <% if (debtInfo.TotalpositiveDebt.toFixed(2) > debtInfo.TotalnegativeDebt.toFixed(2)) { %>
+        <p class="text-sm text-secondary italic"> Overall, you are owed $<%= (debtInfo.TotalpositiveDebt - debtInfo.TotalnegativeDebt).toFixed(2) %> among your friends.</p>
+    <% } else if (debtInfo.TotalpositiveDebt.toFixed(2) < debtInfo.TotalnegativeDebt.toFixed(2)) { %>
+        <p class="text-sm text-secondary italic"> Overall, you owe $<%= (debtInfo.TotalnegativeDebt - debtInfo.TotalpositiveDebt).toFixed(2) %> to your friends.</p>
+    <% }
 </div>
 <img class="w-20 h-20 ml-auto rounded-full hover:cursor-pointer" id="homepagePic" data-src="<%= profilePic %>" alt="">
 </div>

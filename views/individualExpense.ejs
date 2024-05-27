@@ -21,15 +21,28 @@
                 <p class="text-xl font-semibold">$<%= transaction.total_cost.toFixed(2) %></p>
             </div>
             <% let transactionDateString = transaction.date.toString() %>
-            <p class="text-sm text-white font-normal leading-4"><%= transactionDateString.substring(4, 10) + ", " + transactionDateString.substring(11, 15) %></p>
-            <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Paid By:</span> 
-                <% if (transaction.payee._id == userId) { %>
-                    <%= transaction.payee.username %> (You)
-                    <% } else { %>
-                    <%= transaction.payee.username %>
-                <% } %>
-            </p>
-            <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Category:</span> <%= transaction.category.toString()[0].toUpperCase() + transaction.category.toString().substring(1) %></p>
+            <div class="flex flex-row justify-between items-center">
+                <div>
+                    <p class="text-sm text-white font-normal leading-4"><%= transactionDateString.substring(4, 10) + ", " + transactionDateString.substring(11, 15) %></p>
+                    <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Paid By:</span>
+                        <% if (transaction.payee._id == userId) { %>
+                            <%= transaction.payee.username %> (You)
+                            <% } else { %>
+                            <%= transaction.payee.username %>
+                        <% } %>
+                    </p>
+                    <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Category:</span> <%= transaction.category.toString()[0].toUpperCase() + transaction.category.toString().substring(1) %></p>
+                </div>
+                <div class="text-right">
+                    <button type="button" class="text-white underline fadeOut" id="deleteExpense">Delete</button>
+                    <form action="/deleteExpense" method="post" id="deleteExpenseForm" class="hidden fadeOut flex-col">
+                        <input type="hidden" name="expenseId" value="<%= transaction._id %>">
+                        <button type="submit" class="text-white underline" id="ConfirmDeleteExpense">Confirm</button>
+                        <button type="button" class="text-white underline" id="CancelDeleteExpense">Cancel</button>
+                    </form>
+                </div>
+            </div>
+            </div>
         </div>
     </div>
     <div class="overflow-auto mb-[90px] mt-[120px]">
