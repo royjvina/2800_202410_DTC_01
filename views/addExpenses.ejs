@@ -13,6 +13,8 @@
                     </div>
                 </div>
             </header>
+
+            <!-- Select Group -->
             <div class="fixed top-14 w-full bg-white z-10">
                 <div class="m-2 p-3 outline outline-1 rounded-xl">
                     <label class="font-semibold" for="selectedGroup">Group: </label>
@@ -24,6 +26,7 @@
                     </select> 
                 </div>
                 
+                <!-- Expense Info -->
                 <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
                     <div class="flex flex-col gap-4">
                         <% if (transaction) { %>
@@ -58,6 +61,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Category -->
                 <div class="flex flex-col w-full p-3 gap-2">
                     <% if (transaction) { %>
                         <div class="w-full flex flex-row items-center justify-between px-2" id="groupDroupDown"><span id="categoryHeader" class="text-2xl text-primary"><%= transaction.category[0].toUpperCase() + transaction.category.substring(1) %></span><span><img id="categoryArrow" class="w-6 h-6" src="/images/otherIcons/downArrow.svg" alt=""></span> </div>
@@ -82,6 +87,8 @@
                     
                     <input type="text" id="categoryInput" class="hidden" value="miscellaneous" name="selectedCategory">
                 </div>
+
+                <!-- Select user -->
                 <div class="bg-primary mt-4 p-3 rounded-t-3xl">
                     <div class="flex flex-row text-white">
                         <p class="font-semibold text-3xl px-4">Split</p>
@@ -98,6 +105,8 @@
                             </select>
                         </div>
                     </div>
+
+                    <!-- Split Type -->
                     <div class="text-black mt-2 flex mx-2 justify-center">
                         <div class="flex flex-row outline outline-1 rounded-full w-full justify-center bg-white">
                             <button class="w-1/2 p-1 text-white bg-[#4b061a] rounded-full"
@@ -109,6 +118,7 @@
                 </div>
             </div>
 
+            <!-- Equal Split -->
             <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[340px] mb-[70px]">
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
@@ -123,21 +133,23 @@
                 <% } %>
             </div>
             
-            <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[300px] mb-[70px] hidden">
+            <!-- Percentage Split -->
+            <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[340px] mb-[70px] hidden">
                 <% for(let i = 0; i < groups.length; i++) { %>
-                    <div id="<%= groups[i].group_name %>-percentage" class="split-container hidden">
+                    <div id="<%= groups[i]._id %>-percentage" class="split-container hidden">
                         <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                            <%- include('templates/friendsPercentExpense', { friend: groups[i].members[j].user_id }) %>
+                            <%- include('templates/friendsPercentExpense', { group: groups[i], friend: groups[i].members[j].user_id }) %>
                         <% } %>
                     </div>
                 <% } %>
             </div>
             
-            <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[300px] mb-[70px] hidden">
+            <!-- Manual Split -->
+            <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[340px] mb-[70px] hidden">
                 <% for(let i = 0; i < groups.length; i++) { %>
-                    <div id="<%= groups[i].group_name %>-manually" class="split-container hidden">
+                    <div id="<%= groups[i]._id %>-manually" class="split-container hidden">
                         <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                            <%- include('templates/friendsManualExpense', { friend: groups[i].members[j].user_id }) %>
+                            <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id }) %>
                         <% } %>
                     </div>
                 <% } %>

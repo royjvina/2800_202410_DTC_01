@@ -1,19 +1,37 @@
 <div class="flex flex-row">
     <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2">
-        <input type="checkbox" id="<%= friend.username %>" name="userPercentageSplit" value="<%= friend.username %>" class="userPercentageSplit hidden">
+        <!-- <input type="checkbox" id="<%= friend.username %>" name="userPercentageSplit" value="<%= friend.username %>" class="userPercentageSplit"> -->
         <div class="w-1/2 flex flex-row items-center">
-            <img class="p-3" src="<%= friend.profileImageBase64 %>" alt=""
-                height="50" width="50">
-            <p class="font-semibold px-2"><% friend.username %></p>
-        </div>
+            <% if (friend.profileImageBase64) { %>
+                <img class="" src="<%= friend.profileImageBase64 %>" alt=""
+                    height="50" width="50">
+                <% } else { %>
+                <img class="" src="/images/homepageIconsAndPlaceholders/profilePicPlaceholderSettings.svg" alt=""
+                    height="50" width="50">
+                <% } %>
+
+                <p class="font-semibold px-2"><%= friend.username %></p>
+            </div>
         <div class="flex flex-col">
             <div class="flex flex-row">
                 <input
                     class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                    type="number" id="user1Percentage" name="user1Percentage" min="0" placeholder="0">
+                    type="number" id="<%= group._id %><%= friend._id %>Percentage" data-user-id="<%= friend._id %>" name="<%= group._id %><%= friend._id %>Percentage" min="0" placeholder="0">
                 <p class="text-gray-400 text-xl font-semibold px-2">%</p>
             </div>
-            <span class="ml-auto text-sm text-gray-500 px-2" id="user1AmountPercentage" name="user1AmountPercentage">$0.00</span>
+            <span class="ml-auto text-sm text-gray-500 px-2" id="<%= group._id %><%= friend._id %>AmountPercentage" name="<%= group._id %><%= friend._id %>AmountPercentage">$0.00</span>
+            <input class="visually-hidden" type="hidden" id="<%= group._id %><%= friend._id %>AmountByPercent" name="<%= group._id %><%= friend._id %>AmountByPercent" min="0">
         </div>
+        <style>
+            .visually-hidden {
+                position: absolute !important;
+                clip: rect(1px, 1px, 1px, 1px);
+                padding: 0 !important;
+                border: 0 !important;
+                height: 1px !important;
+                width: 1px !important;
+                overflow: hidden;
+            }
+        </style>
     </div>
 </div>
