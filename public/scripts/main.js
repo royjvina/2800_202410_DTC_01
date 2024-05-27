@@ -201,14 +201,12 @@ function toggleFriendSettleUp() {
         if (document.getElementById("payAmount" + friendPhone)) {
             friend.addEventListener('click', function () {
                 const formFriend = document.getElementById("formFriend" + friendPhone);
-                console.log(settleArrow.src);
+                const settleArrow = document.getElementById("settleArrow" + friendPhone);
                 if (settleArrow.src.includes('downArrow')) {
                     settleArrow.src = settleArrow.src.replace('downArrow', 'upArrow');
-                    console.log(settleArrow.src);
                 }
                 else {
                     settleArrow.src = settleArrow.src.replace('upArrow', 'downArrow');
-                    console.log(settleArrow.src, 'rrrrr');
                 }
                 formFriend.classList.toggle('hidden');
                 setTimeout(() => {
@@ -230,6 +228,57 @@ function toggleFriendSettleUp() {
     });
 }
 
+function deleteFriendHandler(removableFriends) {
+    if (removableFriends && removableFriends.length > 0) {
+        removableFriends.forEach(removableFriend => {
+            phone = removableFriend.id.replace('Div', '');
+            const friendDiv = document.getElementById('friend' + phone);
+            friendDiv.addEventListener('click', function () {
+
+                const deleteOptions = document.getElementById(phone + 'ConfirmDeleteOptionsFriends');
+                const settleArrow = document.getElementById("settleArrow" + phone);
+                const deleteBtn = document.getElementById(phone + 'Delete');
+                const deleteForm = document.getElementById(phone + 'DeleteForm');
+                const cancelDelete = document.getElementById(phone + 'CancelDelete');
+                if (settleArrow.src.includes('downArrow')) {
+                    settleArrow.src = settleArrow.src.replace('downArrow', 'upArrow');
+                }
+                else {
+                    settleArrow.src = settleArrow.src.replace('upArrow', 'downArrow');
+                }
+                deleteOptions.classList.toggle('hidden');
+                deleteOptions.classList.add('hideManually');
+                setTimeout(() => {
+                    deleteOptions.classList.toggle('hideManually');
+                }, 10);
+                deleteOptions.classList.toggle('flex');
+                deleteBtn.addEventListener('click', function () {
+                    deleteBtn.parentNode.parentNode.classList.add('hidden');
+                    document.getElementById(phone + 'Selected').value = phone;
+                    deleteForm.classList.remove('hidden');
+                    deleteForm.classList.add('hideManually');
+                    setTimeout(() => {
+                        deleteForm.classList.remove('hideManually');
+                    }, 10);
+                    deleteForm.classList.add('flex');
+                });
+                cancelDelete.addEventListener('click', function () {
+                    document.getElementById(phone + 'Selected').value = '';
+                    deleteForm.classList.add('hidden');
+                    deleteForm.classList.remove('hideManually');
+                    deleteForm.classList.remove('flex');
+                    deleteBtn.parentNode.parentNode.classList.remove('hidden');
+                    deleteBtn.parentNode.parentNode.classList.add('flex');
+                });
+
+            });
+        });
+    } else {
+        console.log('No removable friends found.');
+    }
+}
+
+
 function settledUpFriendAndGroupHandler(entity) {
     const parentDivs = document.querySelectorAll(`.parentDiv${entity}`);
     const showMore = document.getElementById(`showMore${entity}`);
@@ -239,6 +288,7 @@ function settledUpFriendAndGroupHandler(entity) {
         const balanceZeroDiv = parentDiv.querySelector('.balanceZero');
 
         if (balanceZeroDiv) {
+            console.log(parentDiv.querySelector('.group'))
             balanceZeroParentDivs.push(parentDiv);
             parentDiv.classList.add('hidden');
             showMore.classList.remove('hidden');
@@ -262,6 +312,10 @@ function settledUpFriendAndGroupHandler(entity) {
             showLess.classList.add('hidden');
         });
     });
+    console.log(balanceZeroParentDivs);
+    if (entity === 'Friends') {
+        deleteFriendHandler(balanceZeroParentDivs);
+    }
 }
 
 
@@ -271,7 +325,6 @@ document.addEventListener('DOMContentLoaded', function () {
     settledUpFriendAndGroupHandler('Friends');
     removeSecondaryButtons();
     toggleFriendSettleUp();
-    deleteFriendHandler();
     const profileImage = document.getElementById('homepagePic');
     const profileImageSrc = profileImage.getAttribute('data-src');
 
@@ -281,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
         profileImage.src = '/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg';
     };
 
-    
+
 });
 
 

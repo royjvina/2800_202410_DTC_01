@@ -13,7 +13,7 @@ const upload = multer({ storage: storage });
 
 router.get("/home", async (req, res) => {
 
-    try{
+    try {
         let user = await getFriends(req);
         let groupDebt = await getGroupDebt(req);
         let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
@@ -47,11 +47,12 @@ router.get("/home", async (req, res) => {
         }
         let debtInfo = { TotalpositiveDebt: TotalpositiveDebt, TotalnegativeDebt: Math.abs(TotalnegativeDebt) };
         console.log(debtInfo);
-        res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: groupDebt, friendDebt: friendDebt, debtInfo: debtInfo});}
-   catch (error) {
-    console.log(error);
-    res.render('/main');
-   } 
+        res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: groupDebt, friendDebt: friendDebt, debtInfo: debtInfo });
+    }
+    catch (error) {
+        console.log(error);
+        res.render('/main');
+    }
 });
 
 router.get("/addFriend", (req, res) => {
@@ -64,12 +65,12 @@ router.get("/addGroup", async (req, res) => {
     let group = await Group.findOne({ _id: groupId }).populate('members.user_id');
     if (group) {
         if (group.group_pic && group.group_pic.data) {
-        group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
+            group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
         }
     }
 
     // res.render('addGroup', { path: `/groups?groupId=${groupId}`, group: group, friends: user.friends })
-    res.render('addGroup', { path: '/home', friends: user.friends , group: group});
+    res.render('addGroup', { path: '/home', friends: user.friends, group: group });
 });
 
 router.post('/addFriend', async (req, res) => {
@@ -127,31 +128,31 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
         }
         if (!req.body.groupId) {
             const newGroup = await Group.create({
-            group_name: req.body.groupName,
-            group_pic: groupImage,
-            members: [{ user_id: req.session.userId }, ...friendsinGroupID],
-        });
+                group_name: req.body.groupName,
+                group_pic: groupImage,
+                members: [{ user_id: req.session.userId }, ...friendsinGroupID],
+            });
 
-        await User.updateMany({ _id: { $in: newGroup.members.map(member => member.user_id) } }, { $push: { groups: newGroup._id } });
-    }
-    else {
-        if (groupImage) {
-        const group = await Group.findByIdAndUpdate(req.body.groupId, {
-            group_name: req.body.groupName,
-            group_pic: groupImage,
-            $addToSet: { members: { $each: friendsinGroupID } }
-        }, { new: true });
-        await User.updateMany({ _id: { $in: group.members.map(member => member.user_id) } }, { $addToSet: { groups: group._id } });
-    }
-    else {
-        const group = await Group.findByIdAndUpdate(req.body.groupId, {
-            group_name: req.body.groupName,
-            $addToSet: { members: { $each: friendsinGroupID } }
-        }, { new: true });
-        await User.updateMany({ _id: { $in: group.members.map(member => member.user_id) } }, { $addToSet: { groups: group._id } });
-        
-    }
-}
+            await User.updateMany({ _id: { $in: newGroup.members.map(member => member.user_id) } }, { $push: { groups: newGroup._id } });
+        }
+        else {
+            if (groupImage) {
+                const group = await Group.findByIdAndUpdate(req.body.groupId, {
+                    group_name: req.body.groupName,
+                    group_pic: groupImage,
+                    $addToSet: { members: { $each: friendsinGroupID } }
+                }, { new: true });
+                await User.updateMany({ _id: { $in: group.members.map(member => member.user_id) } }, { $addToSet: { groups: group._id } });
+            }
+            else {
+                const group = await Group.findByIdAndUpdate(req.body.groupId, {
+                    group_name: req.body.groupName,
+                    $addToSet: { members: { $each: friendsinGroupID } }
+                }, { new: true });
+                await User.updateMany({ _id: { $in: group.members.map(member => member.user_id) } }, { $addToSet: { groups: group._id } });
+
+            }
+        }
         res.redirect('/home')
     } catch (error) {
         console.log(error);
@@ -171,32 +172,51 @@ router.post('/deleteGroup', async (req, res) => {
     res.redirect('/home');
 });
 
+router.post('/deleteFriend', async (req, res) => {
+    try {
+        console.log(req.body);
+        const friendPhone = req.body.friendDeletePhone;
+        let friend = await User.findOneAndUpdate({ phone: friendPhone }, { $pull: { friends: req.session.userId } });
+
+        if (friend) {
+            await User.findByIdAndUpdate(req.session.userId, { $pull: { friends: friend._id } });
+        } else {
+            console.log('Friend not found');
+        }
+
+        res.redirect('/home');
+    } catch (error) {
+        console.log(error);
+        res.redirect('/home');
+    }
+});
+
 
 router.post('/settleUp', async (req, res) => {
     try {
         console.log(req.body);
         let friend = await User.findOne({ phone: req.body.friendPhone });
         let amount = req.body.enterAmount;
-        let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } }).populate('transactions').populate({path: 'members.user_id', select: 'username'});
+        let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } }).populate('transactions').populate({ path: 'members.user_id', select: 'username' });
         for (let group of commonGroups) {
             let friendsDebt = (await getGroupDebtForFriends(group, req));
             amountTobePaid = Math.min(amount, Math.abs(friendsDebt[friend._id].amount));
             let reimbursement;
             if (amountTobePaid > 0) {
-                
-                    reimbursement = new Transaction({
+
+                reimbursement = new Transaction({
                     name: "Reimbursement",
                     group_id: group._id,
                     category: "miscellaneous",
                     total_cost: amountTobePaid,
                     payee: req.session.userId,
-                    payments: [{ user_id: friend._id, amount_paid: amountTobePaid}]
+                    payments: [{ user_id: friend._id, amount_paid: amountTobePaid }]
                 });
                 await reimbursement.save();
                 await Group.findByIdAndUpdate(group._id, { $push: { transactions: reimbursement._id } });
                 amount = Math.abs(amount) - amountTobePaid;
             }
-            
+
             console.log(friendsDebt[friend._id].amount);
         }
 

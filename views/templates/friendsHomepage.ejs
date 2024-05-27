@@ -1,7 +1,6 @@
 <li>
-    <div class="flex flex-col gap-1 parentDivFriends fadeOut">
+    <div class="flex flex-col gap-1 parentDivFriends fadeOut" id="<%= friend.phone %>Div">
         <div class="flex flex-row shadow-md w-full  text-primary justify-between p-4 gap-1 items-center rounded-xl friend" id="friend<%= friend.phone %>">
-            <!-- <a href="" id="openSettlementOptions<%= friend.phone %>" class=""> -->
                 <div class="flex flex-row items-center gap-4">
                     <% if (!friend.profileImageBase64) { %>
                         <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="<%= friend.username %>">
@@ -13,28 +12,33 @@
                 <div class="flex flex-row gap-3 items-center">
                     <% if (friendDebt[friend._id] < 0) {%>
                     <div class=" pr-2" id="amount<%= friend.phone %>"><div class="text-sm text-gray-400">You owe:</div> <span class="text-red-600 text-right" id="payAmount<%= friend.phone %>">$<%= Math.abs(friendDebt[friend._id]).toFixed(2) %></span></div>
-                    <div> <img id="settleArrow" class="w-3 h-3" src="/images/otherIcons/downArrow.svg" alt=""> </div>
+                    <div> <img id="settleArrow<%= friend.phone %>" class="w-3 h-3" src="/images/otherIcons/downArrow.svg" alt=""> </div>
                 
                 <% } else if (Math.round(friendDebt[friend._id]) == 0 ) { %>
                     <div class="text-right pr-8" id="amount<%= friend.phone %>"><div class="text-sm text-gray-400 balanceZero">All settled up!</div></div>
+                    <div> <img id="settleArrow<%= friend.phone %>" class="w-3 h-3" src="/images/otherIcons/downArrow.svg" alt=""> </div>
                     <% } else {%>
                         <div class="text-right pr-8" id="amount<%= friend.phone %>"><div class="text-sm text-gray-400">Owes you:</div> <span id="" class="text-green-500">$<%= (friendDebt[friend._id]).toFixed(2) %></span></div>
                     <% } %>
             </div>
-            <!-- </a> -->
-            <button id="<%= friend.phone %>Delete" class="hidden text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteFriend">
-                Delete
-            </button>
         </div>
         <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="<%= friend.phone %>ConfirmDeleteOptionsFriends">
-            <form action="/deleteGroup" method="post">
+            <div class="flex flex-col gap-3 justify-center items-center">
+                <div>You are all settled up with this friend, do you want to remove your friend?</div>
+                <div>
+                    <button id="<%= friend.phone %>Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteFriend">
+                    Delete
+                    </button>
+                </div>
+            </div>
+            <form action="/deleteFriend" method="post" id="<%= friend.phone %>DeleteForm" class="hidden flex-col">
                 <div class="text-red-600 text-center text-sm mb-2">
-                    Are you sure you want to delete your friend?
+                    They will still be members of the old groups unless you delete the groups. Are you sure you want to remove this friend?
                 </div>
                 <div class="flex flex-row justify-center gap-2">
                     <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="<%= friend.phone %>ConfirmDelete" value="Confirm">
                     <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="<%= friend.phone %>CancelDelete" value="Cancel">
-                    <input type="text" class="hidden" name="friendDeleteID" id="<%= friend.phone %>Selected">
+                    <input type="text" class="hidden" name="friendDeletePhone" id="<%= friend.phone %>Selected">
                 </div>
             </form>   
         </div>
