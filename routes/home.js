@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 const Transaction = require('../models/Transaction');
 const { addFriend, getFriends, getFriendDebt } = require('../controllers/friendController');
 const { getGroupDebt, getGroupDebtForFriends } = require('../controllers/groupController');
-const { sortAggregatedData } = require('../controllers/sortingController');
+const { mapAndSortEntitiesWithDebts } = require('../controllers/sortingController');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -47,23 +47,10 @@ router.get("/home", async (req, res) => {
             }
         }
         let debtInfo = { TotalpositiveDebt: TotalpositiveDebt, TotalnegativeDebt: Math.abs(TotalnegativeDebt) };
-        const friendsWithDebts = user.friends.map(friend => ({
-            ...friend,
-            debt: friendDebt[friend._id.toString()]
-        }));
+        const friendsWithDebts = mapAndSortEntitiesWithDebts(user.friends, friendDebt);
+        const groupsWithDebts = mapAndSortEntitiesWithDebts(groups, groupDebt);
 
-        friendsWithDebts.sort((a, b) => {
-            if (a.debt === 0 && b.debt !== 0) {
-                return 1; // Place a after b
-            }
-            if (a.debt !== 0 && b.debt === 0) {
-                return -1; // Place a before b
-            }
-            return a.debt - b.debt; // Ascending numeric sort for non-zero values
-        });
-        const sortedGroupDebt = sortAggregatedData(groupDebt);
-        console.log(sortedGroupDebt);
-        res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: friendsWithDebts, groups: groups, groupDebt: sortedGroupDebt, debtInfo: debtInfo });
+        res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: friendsWithDebts, groups: groupsWithDebts, debtInfo: debtInfo });
     }
     catch (error) {
         console.log(error);
