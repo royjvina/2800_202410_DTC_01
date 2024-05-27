@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Transaction = require('./Transaction');
-const User = require('./User');
-const Group = require('./Group');
+const Transaction = require('../models/Transaction');
+const User = require('../models/User');
+const Group = require('../models/Group');
 
 async function getExpensesByCategory(userId) {
   try {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const insightFetcher = require('../models/insightFetcher');
+const insightFetcher = require('../controllers/insightFetcherController');
 
 router.get('/insight', async (req, res) => {
   try {
