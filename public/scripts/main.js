@@ -231,7 +231,8 @@ function toggleFriendSettleUp() {
 function deleteFriendHandler(removableFriends) {
     if (removableFriends && removableFriends.length > 0) {
         removableFriends.forEach(removableFriend => {
-            phone = removableFriend.id.replace('Div', '');
+            const phone = removableFriend.id.replace('Div', '');
+            console.log(phone);
             const friendDiv = document.getElementById('friend' + phone);
             friendDiv.addEventListener('click', function () {
 
