@@ -128,7 +128,6 @@ function calculateExpenseEqually() {
     
     // Query the users within the selected group's split container
     let usersToSplitFor = document.querySelectorAll(`.userEqualSplit:checked`);
-    let usersNotToSplitFor = document.querySelectorAll(`.userEqualSplit:not(:checked)`);
     var numberOfUsers = usersToSplitFor.length;
 
     // Reset amounts for all users
@@ -146,7 +145,6 @@ function calculateExpenseEqually() {
         // Set amounts for users who are checked
         usersToSplitFor.forEach(user => {
             let userId = user.getAttribute('data-user-id');
-            console.log(toString(groupId) + toString(userId) + 'AmountEqual');
             document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$' + splitAmount;
             document.getElementById(`${groupId}${userId}AmountEqualInput`).value = splitAmount; // Update input value
         });
@@ -171,6 +169,58 @@ function calculateUsersPercentage() {
         }
     }) 
     return totalPercentage;
+}
+
+/**
+ * This function is used to handle computation of splitting an expense's total percentage wise as users are selected   
+ * @claaudiaale
+ */
+
+function calculateExpensePercentage() {
+    var expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
+    var selectedGroup = document.getElementById('selectedGroup');
+    var groupId = selectedGroup.value;
+    let totalPercentage = calculateUsersPercentage();
+    let usersToSplitFor = [];
+    
+    if (totalPercentage == 100) {
+        let users = document.querySelectorAll('.percentage');
+        users.forEach(user => {
+            if (!Number.isNaN(user.value) || user.value == "") {
+                usersToSplitFor.push(user)
+            }
+        })
+        usersToSplitFor.forEach(user => {
+            let userId = user.getAttribute('data-user-id');
+            let userPercentage = parseFloat(document.getElementById(`${groupId}${userId}Percentage`).value);
+            let userAmount = (expenseTotal * (userPercentage / 100)).toFixed(2);
+            if (userAmount == 'NaN') {
+                userAmount = '0.00';
+            }
+            document.getElementById(`${groupId}${userId}AmountPercentage`).textContent = '$' + userAmount;
+        }); 
+    } 
+}
+
+/**
+ * This function is used to handle computation of splitting an expense's total manually as a user inputs given split amounts  
+ * @claaudiaale
+ */
+
+function calculateExpenseManual() {
+    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
+    var selectedGroup = document.getElementById('selectedGroup');
+    let userTotal = 0;
+    let manualInputs = document.querySelectorAll('.manual');
+    
+    manualInputs.forEach(input => {
+        if (!input.value) {
+            userTotal += 0;
+        } else {
+            userTotal += parseFloat(input.value);
+        }
+    })
+    return userTotal == expenseTotal;
 }
 
 /**
@@ -222,55 +272,6 @@ function categoryHandler() {
     });
 }
 
-
-/**
- * This function is used to handle computation of splitting an expense's total percentage wise as users are selected   
- * @claaudiaale
- */
-
-function calculateExpensePercentage() {
-    let totalPercentage = calculateUsersPercentage();
-    let usersToSplitFor = [];
-
-    if (totalPercentage == 100) {
-        let users = document.querySelectorAll('.percentage');
-        users.forEach(user => {
-            let userId = user.id
-            if (!Number.isNaN(user.value) || user.value == "") {
-                usersToSplitFor.push(userId)
-            }
-        })
-        usersToSplitFor.forEach(user => {
-            let userPercentage = parseFloat(document.getElementById(user).value);
-            let userAmount = (expenseTotal * (userPercentage / 100)).toFixed(2);
-            if (userAmount == 'NaN') {
-                userAmount = '0.00';
-            }
-            document.getElementById(user.slice(0, -10) + 'AmountPercentage').innerHTML = ('$' + userAmount);
-        }); 
-    } 
-}
-
-/**
- * This function is used to handle computation of splitting an expense's total manually as a user inputs given split amounts  
- * @claaudiaale
- */
-
-function calculateExpenseManual() {
-    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
-    let userTotal = 0;
-    let manualInputs = document.querySelectorAll('.manual');
-
-    manualInputs.forEach(input => {
-        if (!input.value) {
-            userTotal += 0;
-        } else {
-            userTotal += parseFloat(input.value);
-        }
-    })
-    return userTotal == expenseTotal;
-}
-
 /**
  * This function is used to handle the modal display when there is an error in the expense split
  * @claaudiaale
@@ -314,7 +315,7 @@ function displayEmptyFieldModal(event) {
         event.preventDefault();
         let errorMessage = 'Please ensure that the total percentage of the expense is 100.';
         displayErrorModal(errorMessage);
-    } else if (splitMethod == 'Manual' && calculateExpenseManual()) {
+    } else if (splitMethod == 'Manual' && !calculateExpenseManual()) {
         event.preventDefault();
         let errorMessage = 'Please ensure that your manual inputs are equal to the total expense amount.';
         displayErrorModal(errorMessage);
@@ -344,7 +345,6 @@ async function getGroupIdFromName(groupId) {
                 return groupsData[i]._id;
             }
         }
-        console.log(`Group with ID '${groupId}' not found.`);
         return null;
     } catch (error) {
         console.error('Error:', error);
@@ -354,7 +354,6 @@ async function getGroupIdFromName(groupId) {
 
 // Function to get group index by ID
 function getGroupById(groupId) {
-    console.log(groupId);
     for (let i = 0; i < groupsData.length; i++) {
         if (groupsData[i]._id === groupId) {
             return groupsData[i];
@@ -377,7 +376,6 @@ function populateUsersDropdown(groupId) {
     if (group) {
         // Iterate through members and add them to the dropdown
         group.members.forEach(member => {
-            console.log(member); // Log the member object
             const option = document.createElement('option');
             option.value = member.user_id._id;
             option.textContent = member.user_id.username; 
@@ -443,6 +441,9 @@ selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
 selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("")});
 selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Percentage")});
 selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Manual")});
+
+splitExpensePercentage.addEventListener('change', calculateExpensePercentage);
+splitExpenseManually.addEventListener('change', calculateExpenseManual);
 
 let percentageInputs = document.querySelectorAll('.percentage');
 percentageInputs.forEach(input => {

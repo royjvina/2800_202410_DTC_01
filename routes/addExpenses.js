@@ -34,12 +34,13 @@ router.get('/addExpenses', async (req, res) => {
 });
 
 // Route for handling form submission to add expenses
+// Route for handling form submission to add expenses
 router.post('/addExpenses', async (req, res) => {
     try {
-        
         // Extract form data
-        const { selectedGroup, selectedDate, selectedExpenseName, selectedExpenseAmount, selectedCategory, selectedPaidBy, } = req.body;
+        const { selectedGroup, selectedDate, selectedExpenseName, selectedExpenseAmount, selectedCategory, selectedPaidBy } = req.body;
         console.log(req.body);
+
         // Get group by ID to check if it exists
         let groupsData = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
         let groupId = new ObjectId(req.body.selectedGroup);
@@ -51,37 +52,58 @@ router.post('/addExpenses', async (req, res) => {
 
         // Prepare payment data
         const payments = [];
+        let hasNonEmptyPayment = false;
+
         group.members.forEach(member => {
-            paymentName = group._id + member.user_id._id +"AmountEqual";
-            if (req.body[paymentName]) {
-                paymentValue = req.body[paymentName];
-                console.log(paymentValue)
-                payments.push({
-                    user_id: member.user_id._id,
-                    amount_paid: paymentValue
-                });
+            let paymentValue = 0;
+            let paymentByPercentName = group._id + member.user_id._id + "AmountByPercent";
+            let paymentEqualName = group._id + member.user_id._id + "AmountEqual";
+            let paymentManualName = group._id + member.user_id._id + "AmountManual";
+            let paymentByPercent = req.body[paymentByPercentName];
+            let paymentEqual = req.body[paymentEqualName];
+            let paymentManual = req.body[paymentManualName];
+
+            if (paymentByPercent && paymentByPercent.trim() !== "") {
+                paymentValue = parseFloat(paymentByPercent);
+                hasNonEmptyPayment = true;
+            } else if (paymentEqual && paymentEqual.trim() !== "") {
+                paymentValue = parseFloat(paymentEqual);
+                hasNonEmptyPayment = true;
+            } else if (paymentManual && paymentManual.trim() !== "") {
+                paymentValue = parseFloat(paymentManual);
+                hasNonEmptyPayment = true;
             }
+
+            payments.push({
+                user_id: member.user_id._id,
+                amount_paid: paymentValue || 0 // Default to 0 if no payment value
+            });
         });
 
-        // Create new transaction
-        const newTransaction = new Transaction({
-            name: selectedExpenseName,
-            group_id: group._id,
-            category: selectedCategory,
-            total_cost: selectedExpenseAmount,
-            date: selectedDate,
-            payee: selectedPaidBy,
-            payments: payments
-        });
+        if (hasNonEmptyPayment) {
+            // Create new transaction
+            const newTransaction = new Transaction({
+                name: selectedExpenseName,
+                group_id: group._id,
+                category: selectedCategory,
+                total_cost: selectedExpenseAmount,
+                date: selectedDate,
+                payee: selectedPaidBy,
+                payments: payments
+            });
 
-        // Save transaction
-        await newTransaction.save();
-        await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
-        res.redirect('/home');
+            // Save transaction
+            await newTransaction.save();
+            await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
+            res.redirect('/home');
+        } else {
+            res.status(400).json({ error: 'No valid payment values provided' });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 module.exports = router;
