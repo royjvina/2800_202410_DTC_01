@@ -1,65 +1,65 @@
 <li>
-    <div class="flex flex-col gap-1 parentDivFriends fadeOut" id="<%= friend.phone %>Div">
-        <div class="flex flex-row shadow-md w-full  text-primary justify-between p-4 gap-1 items-center rounded-xl friend" id="friend<%= friend.phone %>">
+    <div class="flex flex-col gap-1 parentDivFriends fadeOut" id="<%= friend._doc.phone %>Div">
+        <div class="flex flex-row shadow-md w-full  text-primary justify-between p-4 gap-1 items-center rounded-xl friend" id="friend<%= friend._doc.phone %>">
                 <div class="flex flex-row items-center gap-4">
                     <% if (!friend.profileImageBase64) { %>
-                        <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="<%= friend.username %>">
+                        <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilepic.svg" alt="<%= friend._doc.username %>">
                     <% } else { %>
-                    <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" src="<%= friend.profileImageBase64 %>" alt="<%= friend.username %>">
+                    <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" src="<%= friend.profileImageBase64 %>" alt="<%= friend._doc.username %>">
                     <% } %>
-                    <div><%= friend.username %></div>
+                    <div><%= friend._doc.username %></div>
                 </div>
                 <div class="flex flex-row gap-3 items-center">
-                    <% if (friendDebt[friend._id] < 0) {%>
-                    <div class=" pr-2" id="amount<%= friend.phone %>"><div class="text-sm text-gray-400">You owe:</div> <span class="text-red-600 text-right" id="payAmount<%= friend.phone %>">$<%= Math.abs(friendDebt[friend._id]).toFixed(2) %></span></div>
-                    <div> <img id="settleArrow<%= friend.phone %>" class="w-3 h-3" src="/images/otherIcons/downArrow.svg" alt=""> </div>
+                    <% if (friend.debt < 0) {%>
+                    <div class=" pr-2" id="amount<%= friend._doc.phone %>"><div class="text-sm text-gray-400">You owe:</div> <span class="text-red-600 text-right" id="payAmount<%= friend._doc.phone %>">$<%= Math.abs(friend.debt).toFixed(2) %></span></div>
+                    <div> <img id="settleArrow<%= friend._doc.phone %>" class="w-3 h-3" src="/images/otherIcons/downArrow.svg" alt=""> </div>
                 
-                <% } else if (Math.round(friendDebt[friend._id]) == 0 ) { %>
-                    <div class="text-right pr-8" id="amount<%= friend.phone %>"><div class="text-sm text-gray-400 balanceZero">All settled up!</div></div>
-                    <div> <img id="settleArrow<%= friend.phone %>" class="w-3 h-3" src="/images/otherIcons/downArrow.svg" alt=""> </div>
+                <% } else if (Math.round(friend.debt) == 0 ) { %>
+                    <div class="text-right pr-8" id="amount<%= friend._doc.phone %>"><div class="text-sm text-gray-400 balanceZero">All settled up!</div></div>
+                    <div> <img id="settleArrow<%= friend._doc.phone %>" class="w-3 h-3" src="/images/otherIcons/downArrow.svg" alt=""> </div>
                     <% } else {%>
-                        <div class="text-right pr-8" id="amount<%= friend.phone %>"><div class="text-sm text-gray-400">Owes you:</div> <span id="" class="text-green-500">$<%= (friendDebt[friend._id]).toFixed(2) %></span></div>
+                        <div class="text-right pr-8" id="amount<%= friend._doc.phone %>"><div class="text-sm text-gray-400">Owes you:</div> <span id="" class="text-green-500">$<%= (friend.debt).toFixed(2) %></span></div>
                     <% } %>
             </div>
         </div>
-        <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="<%= friend.phone %>ConfirmDeleteOptionsFriends">
+        <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="<%= friend._doc.phone %>ConfirmDeleteOptionsFriends">
             <div class="flex flex-col gap-3 justify-center items-center">
                 <div>You are all settled up with this friend, do you want to remove your friend?</div>
                 <div>
-                    <button id="<%= friend.phone %>Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteFriend">
+                    <button id="<%= friend._doc.phone %>Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteFriend">
                     Delete
                     </button>
                 </div>
             </div>
-            <form action="/deleteFriend" method="post" id="<%= friend.phone %>DeleteForm" class="hidden flex-col">
+            <form action="/deleteFriend" method="post" id="<%= friend._doc.phone %>DeleteForm" class="hidden flex-col">
                 <div class="text-red-600 text-center text-sm mb-2">
                     They will still be members of the old groups unless you delete the groups. Are you sure you want to remove this friend?
                 </div>
                 <div class="flex flex-row justify-center gap-2">
-                    <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="<%= friend.phone %>ConfirmDelete" value="Confirm">
-                    <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="<%= friend.phone %>CancelDelete" value="Cancel">
-                    <input type="text" class="hidden" name="friendDeletePhone" id="<%= friend.phone %>Selected">
+                    <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="<%= friend._doc.phone %>ConfirmDelete" value="Confirm">
+                    <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="<%= friend._doc.phone %>CancelDelete" value="Cancel">
+                    <input type="text" class="hidden" name="friendDeletePhone" id="<%= friend._doc.phone %>Selected">
                 </div>
             </form>   
         </div>
-        <form action="/settleup" method="post" class="hidden hideManually fadeOut" id="formFriend<%= friend.phone %>">
-            <div class="m-1 hidden hideManually fadeOut text-red-500" id="EnterAmountWarning<%= friend.phone %>">
+        <form action="/settleup" method="post" class="hidden hideManually fadeOut" id="formFriend<%= friend._doc.phone %>">
+            <div class="m-1 hidden hideManually fadeOut text-red-500" id="EnterAmountWarning<%= friend._doc.phone %>">
                 Please enter a valid amount to settle up.
             </div>
             <div class="flex flex-row justify-center gap-5 rounded-xl bg-white p-2 items-center mb-4 shadow-2xl text-black">
                 <div class="flex flex-row justify-evenly gap-3">
                     <div class="flex flex-row w-1/2 items-center gap-1 justify-end">
                         <label class="text-xl" for="amount">$</label>
-                        <input class="text-center rounded-lg px-1 text-black w-full p-1 focus:outline-none focus:border-b focus:border-primary" type="number" id="enterAmount<%= friend.phone %>" name="enterAmount" step=".01" value="">
-                        <input type="text" name="friendPhone" class="hidden" id="" value="<%= friend.phone %>">
+                        <input class="text-center rounded-lg px-1 text-black w-full p-1 focus:outline-none focus:border-b focus:border-primary" type="number" id="enterAmount<%= friend._doc.phone %>" name="enterAmount" step=".01" value="">
+                        <input type="text" name="friendPhone" class="hidden" id="" value="<%= friend._doc.phone %>">
                     </div>
                 </div>
                 <div class=" flex flex-row justify-center">
-                    <input class="text-primary border-primary border gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2 fadeOut" type="button" id="submitSettle<%= friend.phone %>" value="Settle up">
+                    <input class="text-primary border-primary border gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2 fadeOut" type="button" id="submitSettle<%= friend._doc.phone %>" value="Settle up">
                 </div>
-                <div class="flex-row justify-center items-center gap-3 hidden fadeOut" id="confirmfriend<%= friend.phone %>">
-                    <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="confirmSettle<%= friend.phone %>" value="Confirm">
-                    <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="cancelSettle<%= friend.phone %>" value="Cancel">
+                <div class="flex-row justify-center items-center gap-3 hidden fadeOut" id="confirmfriend<%= friend._doc.phone %>">
+                    <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="confirmSettle<%= friend._doc.phone %>" value="Confirm">
+                    <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="cancelSettle<%= friend._doc.phone %>" value="Cancel">
                 </div>
             </div>
         </form>

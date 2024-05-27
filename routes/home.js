@@ -47,11 +47,23 @@ router.get("/home", async (req, res) => {
             }
         }
         let debtInfo = { TotalpositiveDebt: TotalpositiveDebt, TotalnegativeDebt: Math.abs(TotalnegativeDebt) };
-        const sortedFriendDebt = sortAggregatedData(friendDebt);
+        const friendsWithDebts = user.friends.map(friend => ({
+            ...friend,
+            debt: friendDebt[friend._id.toString()]
+        }));
+
+        friendsWithDebts.sort((a, b) => {
+            if (a.debt === 0 && b.debt !== 0) {
+                return 1; // Place a after b
+            }
+            if (a.debt !== 0 && b.debt === 0) {
+                return -1; // Place a before b
+            }
+            return a.debt - b.debt; // Ascending numeric sort for non-zero values
+        });
         const sortedGroupDebt = sortAggregatedData(groupDebt);
         console.log(sortedGroupDebt);
-        console.log(user.friends);
-        res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: user.friends, groups: groups, groupDebt: sortedGroupDebt, friendDebt: sortedFriendDebt, debtInfo: debtInfo });
+        res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: friendsWithDebts, groups: groups, groupDebt: sortedGroupDebt, debtInfo: debtInfo });
     }
     catch (error) {
         console.log(error);
