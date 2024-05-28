@@ -18,7 +18,6 @@ router.get("/home", async (req, res) => {
         let user = await getFriends(req);
         let groupDebt = await getGroupDebt(req);
         let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
-        console.log(groups);
         groups.forEach(group => {
             if (group.group_pic && group.group_pic.data) {
                 group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
@@ -194,36 +193,82 @@ router.post('/settleUp', async (req, res) => {
     try {
         console.log(req.body);
         let friend = await User.findOne({ phone: req.body.friendPhone });
-        let amount = req.body.enterAmount;
-        let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } }).populate('transactions').populate({ path: 'members.user_id', select: 'username' });
-        for (let group of commonGroups) {
-            let friendsDebt = (await getGroupDebtForFriends(group, req));
-            amountTobePaid = Math.min(amount, Math.abs(friendsDebt[friend._id].amount));
-            let reimbursement;
-            if (amountTobePaid > 0) {
+        let amount = parseFloat(req.body.enterAmount);
+        let maxValue = (amount == parseFloat(req.body.maxAmount));
+        let friendsDebts = [];
+        let totalPositiveDebt = 0;
+        let totalNegativeDebt = 0;
 
+        let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } }).populate('transactions').populate({ path: 'members.user_id', select: 'username' });
+
+        // Calculate debts in common groups
+        for (let group of commonGroups) {
+            let friendsDebt = await getGroupDebtForFriends(group, req);
+            friendsDebts.push(friendsDebt);
+            let debt = friendsDebt[friend._id.toString()].amount;
+            if (debt > 0) {
+                totalPositiveDebt += debt;
+            } else {
+                totalNegativeDebt += debt;
+            }
+        }
+
+        // Adjust amount if maxValue is true
+        if (maxValue) {
+            amount = Math.abs(totalNegativeDebt);
+            for (let i = 0; i < commonGroups.length; i++) {
+                if (totalPositiveDebt > 0) {
+                    let group = commonGroups[i];
+                    let friendsDebt = friendsDebts[i];
+                    let debt = friendsDebt[friend._id.toString()].amount;
+
+                    if (debt > 0) {
+                        let amountToBePaid = Math.min(totalPositiveDebt, debt);
+                        let reimbursement = new Transaction({
+                            name: "Reimbursement",
+                            group_id: group._id,
+                            category: "miscellaneous",
+                            total_cost: amountToBePaid,
+                            payee: friend._id,
+                            payments: [{ user_id: req.session.userId, amount_paid: amountToBePaid }]
+                        });
+                        await reimbursement.save();
+                        await Group.findByIdAndUpdate(group._id, { $push: { transactions: reimbursement._id } });
+                        totalPositiveDebt -= amountToBePaid;
+                        totalPositiveDebt -= amountToBePaid;
+                    }
+                }
+            }
+        }
+
+
+        for (let i = 0; i < commonGroups.length; i++) {
+            let group = commonGroups[i];
+            let friendsDebt = await getGroupDebtForFriends(group, req);;
+            let debt = friendsDebt[friend._id.toString()].amount;
+            let amountToBePaid = Math.min(amount, Math.abs(debt));
+            let reimbursement;
+            if (amountToBePaid > 0) {
                 reimbursement = new Transaction({
                     name: "Reimbursement",
                     group_id: group._id,
                     category: "miscellaneous",
-                    total_cost: amountTobePaid,
+                    total_cost: amountToBePaid,
                     payee: req.session.userId,
-                    payments: [{ user_id: friend._id, amount_paid: amountTobePaid }]
+                    payments: [{ user_id: friend._id, amount_paid: amountToBePaid }]
                 });
                 await reimbursement.save();
                 await Group.findByIdAndUpdate(group._id, { $push: { transactions: reimbursement._id } });
-                amount = Math.abs(amount) - amountTobePaid;
+                amount -= amountToBePaid;
             }
-
-            console.log(friendsDebt[friend._id].amount);
         }
 
-
         res.redirect('/home');
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
+        res.status(500).send("Error settling up");
     }
 });
+
 
 module.exports = router

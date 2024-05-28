@@ -51,6 +51,7 @@
                     <div class="flex flex-row w-1/2 items-center gap-1 justify-end">
                         <label class="text-xl" for="amount">$</label>
                         <input class="text-center rounded-lg px-1 text-black w-full p-1 focus:outline-none focus:border-b focus:border-primary" type="number" id="enterAmount<%= friend._doc.phone %>" name="enterAmount" step=".01" value="">
+                        <input class="hidden" type="number" name="maxAmount" step=".01" value="<%= Math.abs(friend.debt).toFixed(2) %>">
                         <input type="text" name="friendPhone" class="hidden" id="" value="<%= friend._doc.phone %>">
                     </div>
                 </div>
