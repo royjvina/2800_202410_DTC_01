@@ -1,4 +1,7 @@
-console.log('insightChart.js loaded');
+function searchByTime() {
+  document.getElementById('searchIcon').style.filter = 'invert(1)';
+}
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('DOM fully loaded and parsed');
@@ -41,6 +44,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const categories = ['home', 'food', 'travel', 'entertainment', 'miscellaneous', 'recreation'];
+    const categoryColors = {
+      'home': '#1C64F2',
+      'food': '#16BDCA',
+      'travel': '#E74694',
+      'entertainment': '#6C5DD3',
+      'miscellaneous': '#FDBA8C',
+      'recreation': '#F9A8D4'
+    };
     const categoryMap = {};
 
     expenses.forEach(expense => {
@@ -49,8 +60,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    const series = Object.values(categoryMap).filter(totalCost => totalCost > 0);
-    const labels = Object.keys(categoryMap).filter(category => categoryMap[category] > 0);
+    const series = [];
+    const labels = [];
+    const colors = [];
+
+    for (const category in categoryMap) {
+      if (categoryMap[category] > 0) {
+        series.push(categoryMap[category]);
+        labels.push(category);
+        colors.push(categoryColors[category]);
+      }
+    }
 
     if (series.length === 0) {
       donutChartElement.innerHTML = '<p>No expenses data available.</p>';
@@ -59,6 +79,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('Series:', series);
     console.log('Labels:', labels);
+    console.log('Colors:', colors);
+
 
     const chartOptions = {
       series: series,
@@ -67,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         height: 350
       },
       labels: labels,
-      colors: ['#ea5545', '#b33dc6', '#ef9b20', '#ede15b', '#87bc45', '#27aeef'],
+      colors: colors,
       plotOptions: {
         pie: {
           donut: {
@@ -95,9 +117,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     };
 
+
+
+
     const chart = new ApexCharts(donutChartElement, chartOptions);
     await chart.render();
     console.log('Chart rendered successfully');
+
+    // Ranking 
+    const sortedCategories = Object.entries(categoryMap).sort((a, b) => b[1] - a[1]);
+    const topThree = sortedCategories.slice(0, 3);
+
+    topThree.forEach((item, index) => {
+      const rankElement = document.getElementById(`rank-${index + 1}`);
+      if (rankElement) {
+        rankElement.textContent = `${index + 1}. ${item[0]} - $${item[1].toFixed(2)}`;
+      }
+    });
+    if (topThree.length > 0) {
+      document.getElementById('most-spent-category').textContent = topThree[0][0];
+    }
+
+
   } catch (error) {
     console.error('Error fetching or rendering chart:', error);
     donutChartElement.innerHTML = '<p>Error loading chart data.</p>';
