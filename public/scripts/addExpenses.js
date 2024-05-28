@@ -8,7 +8,7 @@
  */
 
 function goBackFromAddExpenses() {
-    document.querySelector('.addExpenseCancelButton').addEvenetListener('click', () => {
+    document.querySelector('.addExpenseCancelButton').addEventListener('click', () => {
         history.back();
     })
 }
@@ -31,6 +31,22 @@ function equalExpenseTabHandler(event) {
     splitExpenseManually.classList.add('hidden');
     splitExpenseEqually.classList.remove('hidden');
     splitExpenseEqually.classList.add('flex-col');
+    
+    let percentageInputs = document.querySelectorAll('input.percentage')
+    percentageInputs.forEach(input => {
+        input.value = "";
+    })
+
+    let percentageTotals = document.querySelectorAll('span.amountPercentage')
+    percentageTotals.forEach(total => {
+        total.innerHTML = '$0.00';
+    })
+
+    let manualInputs = document.querySelectorAll('input.manual')
+    manualInputs.forEach(input => {
+        input.value = "";
+        input.placeholder = "0.00";
+    })
 }
 
 /**
