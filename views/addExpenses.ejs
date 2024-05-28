@@ -134,7 +134,11 @@
                 </div>
             </div>
 
-            <div id="allSplitMethods" class="hidden">
+            <% if (transaction) { %>
+                <div id="allSplitMethods"></div>
+            <% } else { %>
+                <div id="allSplitMethods" class="hidden">
+            <% } %>
                 <!-- Equal Split -->
                 <% if (transaction) { %>
                     <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[250px] mb-[90px] hidden"></div>

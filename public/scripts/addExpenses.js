@@ -31,7 +31,14 @@ function equalExpenseTabHandler(event) {
     splitExpenseManually.classList.add('hidden');
     splitExpenseEqually.classList.remove('hidden');
     splitExpenseEqually.classList.add('flex-col');
-    
+}
+
+/**
+ * This function is used to erase the percentage and manual fields on change events in the equal tab 
+ * @claaudiaale
+ */
+
+function erasePercentageManualFields() {
     let percentageInputs = document.querySelectorAll('input.percentage')
     percentageInputs.forEach(input => {
         input.value = "";
@@ -48,6 +55,7 @@ function equalExpenseTabHandler(event) {
         input.placeholder = "0.00";
     })
 }
+
 
 /**
  * This function is used to handle the click event on the split expenses by percentage tab    
@@ -274,7 +282,6 @@ function calculateExpensePercentage() {
 
 function calculateExpenseManual() {
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
-    var selectedGroup = document.getElementById('selectedGroup');
     let userTotal = 0;
     let manualInputs = document.querySelectorAll('.manual');
 
@@ -522,7 +529,14 @@ toggleSplitVisibility();
 
 
 showEqualExpense.addEventListener('click', function (event) { equalExpenseTabHandler(event) });
+let equalChecks = document.querySelectorAll('.userEqualSplit')
+equalChecks.forEach(check => {
+    check.addEventListener('change', erasePercentageManualFields);
+})
+
 showPercentageExpense.addEventListener('click', function (event) { percentageExpenseTabHandler(event) });
+
+
 showManualExpense.addEventListener('click', function (event) { manualExpenseTabHandler(event) });
 document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('change', calculateExpenseEqually);
