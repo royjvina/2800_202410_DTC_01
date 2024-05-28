@@ -16,7 +16,8 @@ router.get('/insight', async (req, res) => {
 router.get('/api/insight', async (req, res) => {
   try {
     const userId = req.session.userId;
-    const expenses = await insightFetcher.getExpensesByCategory(userId);
+    const { startDate, endDate } = req.query;
+    const expenses = await insightFetcher.getExpensesByCategory(userId, startDate, endDate);
     res.json(expenses);
   } catch (error) {
     console.error('Error fetching insight data:', error);
