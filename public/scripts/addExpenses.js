@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Get the current date and set it in the date input field
 
     let transactionDate = document.getElementById('selectedDate').dataset.date;
-    if (trasactionDate == "0") {
+    if (transactionDate == "0") {
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0];
         document.getElementById('selectedDate').value = formattedDate;

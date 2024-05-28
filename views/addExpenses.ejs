@@ -32,6 +32,7 @@
                         <% if (transaction) { %>
                             <input type="text" id="selectedExpenseName" name="selectedExpenseName"
                             value="<%= transaction.name %>" class="focus:outline-none focus:border-b-2 px-4 m-1">
+                            <input type="text" value="<%= transaction._id %>" name="expenseId" class="hidden">
                         <% } else { %>
                         <input type="text" id="selectedExpenseName" name="selectedExpenseName"
                             placeholder="Expense Name" class="focus:outline-none focus:border-b-2 px-4 m-1">
@@ -54,7 +55,7 @@
                                 <% if (month < 10) { %>
                                     <% month = "0" + month %>
                                 <% } %>
-                                <% let day = transactionDate.getDate() %>
+                                <% let day = transactionDate.getUTCDate() %>
                                 <input type="date" id="selectedDate" data-date="<%= year + "-" + month + "-" + day %>" name="selectedDate"
                                 value="<%= year + "-" + month + "-" + day %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
                             <% } else { %>    

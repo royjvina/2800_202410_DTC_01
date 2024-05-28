@@ -38,7 +38,6 @@ router.post('/addExpenses', async (req, res) => {
     try {
         // Extract form data
         const { selectedGroup, selectedDate, selectedExpenseName, selectedExpenseAmount, selectedCategory, selectedPaidBy } = req.body;
-        console.log(req.body);
 
         // Get group by ID to check if it exists
         let groupsData = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
@@ -97,20 +96,20 @@ router.post('/addExpenses', async (req, res) => {
                 await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
                 res.redirect('/home');
             } else {
-                res.status(400).json({ error: 'No valid payment values provided' });
+                console.log("sdfskdf")
+                await Transaction.findByIdAndUpdate(req.body.expenseId, {
+                    name: selectedExpenseName,
+                    group_id: group._id,
+                    category: selectedCategory,
+                    total_cost: selectedExpenseAmount,
+                    date: selectedDate,
+                    payee: selectedPaidBy,
+                    payments: payments
+                })
+                res.redirect('/home');
             }
         } else {
-            // Update existing transaction
-            let transactionId = req.query.expenseId;
-            await Transaction.findByIdAndUpdate(transactionId, {
-                name: selectedExpenseName,
-                group_id: group._id,
-                category: selectedCategory,
-                total_cost: selectedExpenseAmount,
-                date: selectedDate,
-                payee: selectedPaidBy,
-                payments: payments
-            })
+            res.status(400).json({ error: 'No valid payment values provided' });
         }
     } catch (error) {
         console.error(error);
