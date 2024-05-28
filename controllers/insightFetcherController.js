@@ -3,7 +3,7 @@ const Transaction = require('../models/Transaction');
 const User = require('../models/User');
 const Group = require('../models/Group');
 
-async function getExpensesByCategory(userId) {
+async function getExpensesByCategory(userId, startDate, endDate) {
   try {
     const user = await User.findById(userId).populate('groups');
     if (!user) {
@@ -13,8 +13,15 @@ async function getExpensesByCategory(userId) {
     const groupIds = user.groups.map(group => group._id);
     console.log(`Found group IDs: ${groupIds}`);
 
+    const matchQuery = { group_id: { $in: groupIds } };
+
+    if (startDate && endDate) {
+      matchQuery.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
+    }
+
+
     const expenses = await Transaction.aggregate([
-      { $match: { group_id: { $in: groupIds } } },
+      { $match: matchQuery },
       { $group: { _id: "$category", total_cost: { $sum: "$total_cost" } } }
     ]);
 
