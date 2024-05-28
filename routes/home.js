@@ -18,12 +18,7 @@ router.get("/home", async (req, res) => {
         let user = await getFriends(req);
         let groupDebt = await getGroupDebt(req);
         let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
-        if (groups.length == 0) {
-            groups = [];
-        }
-        else if (groups.length == 1) {
-            groups = [groups];
-        }
+        console.log(groups);
         groups.forEach(group => {
             if (group.group_pic && group.group_pic.data) {
                 group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
