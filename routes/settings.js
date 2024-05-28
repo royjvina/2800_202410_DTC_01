@@ -18,14 +18,14 @@ router.get('/settings', async (req, res) => {
 
         const user = await User.findById(req.session.userId);
         const formattedPhoneNumber = user.phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-        
-        res.render('settings', { 
-            username: user.username, 
-            phoneNumber: formattedPhoneNumber, 
-            profilePic: req.session.profilePic, 
-            email: user.email, 
+
+        res.render('settings', {
+            username: user.username,
+            phoneNumber: formattedPhoneNumber,
+            profilePic: req.session.profilePic,
+            email: user.email,
             editMode: false,
-            path: req.path 
+            path: req.path
         });
     } catch (error) {
         console.error(error);
@@ -41,13 +41,13 @@ router.get('/settings/edit', async (req, res) => {
         }
 
         const formattedPhoneNumber = req.session.phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-        res.render('settings', { 
-            username: req.session.username, 
-            phoneNumber: formattedPhoneNumber, 
-            profilePic: req.session.profilePic, 
-            email: req.session.email, 
+        res.render('settings', {
+            username: req.session.username,
+            phoneNumber: formattedPhoneNumber,
+            profilePic: req.session.profilePic,
+            email: req.session.email,
             editMode: true,
-            path: req.path 
+            path: req.path
         });
     } catch (error) {
         console.error(error);
@@ -81,7 +81,7 @@ router.post('/settings', upload.single('profileImage'), async (req, res) => {
     }
 });
 
-router.get('/settings/changePass', async (req, res) => { 
+router.get('/settings/changePass', async (req, res) => {
     res.render('changePass', { error: null, path: req.path });
 });
 
@@ -118,6 +118,39 @@ router.post('/settings/changePass', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+// change phone number route
+
+router.get('/settings/changeNum', async (req, res) => {
+    res.render('changeNum', { error: null, path: req.path });
+});
+
+router.post('/settings/changeNum', async (req, res) => {
+    try {
+        const { phoneNumber } = req.body;
+
+        if (!phoneNumber.match(/^\d{10}$/)) {
+            return res.render('changeNum', { error: 'Invalid phone number format', path: req.path });
+        }
+
+        if (!req.session.userId) {
+            return res.status(401).send('Unauthorized');
+        }
+
+        const user = await User.findById(req.session.userId);
+        user.phone = phoneNumber;
+
+        await user.save();
+
+        req.session.phoneNumber = phoneNumber;
+
+        res.redirect('/settings');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 
 module.exports = router;
