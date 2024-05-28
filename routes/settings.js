@@ -151,6 +151,32 @@ router.post('/settings/changeNum', async (req, res) => {
     }
 });
 
+// delete account route
+
+router.get('/settings/deleteAccount', async (req, res) => {
+    res.render('deleteAccount', { path: req.path });
+});
+
+router.post('/settings/deleteAccount', async (req, res) => {
+    try {
+        if (!req.session.userId) {
+            return res.status(401).send('Unauthorized');
+        }
+
+        await User.findByIdAndDelete(req.session.userId);
+
+        req.session.destroy((err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal Server Error');
+            }
+            res.redirect('/');
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 
 module.exports = router;
