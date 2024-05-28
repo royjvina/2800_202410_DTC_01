@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const User = require('../models/User');
 const { registrationSchema } = require('../models/UserRegistration');
-const { passwordSchema } = require('../models/UserPassword');
 const bcrypt = require('bcrypt');
 const { createTransporter } = require('../controllers/mailer');
 const crypto = require('crypto');
@@ -92,7 +91,6 @@ router.get("/register", (req, res) => {
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
     var { email, phone, username, password } = req.body;
     phone = phone.replace(/[^\d]/g, '');
-    console.log(req.body);
     const incorrectFields = [];
 
     try {
@@ -140,7 +138,6 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
 
         await newUser.save();
 
-        // Send verification email
         const transporter = await createTransporter();
         if (!transporter) {
             console.error('Failed to create transporter');
@@ -152,10 +149,12 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
             to: newUser.email,
             from: process.env.USER,
             subject: 'Email Verification',
-            text: `Please verify your email by clicking the following link: ${verificationURL}`
+            text: `Please verify your email by clicking the following link: ${verificationURL}`,
+            html: `<p>Please verify your email by clicking the following link:</p><a href="${verificationURL}">${verificationURL}</a>`
         };
 
         await transporter.sendMail(mailOptions);
+        console.log(`Verification email sent to ${newUser.email}`);
 
         req.session.userId = newUser._id;
         req.session.authenticated = false;
@@ -192,51 +191,6 @@ router.get('/verify/:token', async (req, res) => {
     } catch (error) {
         console.error('Error verifying email:', error);
         res.status(500).send('Error verifying email.');
-    }
-});
-
-router.post('/resendVerification', async (req, res) => {
-    const { email } = req.body;
-
-    try {
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.redirect('/?error=emailNotFound');
-        }
-
-        if (user.emailVerified) {
-            return res.redirect('/?message=Your email is already verified. Please login.');
-        }
-
-        const emailVerificationToken = crypto.randomBytes(32).toString('hex');
-        const emailVerificationExpires = Date.now() + 3600000; // 1 hour from now
-
-        user.emailVerificationToken = emailVerificationToken;
-        user.emailVerificationExpires = emailVerificationExpires;
-        await user.save();
-
-        // Send verification email
-        const transporter = await createTransporter();
-        if (!transporter) {
-            console.error('Failed to create transporter');
-            return res.status(500).send('Error sending verification email.');
-        }
-
-        const verificationURL = `${process.env.REDIRECTURL}/verify/${emailVerificationToken}`;
-        const mailOptions = {
-            to: user.email,
-            from: process.env.USER,
-            subject: 'Email Verification',
-            text: `Please verify your email by clicking the following link: ${verificationURL}`
-        };
-
-        await transporter.sendMail(mailOptions);
-
-        res.redirect('/?message=Verification email resent. Please check your email.');
-    } catch (error) {
-        console.error('Error resending verification email:', error);
-        res.status(500).send('Error resending verification email.');
     }
 });
 
@@ -278,6 +232,7 @@ router.post('/reset', async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
+        console.log(`Password reset email sent to ${user.email}`);
 
         res.redirect('/reset?message=checkEmail');
     } catch (error) {
@@ -310,7 +265,6 @@ router.get('/reset/:token', async (req, res) => {
 router.post('/reset/:token', async (req, res) => {
     const { password, confirmPassword } = req.body;
 
-    // Validate password
     const { error } = passwordSchema.validate({ password });
 
     if (error) {
