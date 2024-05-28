@@ -33,7 +33,6 @@ router.get('/addExpenses', async (req, res) => {
 });
 
 // Route for handling form submission to add expenses
-// Route for handling form submission to add expenses
 router.post('/addExpenses', async (req, res) => {
     try {
         // Extract form data
@@ -54,15 +53,15 @@ router.post('/addExpenses', async (req, res) => {
         console.log(req.body)
         group.members.forEach(member => {
             let paymentValue = 0;
-            let paymentByPercentName = group._id + member.user_id._id + "AmountByPercent";
+            let paymentPercentName = group._id + member.user_id._id + "AmountPercentage";
             let paymentEqualName = group._id + member.user_id._id + "AmountEqual";
             let paymentManualName = group._id + member.user_id._id + "AmountManual";
-            let paymentByPercent = req.body[paymentByPercentName];
+            let paymentPercent = req.body[paymentPercentName];
             let paymentEqual = req.body[paymentEqualName];
             let paymentManual = req.body[paymentManualName];
 
-            if (paymentByPercent && paymentByPercent.trim() !== "") {
-                paymentValue = parseFloat(paymentByPercent);
+            if (paymentPercent && paymentPercent.trim() !== "") {
+                paymentValue = parseFloat(paymentPercent);
                 hasNonEmptyPayment = true;
             } else if (paymentEqual && paymentEqual.trim() !== "") {
                 paymentValue = parseFloat(paymentEqual);

@@ -19,7 +19,7 @@ id="usernameAndPic">
         </div>
         
         <div class="text-black mt-2 flex fixed w-full items-center justify-center">
-            <div class="flex flex-row border border-black rounded-full w-full justify-center">
+            <div class="flex flex-row border border-black rounded-full w-full mx-3 justify-center">
                 <button class="w-1/2 p-1 text-white  rounded-full bg-[#4b061a]" id="showGroups">Groups</button>
                 <button class="w-1/2 p-1 bg-white rounded-full" id="showFriends">Friends</button>
             </div>
@@ -30,7 +30,7 @@ id="usernameAndPic">
                     <% for(let i = 0; i < groups.length; i++) {%>
                         <%- include('templates/groupsHomepage', { group: groups[i] }) %>
                     <% } %>
-                    <button class="text-primary pt-4 text-center underline hidden" id="showMoreGroups">Show more</button>
+                    <button class="text-primary pt-4 text-center underline hidden" data-length="<%= groups.length %>" id="showMoreGroups">Show more</button>
                     <button class="text-primary pt-4 text-center underline hidden" id="showLessGroups">Show less</button>
                 </ul>
                 
@@ -40,7 +40,7 @@ id="usernameAndPic">
                     <% for(let i = 0; i < friends.length; i++ ) { %>
                         <%- include('templates/friendsHomepage', { friend: friends[i] }) %>
                         <% } %>
-                        <button class="text-primary pt-4 text-center underline hidden" id="showMoreFriends">Show more</button>
+                        <button class="text-primary pt-4 text-center underline hidden" data-length="<%= friends.length %>" id="showMoreFriends">Show more</button>
                         <button class="text-primary pt-4 text-center underline hidden" id="showLessFriends">Show less</button>
                     </ul>
             </div>

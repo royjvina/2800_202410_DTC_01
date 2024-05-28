@@ -17,9 +17,9 @@
             <% } %>
         </div>
         <form method="POST" class="flex flex-col items-center w-full justify-center gap-y-4 text-center">
-            <input type="text" name="email" class="focus:outline-none mx-auto bg-slate-50 w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4" placeholder="Enter your email" <% if (loginEmail) { %> value="<%= loginEmail %>" <% } %>>
-            <input type="password" name="password" class="focus:outline-none mx-auto bg-slate-50 w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4" placeholder="Enter your password">
-            <button type="submit" id="login" class="bg-primary mx-auto text-white font-medium w-1/2 text-lg p-2 border-primary border-2 rounded-full shadow-md">Login</button>
+            <input type="text" name="email" class="focus:outline-none mx-auto bg-slate-50 w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4" placeholder="Enter your email" <% if (loginEmail) { %> value="<%= loginEmail %>" <% } %>>
+            <input type="password" name="password" class="focus:outline-none mx-auto bg-slate-50 w-1/2 min-w-2 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4" placeholder="Enter your password">
+            <button type="submit" id="login" class="bg-primary mx-auto text-white font-medium w-1/2 text-lg p-2 border-primary border-2 rounded-xl shadow-md">Login</button>
         </form>
         <% if (error === 'invalidLogin') { %>
             <p class="pt-4 text-center">

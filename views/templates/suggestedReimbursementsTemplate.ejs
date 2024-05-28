@@ -1,7 +1,7 @@
 <% if(friendDebt.name != loggedUsername) {%>
 <li>
     <% if (friendDebt.amount < 0) { %>
-        <div class="flex flex-row items-center w-full justify-between m-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+        <div class="flex flex-row items-center w-full justify-between p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
             <div class="flex flex-col justify-between">
                 <p class="font-medium">You</p>
                 <p class="text-xs text-gray-500 py-1">owe</p>
@@ -24,7 +24,7 @@
         </div>
         <div id="amountWarning" class="text-red-500 text-sm text-center fadeOut hidden">Please enter a valid amount!</div>
     <% } else if (friendDebt.amount > 0) { %>
-        <div class="flex flex-row items-center w-full justify-between mt-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+        <div class="flex flex-row items-center w-full justify-between p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
             <div class="flex flex-col w-1/2 justify-between">
                 <p class="font-medium"><%= friendDebt.name %></p>
                 <p class="text-xs text-gray-500 py-1">owes</p>
