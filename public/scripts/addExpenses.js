@@ -73,6 +73,10 @@ function percentageExpenseTabHandler(event) {
     splitExpenseManually.classList.add('hidden');
     splitExpensePercentage.classList.remove('hidden');
     splitExpensePercentage.classList.add('flex-col');
+    let percentageInputs = document.querySelectorAll('.percentage');
+    percentageInputs.forEach(input => {
+        input.addEventListener('change', eraseEqualManualFields)
+    });
 }
 
 /**
@@ -119,6 +123,9 @@ function manualExpenseTabHandler(event) {
     splitExpensePercentage.classList.add('hidden');
     splitExpenseManually.classList.remove('hidden');
     splitExpenseManually.classList.add('flex-col');
+    document.querySelectorAll('.userEqualSplit').forEach(user => {
+        user.addEventListener('change', eraseEqualPercentageFields);
+    });
 }
 
 /**
@@ -284,8 +291,8 @@ function calculateExpensePercentage() {
             }
             document.getElementById(`${groupId}${userId}PercentageAmount`).textContent = '$' + userAmount;
             document.getElementById(`${groupId}${userId}AmountPercentage`).value = userAmount;
-        }); 
-    } 
+        });
+    }
 }
 
 /**
@@ -544,20 +551,18 @@ toggleSplitVisibility();
 showEqualExpense.addEventListener('click', function (event) { equalExpenseTabHandler(event) });
 let equalChecks = document.querySelectorAll('.userEqualSplit')
 equalChecks.forEach(check => {
-    check.addEventListener('change', erasePercentageManualFields);
+    check.addEventListener('click', erasePercentageManualFields);
 })
 
 showPercentageExpense.addEventListener('click', function (event) { percentageExpenseTabHandler(event) });
 let percentageInputs = document.querySelectorAll('.percentage');
 percentageInputs.forEach(input => {
     input.addEventListener('input', calculateExpensePercentage);
-    input.addEventListener('change', eraseEqualManualFields)
 });
 
 showManualExpense.addEventListener('click', function (event) { manualExpenseTabHandler(event) });
 document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('change', calculateExpenseEqually);
-    user.addEventListener('change', eraseEqualPercentageFields);
 });
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
 selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("") });
