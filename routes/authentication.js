@@ -85,7 +85,9 @@ router.get("/register", (req, res) => {
 });
 
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
-    const { email, phone, username, password } = req.body;
+    var { email, phone, username, password } = req.body;
+    phone = phone.replace(/[^\d]/g, '');
+    console.log(req.body);
     const incorrectFields = [];
 
     try {
