@@ -9,7 +9,6 @@ const { debtInGroup } = require("../controllers/groupController");
 router.get('/suggestedReimbursements', async (req, res) => {
     const groupId = new ObjectId(req.query.groupId);
     const group = await Group.findOne({ _id: groupId }).populate('transactions').populate({path: 'members.user_id', select: 'username'});
-    console.log(group);
     const debtsInGroup = await debtInGroup(group, req);
     res.render('suggestedReimbursements', { path: '/groups', debtInGroup: debtsInGroup, loggedUsername: req.session.username, groupId: groupId})
 })

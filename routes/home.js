@@ -6,7 +6,7 @@ const multer = require('multer');
 const { get } = require("http");
 const { ObjectId } = require('mongodb');
 const Transaction = require('../models/Transaction');
-const { addFriend, getFriends, getFriendDebt } = require('../controllers/friendController');
+const { addFriend, getFriends, getFriendDebt, processTransaction } = require('../controllers/friendController');
 const { getGroupDebt, getGroupDebtForFriends } = require('../controllers/groupController');
 const { mapAndSortEntitiesWithDebts } = require('../controllers/sortingController');
 const storage = multer.memoryStorage();
@@ -18,12 +18,6 @@ router.get("/home", async (req, res) => {
         let user = await getFriends(req);
         let groupDebt = await getGroupDebt(req);
         let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
-        if (groups.length == 0) {
-            groups = [];
-        }
-        else if (groups.length == 1) {
-            groups = [groups];
-        }
         groups.forEach(group => {
             if (group.group_pic && group.group_pic.data) {
                 group.group_picBase64 = `data:${group.group_pic.contentType};base64,${group.group_pic.data.toString('base64')}`;
@@ -197,38 +191,53 @@ router.post('/deleteFriend', async (req, res) => {
 
 router.post('/settleUp', async (req, res) => {
     try {
-        console.log(req.body);
         let friend = await User.findOne({ phone: req.body.friendPhone });
-        let amount = req.body.enterAmount;
+        let amount = parseFloat(req.body.enterAmount);
+        let maxValue = (amount == parseFloat(req.body.maxAmount));
+        let friendsDebts = [];
+        let totalPositiveDebt = 0;
+        let totalNegativeDebt = 0;
         let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } }).populate('transactions').populate({ path: 'members.user_id', select: 'username' });
+        // Calculate debts in common groups
         for (let group of commonGroups) {
-            let friendsDebt = (await getGroupDebtForFriends(group, req));
-            amountTobePaid = Math.min(amount, Math.abs(friendsDebt[friend._id].amount));
-            let reimbursement;
-            if (amountTobePaid > 0) {
-
-                reimbursement = new Transaction({
-                    name: "Reimbursement",
-                    group_id: group._id,
-                    category: "miscellaneous",
-                    total_cost: amountTobePaid,
-                    payee: req.session.userId,
-                    payments: [{ user_id: friend._id, amount_paid: amountTobePaid }]
-                });
-                await reimbursement.save();
-                await Group.findByIdAndUpdate(group._id, { $push: { transactions: reimbursement._id } });
-                amount = Math.abs(amount) - amountTobePaid;
-            }
-
-            console.log(friendsDebt[friend._id].amount);
+            let friendsDebt = await getGroupDebtForFriends(group, req);
+            friendsDebts.push(friendsDebt);
+            let debt = friendsDebt[friend._id.toString()].amount;
+            debt > 0 ? totalPositiveDebt += debt : totalNegativeDebt += debt;
         }
+        // Adjust amount if maxValue is true
+        if (maxValue) {
+            amount = Math.abs(totalNegativeDebt);
+            for (let i = 0; i < commonGroups.length; i++) {
+                if (totalPositiveDebt > 0) {
+                    let group = commonGroups[i];
+                    let friendsDebt = friendsDebts[i];
+                    let debt = friendsDebt[friend._id.toString()].amount;
 
-
+                    if (debt > 0) {
+                        let amountToBePaid = Math.min(totalPositiveDebt, debt);
+                        await processTransaction(friend._id, group._id, req.session.userId, amountToBePaid);
+                        totalPositiveDebt -= amountToBePaid;
+                    }
+                }
+            }
+        }
+        for (let i = 0; i < commonGroups.length; i++) {
+            let group = commonGroups[i];
+            let friendsDebt = await getGroupDebtForFriends(group, req);;
+            let debt = friendsDebt[friend._id.toString()].amount;
+            let amountToBePaid = Math.min(amount, Math.abs(debt));
+            if (amountToBePaid > 0) {
+                await processTransaction(req.session.userId, group._id, friend._id, amountToBePaid);
+                amount -= amountToBePaid;
+            }
+        }
         res.redirect('/home');
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
+        res.status(500).send("Error settling up");
     }
 });
+
 
 module.exports = router
