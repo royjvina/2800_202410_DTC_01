@@ -15,5 +15,6 @@ removePic.addEventListener("click", function () {
     profileImage.value = "";
     removePic.classList.add('hidden');
 });
-
+document.addEventListener("DOMContentLoaded", function () {
 Inputmask({ "mask": "(999) 999-9999" }).mask(document.getElementById("phoneNumber"));
+});
