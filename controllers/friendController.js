@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
+const Group = require('../models/Group');
 const { model } = require('mongoose');
 
 async function addFriend(friend, req) {
@@ -115,4 +116,4 @@ async function processTransaction(payeeId, groupID, payedToId, amount) {
 }
 
 
-module.exports = { addFriend, getFriends, getFriendDebt, getEveryFriendDebt, processTransaction};
+module.exports = { addFriend, getFriends, getFriendDebt, getEveryFriendDebt, processTransaction };
