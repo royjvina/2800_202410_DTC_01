@@ -20,8 +20,7 @@ async function createTransporter() {
                     user: process.env.USER,
                     clientId: process.env.CLIENTID,
                     clientSecret: process.env.CLIENTSECRET,
-                    refreshToken: process.env.REFRESHTOKEN,
-                    accessToken: accessToken.token,
+                    refreshToken: process.env.REFRESHTOKEN, 
                 },
             });
         } else {
