@@ -10,7 +10,7 @@
             <p class="flex justify-center w-full class=" style="font-family: Georgia, 'Times New Roman', Times, serif;"">Reimbursements</p>
     </header>
     
-    <ul>
+    <ul class="mx-6 my-4 mb-[120px]">
         <% Object.keys(debtInGroup).forEach(function(userId) { %>
             <%- include('templates/suggestedReimbursementsTemplate.ejs', {friendDebt : debtInGroup[userId], loggedUser: loggedUsername, userId: userId, groupId: groupId})%>
         <% }); %>  
