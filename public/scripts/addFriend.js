@@ -1,4 +1,3 @@
-
 document.getElementById("confirmAddFriend").addEventListener("click", function (event) {
     if (friendName.value.trim() === "") {
         event.preventDefault();
@@ -12,8 +11,4 @@ document.getElementById("confirmAddFriend").addEventListener("click", function (
     }
 });
 
-document.getElementById("friendPhone").addEventListener("keyup", function () {
-    var num = this.value.replace(/\D/g, '');
-    this.value = '(' + num.substring(0, 3) + ')' + num.substring(3, 6) + '-' + num.substring(6, 10);
-    console.log(this.value);
-});
+Inputmask({ "mask": "(999) 999-9999" }).mask(document.getElementById("friendPhone"));

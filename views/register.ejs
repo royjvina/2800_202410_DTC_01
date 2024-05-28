@@ -32,7 +32,7 @@
             <% } else {%>
                 >
             <% } %>
-            <input type = "tel" name = "phone" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('phone') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('phone') ? 'Invalid phone #' : 'Enter your phone #' %>"
+            <input type = "tel" name = "phone" id="phoneNumber" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-4 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('phone') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('phone') ? 'Invalid phone #' : 'Enter your phone #' %>"
             <% if(signUpFields['phone'] != "") { %>
                 value="<%= signUpFields['phone'] %>">
             <% } else { %>
