@@ -6,7 +6,7 @@ const multer = require('multer');
 const { get } = require("http");
 const { ObjectId } = require('mongodb');
 const Transaction = require('../models/Transaction');
-const { addFriend, getFriends, getFriendDebt } = require('../controllers/friendController');
+const { addFriend, getFriends, getFriendDebt, processTransaction } = require('../controllers/friendController');
 const { getGroupDebt, getGroupDebtForFriends } = require('../controllers/groupController');
 const { mapAndSortEntitiesWithDebts } = require('../controllers/sortingController');
 const storage = multer.memoryStorage();
@@ -191,28 +191,20 @@ router.post('/deleteFriend', async (req, res) => {
 
 router.post('/settleUp', async (req, res) => {
     try {
-        console.log(req.body);
         let friend = await User.findOne({ phone: req.body.friendPhone });
         let amount = parseFloat(req.body.enterAmount);
         let maxValue = (amount == parseFloat(req.body.maxAmount));
         let friendsDebts = [];
         let totalPositiveDebt = 0;
         let totalNegativeDebt = 0;
-
         let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } }).populate('transactions').populate({ path: 'members.user_id', select: 'username' });
-
         // Calculate debts in common groups
         for (let group of commonGroups) {
             let friendsDebt = await getGroupDebtForFriends(group, req);
             friendsDebts.push(friendsDebt);
             let debt = friendsDebt[friend._id.toString()].amount;
-            if (debt > 0) {
-                totalPositiveDebt += debt;
-            } else {
-                totalNegativeDebt += debt;
-            }
+            debt > 0 ? totalPositiveDebt += debt : totalNegativeDebt += debt;
         }
-
         // Adjust amount if maxValue is true
         if (maxValue) {
             amount = Math.abs(totalNegativeDebt);
@@ -224,45 +216,22 @@ router.post('/settleUp', async (req, res) => {
 
                     if (debt > 0) {
                         let amountToBePaid = Math.min(totalPositiveDebt, debt);
-                        let reimbursement = new Transaction({
-                            name: "Reimbursement",
-                            group_id: group._id,
-                            category: "miscellaneous",
-                            total_cost: amountToBePaid,
-                            payee: friend._id,
-                            payments: [{ user_id: req.session.userId, amount_paid: amountToBePaid }]
-                        });
-                        await reimbursement.save();
-                        await Group.findByIdAndUpdate(group._id, { $push: { transactions: reimbursement._id } });
-                        totalPositiveDebt -= amountToBePaid;
+                        await processTransaction(friend._id, group._id, req.session.userId, amountToBePaid);
                         totalPositiveDebt -= amountToBePaid;
                     }
                 }
             }
         }
-
-
         for (let i = 0; i < commonGroups.length; i++) {
             let group = commonGroups[i];
             let friendsDebt = await getGroupDebtForFriends(group, req);;
             let debt = friendsDebt[friend._id.toString()].amount;
             let amountToBePaid = Math.min(amount, Math.abs(debt));
-            let reimbursement;
             if (amountToBePaid > 0) {
-                reimbursement = new Transaction({
-                    name: "Reimbursement",
-                    group_id: group._id,
-                    category: "miscellaneous",
-                    total_cost: amountToBePaid,
-                    payee: req.session.userId,
-                    payments: [{ user_id: friend._id, amount_paid: amountToBePaid }]
-                });
-                await reimbursement.save();
-                await Group.findByIdAndUpdate(group._id, { $push: { transactions: reimbursement._id } });
+                await processTransaction(req.session.userId, group._id, friend._id, amountToBePaid);
                 amount -= amountToBePaid;
             }
         }
-
         res.redirect('/home');
     } catch (error) {
         console.log(error);
