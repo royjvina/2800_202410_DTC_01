@@ -51,11 +51,14 @@
                                 <% let transactionDate = new Date(transaction.date) %>
                                 <% let year = transaction.date.getFullYear() %>
                                 <% let month = transactionDate.getMonth() + 1 %>
+                                <% if (month < 10) { %>
+                                    <% month = "0" + month %>
+                                <% } %>
                                 <% let day = transactionDate.getDate() %>
-                                <input type="date" id="selectedDate" name="selectedDate"
+                                <input type="date" id="selectedDate" data-date="<%= year + "-" + month + "-" + day %>" name="selectedDate"
                                 value="<%= year + "-" + month + "-" + day %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
                             <% } else { %>    
-                                <input type="date" id="selectedDate" name="selectedDate"
+                                <input type="date" id="selectedDate" name="selectedDate" data-date="0"
                                 class="focus:outline-none focus:border-b-2 px-2 m-1">
                             <% } %>    
                         </div>

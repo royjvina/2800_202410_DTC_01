@@ -125,7 +125,7 @@ function calculateExpenseEqually() {
     var expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     var selectedGroup = document.getElementById('selectedGroup');
     var groupId = selectedGroup.value;
-    
+
     // Query the users within the selected group's split container
     let usersToSplitFor = document.querySelectorAll(`.userEqualSplit:checked`);
     var numberOfUsers = usersToSplitFor.length;
@@ -138,17 +138,17 @@ function calculateExpenseEqually() {
             document.getElementById(`${groupId}${userId}AmountEqualInput`).value = '0.00'; // Reset input value
         }
     });
-    
+
     if (expenseTotal > 0 && numberOfUsers > 0) {
         var splitAmount = (expenseTotal / numberOfUsers).toFixed(2);
-        
+
         // Set amounts for users who are checked
         usersToSplitFor.forEach(user => {
             let userId = user.getAttribute('data-user-id');
             document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$' + splitAmount;
             document.getElementById(`${groupId}${userId}AmountEqualInput`).value = splitAmount; // Update input value
         });
-    } 
+    }
 }
 
 
@@ -167,7 +167,7 @@ function calculateUsersPercentage() {
         } else {
             totalPercentage += parseFloat(input.value);
         }
-    }) 
+    })
     return totalPercentage;
 }
 
@@ -182,7 +182,7 @@ function calculateExpensePercentage() {
     var groupId = selectedGroup.value;
     let totalPercentage = calculateUsersPercentage();
     let usersToSplitFor = [];
-    
+
     if (totalPercentage == 100) {
         let users = document.querySelectorAll('.percentage');
         users.forEach(user => {
@@ -198,8 +198,8 @@ function calculateExpensePercentage() {
                 userAmount = '0.00';
             }
             document.getElementById(`${groupId}${userId}AmountPercentage`).textContent = '$' + userAmount;
-        }); 
-    } 
+        });
+    }
 }
 
 /**
@@ -212,7 +212,7 @@ function calculateExpenseManual() {
     var selectedGroup = document.getElementById('selectedGroup');
     let userTotal = 0;
     let manualInputs = document.querySelectorAll('.manual');
-    
+
     manualInputs.forEach(input => {
         if (!input.value) {
             userTotal += 0;
@@ -330,11 +330,16 @@ const groupsDataElement = document.getElementById('groupsData');
 const groupsData = JSON.parse(groupsDataElement.dataset.groups);
 
 // Function to execute when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Get the current date and set it in the date input field
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    document.getElementById('selectedDate').value = formattedDate;
+
+    let transactionDate = document.getElementById('selectedDate').dataset.date;
+    if (trasactionDate == "0") {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        document.getElementById('selectedDate').value = formattedDate;
+    }
+
 });
 
 // Function to get group ID from group name
@@ -378,14 +383,14 @@ function populateUsersDropdown(groupId) {
         group.members.forEach(member => {
             const option = document.createElement('option');
             option.value = member.user_id._id;
-            option.textContent = member.user_id.username; 
+            option.textContent = member.user_id.username;
             selectElement.appendChild(option);
         });
 
     }
 }
 
-document.getElementById('selectedGroup').addEventListener('change', function() {
+document.getElementById('selectedGroup').addEventListener('change', function () {
     var selectedGroupId;
     for (i = 0; i < groupsData.length; i++) {
         if (groupsData[i]._id === document.getElementById('selectedGroup').value) {
@@ -405,8 +410,8 @@ async function toggleSplitVisibility() {
 
     allSplits.forEach(split => {
         // Check if the split id matches the selected group
-        if (split.id === `${selectedGroup}-equally` || 
-            split.id === `${selectedGroup}-percentage` || 
+        if (split.id === `${selectedGroup}-equally` ||
+            split.id === `${selectedGroup}-percentage` ||
             split.id === `${selectedGroup}-manually`) {
             split.classList.remove('hidden');
         } else {
@@ -431,16 +436,16 @@ toggleSplitVisibility();
 
 
 
-showEqualExpense.addEventListener('click', function (event) {equalExpenseTabHandler(event)});
-showPercentageExpense.addEventListener('click', function (event) {percentageExpenseTabHandler(event)});
-showManualExpense.addEventListener('click', function (event) {manualExpenseTabHandler(event)});
+showEqualExpense.addEventListener('click', function (event) { equalExpenseTabHandler(event) });
+showPercentageExpense.addEventListener('click', function (event) { percentageExpenseTabHandler(event) });
+showManualExpense.addEventListener('click', function (event) { manualExpenseTabHandler(event) });
 document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('change', calculateExpenseEqually);
 });
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
-selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("")});
-selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Percentage")});
-selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Manual")});
+selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("") });
+selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("Percentage") });
+selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("Manual") });
 
 splitExpensePercentage.addEventListener('change', calculateExpensePercentage);
 splitExpenseManually.addEventListener('change', calculateExpenseManual);
@@ -450,8 +455,7 @@ percentageInputs.forEach(input => {
     input.addEventListener('input', calculateExpensePercentage);
 });
 
-confirmAddExpense.addEventListener('click', function(event) {displayEmptyFieldModal(event)});
-closeExpenseError.addEventListener('click', function() {errorModal.close()})
+confirmAddExpense.addEventListener('click', function (event) { displayEmptyFieldModal(event) });
+closeExpenseError.addEventListener('click', function () { errorModal.close() })
 categoryHandler();
 // goBackFromAddExpenses();
-
