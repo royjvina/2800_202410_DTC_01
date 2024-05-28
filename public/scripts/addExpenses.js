@@ -104,6 +104,31 @@ function manualExpenseTabHandler(event) {
     splitExpensePercentage.classList.add('hidden');
     splitExpenseManually.classList.remove('hidden');
     splitExpenseManually.classList.add('flex-col');
+
+    let equalTotals = document.querySelectorAll('input.equalValue')
+    equalTotals.forEach(total => {
+        total.value = "";
+    })
+
+    let equalDisplays = document.querySelectorAll('p.equalDisplay')
+    equalDisplays.forEach(display => {
+        display.innerHTML = '$0.00';
+    })
+
+    let equalChecks = document.querySelectorAll('.userEqualSplit')
+    equalChecks.forEach(check => {
+        check.checked = false;
+    })
+
+    let percentageInputs = document.querySelectorAll('input.percentage')
+    percentageInputs.forEach(input => {
+        input.value = "";
+    })
+
+    let percentageTotals = document.querySelectorAll('span.amountPercentage')
+    percentageTotals.forEach(total => {
+        total.innerHTML = '$0.00';
+    })
 }
 
 /**
