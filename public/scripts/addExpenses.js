@@ -73,7 +73,14 @@ function percentageExpenseTabHandler(event) {
     splitExpenseManually.classList.add('hidden');
     splitExpensePercentage.classList.remove('hidden');
     splitExpensePercentage.classList.add('flex-col');
+}
 
+/**
+ * This function is used to erase the equal and manual fields on change events in the percentage tab 
+ * @claaudiaale
+ */
+
+function eraseEqualManualFields() {
     let equalTotals = document.querySelectorAll('input.equalValue')
     equalTotals.forEach(total => {
         total.value = "";
@@ -112,7 +119,13 @@ function manualExpenseTabHandler(event) {
     splitExpensePercentage.classList.add('hidden');
     splitExpenseManually.classList.remove('hidden');
     splitExpenseManually.classList.add('flex-col');
+}
 
+/**
+ * This function is used to erase the equal and percentage fields on change events in the manual tab 
+ * @claaudiaale
+ */
+function eraseEqualPercentageFields() {
     let equalTotals = document.querySelectorAll('input.equalValue')
     equalTotals.forEach(total => {
         total.value = "";
@@ -535,11 +548,16 @@ equalChecks.forEach(check => {
 })
 
 showPercentageExpense.addEventListener('click', function (event) { percentageExpenseTabHandler(event) });
-
+let percentageInputs = document.querySelectorAll('.percentage');
+percentageInputs.forEach(input => {
+    input.addEventListener('input', calculateExpensePercentage);
+    input.addEventListener('change', eraseEqualManualFields)
+});
 
 showManualExpense.addEventListener('click', function (event) { manualExpenseTabHandler(event) });
 document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('change', calculateExpenseEqually);
+    user.addEventListener('change', eraseEqualPercentageFields);
 });
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
 selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("") });
@@ -548,11 +566,6 @@ selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("
 
 splitExpensePercentage.addEventListener('change', calculateExpensePercentage);
 splitExpenseManually.addEventListener('change', calculateExpenseManual);
-
-let percentageInputs = document.querySelectorAll('.percentage');
-percentageInputs.forEach(input => {
-    input.addEventListener('input', calculateExpensePercentage);
-});
 
 confirmAddExpense.addEventListener('click', function (event) { displayEmptyFieldModal(event) });
 closeExpenseError.addEventListener('click', function () { errorModal.close() })
