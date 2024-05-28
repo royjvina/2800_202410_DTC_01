@@ -33,25 +33,25 @@
                     </p>
                     <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Category:</span> <%= transaction.category.toString()[0].toUpperCase() + transaction.category.toString().substring(1) %></p>
                 </div>
-                <div class="text-right">
-                    <button type="button" class="text-white underline fadeOut" id="deleteExpense">Delete</button>
-                    <form action="/deleteExpense" method="post" id="deleteExpenseForm" class="hidden fadeOut flex-col">
-                        <input type="hidden" name="expenseId" value="<%= transaction._id %>">
-                        <button type="submit" class="text-white underline" id="ConfirmDeleteExpense">Confirm</button>
-                        <button type="button" class="text-white underline" id="CancelDeleteExpense">Cancel</button>
-                    </form>
-                </div>
-            </div>
             </div>
         </div>
     </div>
-    <div class="overflow-auto mb-[90px] mt-[120px]">
-        <ul>
-            <% let payments = transaction.payments %>
-            <% for (let i = 0; i < payments.length; i++) { %>
-                <%- include('templates/usersSplit', { payments: payments[i], userId: userId}) %>
+</div>
+<div class="overflow-auto mb-[90px] mt-[120px]">
+    <ul>
+        <% let payments = transaction.payments %>
+        <% for (let i = 0; i < payments.length; i++) { %>
+            <%- include('templates/usersSplit', { payments: payments[i], userId: userId}) %>
             <% } %>
         </ul>
+    </div>
+    <div class="text-right flex flex-col items-center">
+        <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2 fadeOut" id="deleteExpense">Delete</button>
+        <form action="/deleteExpense" method="post" id="deleteExpenseForm" class="hidden fadeOut flex-row gap-2">
+            <input type="hidden" name="expenseId" value="<%= transaction._id %>">
+            <button type="submit" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="ConfirmDeleteExpense">Confirm</button>
+            <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="CancelDeleteExpense">Cancel</button>
+        </form>
     </div>
 
 <script src="/scripts/individualExpense.js"></script>

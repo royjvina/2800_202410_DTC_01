@@ -11,21 +11,21 @@ id="usernameAndPic">
 </div>
 <img class="w-20 h-20 ml-auto rounded-full hover:cursor-pointer" id="homepagePic" data-src="<%= profilePic %>" alt="">
 </div>
-<div class="mb-[102px]">
+<div class="mb-[150px]">
 
     <div class="flex justify-start mt-[110px] mx-3" id="AddButtonsDiv">
         <a class="hidden self-start" href="addGroup" id="createGroup">+ create group</a>
         <a class="hidden" href="/addFriend" id="addFriend">+ add friend</a>
         </div>
         
-        <div class="text-black mt-2 flex mx-2 justify-center">
+        <div class="text-black mt-2 flex fixed w-full items-center justify-center">
             <div class="flex flex-row border border-black rounded-full w-full justify-center">
                 <button class="w-1/2 p-1 text-white  rounded-full bg-[#4b061a]" id="showGroups">Groups</button>
-                <button class="w-1/2 p-1 rounded-full" id="showFriends">Friends</button>
+                <button class="w-1/2 p-1 bg-white rounded-full" id="showFriends">Friends</button>
             </div>
         </div>
         
-            <div id="groups" class="flex-col m-3 mt-6 gap-3 flex">
+            <div id="groups" class="flex-col m-3 mt-16 gap-3 flex">
                 <ul class="flex flex-col gap-2">
                     <% for(let i = 0; i < groups.length; i++) {%>
                         <%- include('templates/groupsHomepage', { group: groups[i] }) %>
@@ -35,7 +35,7 @@ id="usernameAndPic">
                 </ul>
                 
             </div>
-            <div id="friends" class="hidden flex-col m-3 mt-6 gap-3">
+            <div id="friends" class="hidden flex-col m-3 mt-16 gap-3">
                 <ul class="flex flex-col gap-2">
                     <% for(let i = 0; i < friends.length; i++ ) { %>
                         <%- include('templates/friendsHomepage', { friend: friends[i] }) %>
@@ -47,7 +47,7 @@ id="usernameAndPic">
                 
             
             </div>
-            <div class="hidden flex-row justify-center mt-10" id="addFriendSecondaryDiv">
+            <div class="hidden flex-row justify-center mt-10 mb-[150px]" id="addFriendSecondaryDiv">
                 <a id="addFriendSecondary" href="/addFriend" class="flex flex-row items-center border py-3 px-9 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
                     <img src="/images/homepageIconsAndPlaceholders/addFriend.svg" id="addFriendPic" class="w-8 h-8" alt=""> <span>Add a friend</span></a>
             </div>

@@ -80,7 +80,7 @@ router.post('/', async (req, res) => {
         req.session.email = user.email;
         req.session.authenticated = true;
         req.session.authorisation = user.authorisation;
-        console.log()   
+        console.log()
         return res.redirect('/home');
     } catch (error) {
         console.error('Error logging in:', error);
@@ -112,6 +112,7 @@ router.get("/register", (req, res) => {
 
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
     var { email, phone, username, password } = req.body;
+    phone = phone.replace(/[^\d]/g, '');
     console.log(req.body);
     const incorrectFields = [];
 

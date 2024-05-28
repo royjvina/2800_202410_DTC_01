@@ -13,6 +13,10 @@ function groupsTabHandler() {
     AddButtonsDiv.classList.add('justify-start');
     showFriends.classList.remove('bg-[#4b061a]');
     showFriends.classList.remove('text-white');
+    showFriends.classList.add('bg-white');
+    showFriends.classList.add('text-black');
+    showGroups.classList.remove('bg-white');
+    showGroups.classList.remove('text-black');
     showGroups.classList.add('bg-[#4b061a]');
     showGroups.classList.add('text-white');
     friends.classList.add('hidden');
@@ -33,8 +37,12 @@ function friendsTabHandler() {
     AddButtonsDiv.classList.add('justify-end');
     showGroups.classList.remove('bg-[#4b061a]');
     showGroups.classList.remove('text-white');
+    showGroups.classList.add('bg-white');
+    showGroups.classList.add('text-black');
     showFriends.classList.add('bg-[#4b061a]');
     showFriends.classList.add('text-white');
+    showFriends.classList.remove('bg-white');
+    showFriends.classList.remove('text-black');
     groups.classList.add('hidden');
     friends.classList.remove('hidden');
     friends.classList.add('flex');
@@ -231,7 +239,8 @@ function toggleFriendSettleUp() {
 function deleteFriendHandler(removableFriends) {
     if (removableFriends && removableFriends.length > 0) {
         removableFriends.forEach(removableFriend => {
-            phone = removableFriend.id.replace('Div', '');
+            const phone = removableFriend.id.replace('Div', '');
+            console.log(phone);
             const friendDiv = document.getElementById('friend' + phone);
             friendDiv.addEventListener('click', function () {
 
