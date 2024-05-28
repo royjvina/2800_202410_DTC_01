@@ -468,7 +468,8 @@ async function toggleSplitVisibility() {
     const selectedGroup = await getGroupIdFromName(document.getElementById('selectedGroup').value);
     const allSplits = document.querySelectorAll('.split-container');
 
-    // resetCheckboxes(); // Reset checkboxes when switching groups            
+    displayMembersToSplitFor();
+    resetCheckboxes(); // Reset checkboxes when switching groups            
 
     allSplits.forEach(split => {
         // Check if the split id matches the selected group
@@ -481,6 +482,25 @@ async function toggleSplitVisibility() {
         }
     });
 }
+
+/**
+ * This function is used to ensure that a payee must be selected in order to view members to split for
+ * @claaudiaale
+ */
+function displayMembersToSplitFor() {
+    let payeeMenu = document.getElementById('selectedPaidBy');
+    let splitDisplay = document.getElementById('allSplitMethods');
+
+    payeeMenu.addEventListener('change', function () {
+        let payee = payeeMenu.value;
+        if (payee !== "") {
+            splitDisplay.classList.remove('hidden');
+        } else {
+            splitDisplay.classList.add('hidden');
+        }
+    })
+}
+
 
 // Function to reset checkboxes
 function resetCheckboxes() {
@@ -520,4 +540,4 @@ percentageInputs.forEach(input => {
 confirmAddExpense.addEventListener('click', function (event) { displayEmptyFieldModal(event) });
 closeExpenseError.addEventListener('click', function () { errorModal.close() })
 categoryHandler();
-// goBackFromAddExpenses();
+goBackFromAddExpenses();
