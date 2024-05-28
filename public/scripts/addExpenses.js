@@ -135,7 +135,7 @@ function calculateExpenseEqually() {
         let userId = user.getAttribute('data-user-id');
         if (document.getElementById(`${groupId}${userId}AmountEqual`)) {
             document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$0.00';
-            document.getElementById(`${groupId}${userId}AmountEqualInput`).value = '0.00'; // Reset input value
+            document.getElementById(`${groupId}${userId}AmountEqualInput`).value = ''; // Reset input value
         }
     });
 

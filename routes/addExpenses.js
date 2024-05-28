@@ -51,7 +51,7 @@ router.post('/addExpenses', async (req, res) => {
         // Prepare payment data
         const payments = [];
         let hasNonEmptyPayment = false;
-
+        console.log(req.body)
         group.members.forEach(member => {
             let paymentValue = 0;
             let paymentByPercentName = group._id + member.user_id._id + "AmountByPercent";
@@ -96,7 +96,6 @@ router.post('/addExpenses', async (req, res) => {
                 await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
                 res.redirect('/home');
             } else {
-                console.log("sdfskdf")
                 await Transaction.findByIdAndUpdate(req.body.expenseId, {
                     name: selectedExpenseName,
                     group_id: group._id,

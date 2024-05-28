@@ -41,10 +41,10 @@
                             <div class="flex flex-row px-2 justify-between">
                                 <span class="text-gray-400 text-xl">$</span>
                                 <% if (transaction) { %>
-                                    <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0"
+                                    <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount"
                                    value="<%= transaction.total_cost.toFixed(2) %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
                                  <% } else { %>   
-                                    <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount" min="0"
+                                    <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount"
                                     placeholder="Expense Total" class="focus:outline-none focus:border-b-2 px-2 m-1">
                                 <% } %>    
                             </div>
@@ -143,11 +143,7 @@
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
                         <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                            <% if (transaction) { %>
-                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j] }) %>
-                            <% } else { %>
-                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: null }) %>
-                            <% } %>
+                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id}) %>
                         <% } %>
                     </div>
                 <% } %>
