@@ -185,11 +185,13 @@ function calculateExpensePercentage() {
     
     if (totalPercentage == 100) {
         let users = document.querySelectorAll('.percentage');
+
         users.forEach(user => {
-            if (!Number.isNaN(user.value) || user.value == "") {
+            if (!Number.isNaN(user.value) && !user.value == "") {
                 usersToSplitFor.push(user)
             }
         })
+
         usersToSplitFor.forEach(user => {
             let userId = user.getAttribute('data-user-id');
             let userPercentage = parseFloat(document.getElementById(`${groupId}${userId}Percentage`).value);
@@ -197,7 +199,8 @@ function calculateExpensePercentage() {
             if (userAmount == 'NaN') {
                 userAmount = '0.00';
             }
-            document.getElementById(`${groupId}${userId}AmountPercentage`).textContent = '$' + userAmount;
+            document.getElementById(`${groupId}${userId}PercentageAmount`).textContent = '$' + userAmount;
+            document.getElementById(`${groupId}${userId}AmountPercentage`).value = userAmount;
         }); 
     } 
 }
