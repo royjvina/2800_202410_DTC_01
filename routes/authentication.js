@@ -4,8 +4,7 @@ const User = require('../models/User');
 const { registrationSchema } = require('../models/UserRegistration');
 const { passwordSchema } = require('../models/UserPassword');
 const bcrypt = require('bcrypt');
-const { createTransport } = require('nodemailer');
-const { google } = require('googleapis');
+const { createTransporter } = require('../controllers/mailer');
 const crypto = require('crypto');
 const saltRounds = 12;
 const multer = require('multer');
@@ -14,39 +13,12 @@ const path = require("path");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const OAuth2Client = new google.auth.OAuth2(
-    process.env.CLIENTID,
-    process.env.CLIENTSECRET,
-    process.env.REDIRECTURL
-);
-
-OAuth2Client.setCredentials({ refreshToken: process.env.REFRESHTOKEN });
-
-async function createTransporter() {
-    try {
-        return createTransport({
-            service: 'gmail',
-            auth: {
-                type: 'OAuth2',
-                user: process.env.USER,
-                clientId: process.env.CLIENTID,
-                clientSecret: process.env.CLIENTSECRET,
-                refreshToken: process.env.REFRESHTOKEN,
-                accessToken: await OAuth2Client,
-            },
-        });
-    } catch (error) {
-        console.error('Error creating transporter:', error);
-        return null;
-    }
-}
-
-
 router.get("/", (req, res) => {
     const errorMessage = req.query.error;
     const loginEmail = req.session.loginEmail || '';
-    res.render('index.ejs', { error: errorMessage, loginEmail, path: req.path });
-})
+    const message = req.query.message;
+    res.render('index.ejs', { error: errorMessage, loginEmail, message, path: req.path });
+});
 
 router.post('/', async (req, res) => {
     const { email, password } = req.body;
@@ -59,35 +31,43 @@ router.post('/', async (req, res) => {
             return res.redirect('/?error=invalidLogin');
         }
 
-        var passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
             req.session.loginEmail = email;
             return res.redirect('/?error=invalidLogin');
         }
 
+        if (!user.emailVerified) {
+            req.session.loginEmail = email;
+            return res.redirect('/?error=emailNotVerified');
+        }
+
         req.session.loginEmail = '';
         req.session.userId = user._id;
         req.session.username = user.username;
         if (user.profileImage && user.profileImage.data) {
-            console.log(user.profileImage);
-            req.session.profilePic = `data:${user.profileImage.contentType};base64,${user.profileImage.data.toString('base64')}`
-        }
-        else {
+            const profileImageBase64 = user.profileImage.data.toString('base64');
+            req.session.profilePic = `data:${user.profileImage.contentType};base64,${profileImageBase64}`;
+        } else {
             req.session.profilePic = null;
         }
-        req.session.username = user.username;
         req.session.phoneNumber = user.phone;
         req.session.email = user.email;
         req.session.authenticated = true;
         req.session.authorisation = user.authorisation;
-        res.redirect('/home')
+        req.session.save((err) => {
+            if (err) {
+                console.error('Error saving session:', err);
+                return res.status(500).send('Error logging in');
+            }
+            return res.redirect('/home');
+        });
     } catch (error) {
-        console.error('Error logging in:', error)
-        res.status(500).send('Error logging in')
+        console.error('Error logging in:', error);
+        res.status(500).send('Error logging in');
     }
-})
-
+});
 
 router.post('/logout', (req, res) => {
     req.session.destroy(err => {
@@ -102,7 +82,6 @@ router.post('/logout', (req, res) => {
 router.get("/register", (req, res) => {
     const incorrectFields = req.query.error ? req.query.error.split(',') : [];
     const signUpFields = req.session.signUpFields || {};
-    console.log(signUpFields);
     incorrectFields.forEach(field => {
         signUpFields[field] = '';
     });
@@ -112,13 +91,13 @@ router.get("/register", (req, res) => {
 
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
     var { email, phone, username, password } = req.body;
+    phone = phone.replace(/[^\d]/g, '');
     console.log(req.body);
     const incorrectFields = [];
 
     try {
         const existingUser = await User.findOne({ email });
         const existingPhone = await User.findOne({ phone });
-
 
         if (existingUser) {
             incorrectFields.push('email');
@@ -138,40 +117,128 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
         if (incorrectFields.length > 0) {
             return res.redirect(`/register?error=${incorrectFields.join(',')}`);
         }
-        let profileImage = null;
-        if (req.file) {
-            profileImage = {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            };
-        }
+
+        const profileImage = req.file ? {
+            data: req.file.buffer,
+            contentType: req.file.mimetype
+        } : null;
+
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const newUser = new User({ email, phone, username, password: hashedPassword, profileImage });
+
+        const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+        const emailVerificationExpires = Date.now() + 3600000; // 1 hour from now
+
+        const newUser = new User({
+            email,
+            phone,
+            username,
+            password: hashedPassword,
+            profileImage,
+            emailVerificationToken,
+            emailVerificationExpires
+        });
 
         await newUser.save();
 
+        // Send verification email
+        const transporter = await createTransporter();
+        if (!transporter) {
+            console.error('Failed to create transporter');
+            return res.status(500).send('Error sending verification email.');
+        }
+
+        const verificationURL = `${process.env.REDIRECTURL}/verify/${emailVerificationToken}`;
+        const mailOptions = {
+            to: newUser.email,
+            from: process.env.USER,
+            subject: 'Email Verification',
+            text: `Please verify your email by clicking the following link: ${verificationURL}`
+        };
+
+        await transporter.sendMail(mailOptions);
+
         req.session.userId = newUser._id;
-        req.session.authenticated = true;
-        if (profileImage) {
-            console.log(newUser.profileImage);
-            req.session.profilePic = `data:${newUser.profileImage.contentType};base64,${newUser.profileImage.data.toString('base64')}`
-        }
-        else {
-            req.session.profilePic = null;
-        }
-        req.session.username = newUser.username;
-        req.session.phoneNumber = newUser.phone;
-        req.session.email = newUser.email;
-        req.session.authorisation = newUser.authorisation;
-        delete req.session.signUpFields;
-        res.redirect('/home');
+        req.session.authenticated = false;
+        req.session.signUpFields = null;
+        res.redirect('/?message=Please check your email for verification link.');
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).send('Error registering user.');
     }
 });
 
+router.get('/verify/:token', async (req, res) => {
+    const token = req.params.token;
 
+    try {
+        const user = await User.findOne({
+            emailVerificationToken: token,
+            emailVerificationExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.redirect('/?error=invalidOrExpiredToken');
+        }
+
+        user.emailVerified = true;
+        user.emailVerificationToken = undefined;
+        user.emailVerificationExpires = undefined;
+
+        await user.save();
+
+        req.session.userId = user._id;
+        req.session.authenticated = true;
+        res.render('verificationSuccess', { path: req.path });
+    } catch (error) {
+        console.error('Error verifying email:', error);
+        res.status(500).send('Error verifying email.');
+    }
+});
+
+router.post('/resendVerification', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.redirect('/?error=emailNotFound');
+        }
+
+        if (user.emailVerified) {
+            return res.redirect('/?message=Your email is already verified. Please login.');
+        }
+
+        const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+        const emailVerificationExpires = Date.now() + 3600000; // 1 hour from now
+
+        user.emailVerificationToken = emailVerificationToken;
+        user.emailVerificationExpires = emailVerificationExpires;
+        await user.save();
+
+        // Send verification email
+        const transporter = await createTransporter();
+        if (!transporter) {
+            console.error('Failed to create transporter');
+            return res.status(500).send('Error sending verification email.');
+        }
+
+        const verificationURL = `${process.env.REDIRECTURL}/verify/${emailVerificationToken}`;
+        const mailOptions = {
+            to: user.email,
+            from: process.env.USER,
+            subject: 'Email Verification',
+            text: `Please verify your email by clicking the following link: ${verificationURL}`
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        res.redirect('/?message=Verification email resent. Please check your email.');
+    } catch (error) {
+        console.error('Error resending verification email:', error);
+        res.status(500).send('Error resending verification email.');
+    }
+});
 
 router.get("/reset", (req, res) => {
     const message = req.query.message;
@@ -197,6 +264,11 @@ router.post('/reset', async (req, res) => {
 
         const resetURL = `${process.env.REDIRECTURL}/reset/${token}`;
         const transporter = await createTransporter();
+
+        if (!transporter) {
+            console.error('Failed to create transporter');
+            return res.status(500).send('Error sending reset email.');
+        }
 
         const mailOptions = {
             to: user.email,
@@ -275,4 +347,4 @@ router.post('/reset/:token', async (req, res) => {
     }
 });
 
-module.exports = router
+module.exports = router;

@@ -1,0 +1,39 @@
+<% if(friendDebt.name != loggedUsername) {%>
+<li>
+    <% if (friendDebt.amount < 0) { %>
+        <div class="flex flex-row items-center w-full justify-between m-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+            <div class="flex flex-col justify-between">
+                <p class="font-medium">You</p>
+                <p class="text-xs text-gray-500 py-1">owe</p>
+                <p class="font-medium"><%= friendDebt.name %></p>
+            </div>
+           
+            <div >
+                    
+                <form action="/reimburse" method="post" class="flex flex-col justify-between jusitfy-start w-full">
+                    <div class="flex flex-row items-center mb-2"><label for="reimburseAmount">$</label><input type="number" step=".01" name="reimburseAmount" id="amount<%= userId %>" class="font-medium pb-2 text-xl text-left border-b p-2 focus:outline-none focus:border-black items-start" value="<%= Math.abs(friendDebt.amount) %>"></div>
+                    <div class="flex flex-row w-full justify-center"><button class="text-[#4b061a] w-full outline outline-1 outline-[#4b061a] hover:text-white hover:bg-[#4b061a] rounded-lg px-2 text-sm flex flex-row justify-center items-center fadeOut displayConfirmReimburse" id="displayConfirmReimburse<%= userId %>"><span>Reimburse</span><span class="text-2xl pl-1 pb-1">&#8250;</span></button></div>
+                <div class="flex-row justify-center gap-3 hidden items-center w-full fadeOut text-center" id="confirmOption<%= userId %>">
+                    <input type="hidden" name="reimburseFriendId" value="<%= userId %>">
+                    <input type="hidden" name="reimburseGroupId" value="<%= groupId %>">
+                    <button class="text-[#4b061a] outline outline-1 outline-[#4b061a] hover:text-white hover:bg-[#4b061a] rounded-lg px-2 text-sm flex items-center" id="confirm<%= userId %>"><span>Confirm</span><span class="text-2xl pl-1 pb-1">&#8250;</span></button>
+                    <button class="text-[#4b061a] outline outline-1 outline-[#4b061a] hover:text-white hover:bg-[#4b061a] rounded-lg px-2 text-sm flex items-center" id="cancel<%= userId %>"><span>Cancel</span><span class="text-2xl pl-1 pb-1">&#8250;</span></button>
+                </div>
+            </form>
+            </div>
+        </div>
+        <div id="amountWarning" class="text-red-500 text-sm text-center fadeOut hidden">Please enter a valid amount!</div>
+    <% } else if (friendDebt.amount > 0) { %>
+        <div class="flex flex-row items-center w-full justify-between mt-2 p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+            <div class="flex flex-col w-1/2 justify-between">
+                <p class="font-medium"><%= friendDebt.name %></p>
+                <p class="text-xs text-gray-500 py-1">owes</p>
+                <p class="font-medium">You</p>
+            </div>
+            <div>
+                <div class="font-medium flex pb-2 text-xl w-1/2 text-left pr-12"> $<%= Math.abs(friendDebt.amount) %> </div>
+            </div>
+        </div>
+    <% } %>
+</li>
+<% } %>

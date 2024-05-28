@@ -1,4 +1,4 @@
-.wrapper {
+#wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,36 +16,34 @@
   margin-bottom: 5px;
 }
 
-.chatContainer {
-  background-color: #6E0924;
-  border-radius: 20px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  width: 90%;
+#chatContainer {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   min-width: 360px;
   max-width: 800px;
-  height: 100%;
+  height: 95%;
   color: white;
-  font-size: 18px;
+  font-size: 12px;
   position: relative;
+  margin-bottom: 50px
 }
 
-.chatHeader {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+#chatHeader {
   padding: 10px;
 }
 
-.chatHeader .history-icon {
+#chatHeader .history-icon {
   color: white;
+  scale: 1.5;
   font-size: 1.5em; 
   cursor: pointer;
 }
 
-.chatContent {
+#chatContent {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -53,6 +51,7 @@
 }
 
 .messages {
+  background-color: #f8fafc;
   flex-grow: 1;
   overflow-y: auto;
   margin-bottom: 10px;
@@ -60,7 +59,7 @@
   flex-direction: column;
 }
 
-.inputContainer {
+#inputContainer {
   display: none; 
   align-items: center;
   background-color: #6E0924;
@@ -118,15 +117,10 @@ button {
   border: none;
   border-radius: 90%;
   cursor: pointer;
-  font-size: 24px;
   transition: all 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-button:hover {
-  background-color: #ac153a;
 }
 
 button:disabled,
@@ -136,41 +130,42 @@ button[disabled] {
   color: #666666;
 }
 
-h1 {
+/* h1 {
   font-size: 28px;
   text-shadow: 2px 2px #000;
   text-align: center;
   margin: 0;
-}
+} */
 
-p {
+/* p {
   font-size: 24px;
   margin-bottom: 30px;
   text-align: center;
-}
+} */
 
-#introduction {
+/* #introduction {
   font-size: 12px;
   text-align: center;
   margin-top: 3px;
   margin-bottom: 3px;
-}
+} */
 
 #loading {
   padding-bottom: 10px;
   display: none;
+  color: black
 }
 
-#introMessage {
+/* #introMessage {
   font-size: 25px;
   margin: 0;
   text-align: left;
-}
+} */
 
-#introQuestion {
+/* #introQuestion {
   display: flex;
   flex-direction: column;
-}
+} */
 
 #startBtn {
   border: #000;
@@ -201,6 +196,3 @@ label {
   display: none;
 }
 
-#settingsIcon {
-  transform: scale(1.5);
-}

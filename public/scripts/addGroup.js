@@ -1,39 +1,7 @@
 /** JavaScript for handling add group form elements */
 
 
-/**
- * Function to handle the category selection in the add group form
- * @balpreet787
- */
-// function categoryHandler() {
-//     const categories = document.querySelectorAll("#groupCategoryChoices li");
-//     categories.forEach(category => {
-//         category.addEventListener("click", function () {
-//             categories.forEach(category => {
-//                 category.classList.remove("bg-primary");
-//                 category.classList.add("bg-secondary");
-//                 category.classList.remove("text-white");
-//                 let img = category.querySelector('img');
-//                 let categoryId = category.id;
-//                 img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
-//             });
-//             category.classList.toggle("bg-secondary");
-//             category.classList.toggle("bg-primary");
-//             category.classList.toggle("text-white");
-//             let img = category.querySelector('img');
-//             let categoryId = category.id;
 
-//             if (category.classList.contains("bg-primary")) {
-//                 categoryInput.value = category.textContent;
-//                 img.src = `/images/addGroupIcons/${categoryId}White.svg`;
-//             }
-//             else {
-//                 categoryInput.value = "misc";
-
-//             }
-//         });
-//     });
-// }
 
 /**
  * Function to handle the friend selection in the add group form
@@ -56,9 +24,10 @@ function addFriendsToGroupHandler() {
                 console.log(addFriendbtnId)
             }
             else {
-                let friendInputValue = friendInput.value;
-                friendInputValue = friendInputValue.replace(friendId + ",", "");
-                friendInput.value = friendInputValue;
+                let friendValue = friendId.replace("selectFriend", "");
+                let friendInputValueArray = friendInput.value.split(',').filter(id => id && id !== friendValue);
+    
+                friendInput.value = friendInputValueArray.join(',') + (friendInputValueArray.length ? ',' : '');
                 document.getElementById(addFriendbtnId).textContent = '+';
             }
         });
@@ -71,7 +40,7 @@ document.getElementById("confirmAddGroup").addEventListener("click", function (e
         event.preventDefault();
         emptyGroupNameWarning.classList.remove("hidden");
     }
-    else if (friendInput.value === "") {
+    else if (friendInput.value === "" && checkGroup.value === "GroupDoesNotExist") {
         event.preventDefault();
         emptyFriendWarning.classList.remove("hidden");
 
@@ -89,5 +58,41 @@ groupImage.addEventListener("change", function () {
     }
 });
 
+
+/**
+ * This function is used to handle the delete a groups
+ * @balpreet787
+ * */
+function deleteGroupHandler() {
+            deleteGroup = document.querySelector('.deleteGroup');
+            deleteGroup.addEventListener('click', function () {
+            let deleteGroupId = (this.id).replace('Delete', '');
+            let selectedGroup = document.getElementById(deleteGroupId + 'Selected');
+            console.log(deleteGroupId);
+            let confirmDeleteOptions = document.getElementById(deleteGroupId + 'ConfirmDeleteOptions');
+            let cancelDelete = document.getElementById(deleteGroupId + 'CancelDelete');
+            confirmDeleteOptions.classList.toggle('hidden');
+            confirmDeleteOptions.classList.add('hideManually');
+            deleteGroup.classList.remove('flex');
+            deleteGroup.classList.add('hidden');
+            selectedGroup.value = deleteGroupId;
+            setTimeout(() => {
+                confirmDeleteOptions.classList.toggle('hideManually');
+            }, 10);
+            confirmDeleteOptions.classList.toggle('flex');
+            cancelDelete.addEventListener('click', function () {
+                confirmDeleteOptions.classList.add('hidden');
+                confirmDeleteOptions.classList.remove('hideManually');
+                confirmDeleteOptions.classList.remove('flex');
+                deleteGroup.classList.remove('hidden');
+                deleteGroup.classList.add('flex');
+                selectedGroup.value = '';
+
+            });
+
+        });
+}
+
 // categoryHandler();
 addFriendsToGroupHandler();
+deleteGroupHandler();

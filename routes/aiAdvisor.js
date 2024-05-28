@@ -6,6 +6,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const fs = require('fs');
 const path = require('path');
 const ChatHistory = require('../models/chatHistory');
+const { getUserGroups, getUserTransactions, getUserDetails } = require('../controllers/dataFetcherController');
 
 router.get('/history', async (req, res) => {
     if (!req.session.userId) {
@@ -26,6 +27,29 @@ router.post('/advisor', async function (req, res) {
     let messages = [
         { role: "system", content: constants.SYSTEM_COMMENT }
     ];
+
+    const userId = req.session.userId;
+
+    const [userGroups, userTransactions, userDetails] = await Promise.all([
+        getUserGroups(userId),
+        getUserTransactions(userId),
+        getUserDetails(userId)
+    ]);
+
+    const userContext = `
+    User Details:
+    - Username: ${userDetails.username}
+    - Email: ${userDetails.email}
+    - Phone: ${userDetails.phone}
+
+    Groups:
+    ${userGroups.map(group => `- ${group.group_name}`).join('\n')}
+
+    Transactions:
+    ${userTransactions.map(transaction => `- ${transaction.name}: $${transaction.total_cost}`).join('\n')}
+    `;
+
+    messages.push({ role: "system", content: userContext });
 
     while (userMessages.length != 0 || assistantMessages.length != 0) {
         if (userMessages.length != 0) {
@@ -60,9 +84,10 @@ router.post('/advisor', async function (req, res) {
     }
 
     let chatGPTResult = completion.choices[0].message.content;
-    console.log(`Question: ${messages.at(-2).content}\nAnswer: ${chatGPTResult}`);
+    console.log(`Question: ${messages.at(-1).content}\nAnswer: ${chatGPTResult}`);
+    console.log(`${messages}`)
 
-    let question = messages.at(-2).content;
+    let question = messages.at(-1).content;
     let answer = chatGPTResult;
 
     if (!req.session.chatHistory) {

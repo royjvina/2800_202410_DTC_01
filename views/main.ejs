@@ -3,55 +3,51 @@
 id="usernameAndPic">
 <div>
     <h1>Hi, <span class="" id="namegoesHere"><%= username %></span>!</h1>
-    <div class="text-sm text-[#d3d0cb]">Ready to settle up?</div>
+    <% if (debtInfo.TotalpositiveDebt.toFixed(2) > debtInfo.TotalnegativeDebt.toFixed(2)) { %>
+        <p class="text-sm text-secondary italic"> Overall, you are owed $<%= (debtInfo.TotalpositiveDebt - debtInfo.TotalnegativeDebt).toFixed(2) %> among your friends.</p>
+    <% } else if (debtInfo.TotalpositiveDebt.toFixed(2) < debtInfo.TotalnegativeDebt.toFixed(2)) { %>
+        <p class="text-sm text-secondary italic"> Overall, you owe $<%= (debtInfo.TotalnegativeDebt - debtInfo.TotalpositiveDebt).toFixed(2) %> to your friends.</p>
+    <% } %>
 </div>
-<img class="w-16 h-16 ml-auto rounded-full hover:cursor-pointer" id="homepagePic" data-src="<%= profilePic %>" alt="">
+<img class="w-20 h-20 ml-auto rounded-full hover:cursor-pointer" id="homepagePic" data-src="<%= profilePic %>" alt="">
 </div>
-<div class="mb-[102px]">
-    <div class="flex justify-start mt-[100px] mx-3" id="AddButtonsDiv">
+<div class="mb-[150px]">
+
+    <div class="flex justify-start mt-[110px] mx-3" id="AddButtonsDiv">
         <a class="hidden self-start" href="addGroup" id="createGroup">+ create group</a>
         <a class="hidden" href="/addFriend" id="addFriend">+ add friend</a>
         </div>
         
-        <div class="text-black mt-2 flex mx-2 justify-center">
-            <div class="flex flex-row border border-black rounded-full w-full justify-center">
+        <div class="text-black mt-2 flex fixed w-full items-center justify-center">
+            <div class="flex flex-row border border-black rounded-full w-full mx-3 justify-center">
                 <button class="w-1/2 p-1 text-white  rounded-full bg-[#4b061a]" id="showGroups">Groups</button>
-                <button class="w-1/2 p-1 rounded-full" id="showFriends">Friends</button>
-            </div>
-        </div>
-        <div class="m-3" id="friendSearch">
-            <div class="outline outline-1 outline-[#d3d0cb] rounded-lg flex flex-row w-full">
-                <input class="px-2  py-1 w-full" name="friendSearch" type="search" placeholder="Search for a friend ">
-                <button id="friendSearchButton" class="justify-end px-2 mr-auto hover:cursor-pointer"><img class="w-8 h-8" src="/images/homepageIconsAndPlaceholders/search.svg" alt=""> </button>
-            </div>
-        </div>
-        <div class="m-3 hidden" id="groupSearch">
-            <div class="outline outline-1 outline-[#d3d0cb] rounded-lg flex-row w-full flex">
-                <input class="px-2 py-1 w-full" name="groupSearch" type="search" placeholder="Search for a group ">
-                <button id="groupSearchButton" class="justify-end px-2 mr-auto hover:cursor-pointer"> <img class="w-8 h-8" src="/images/homepageIconsAndPlaceholders/search.svg" alt=""> </button>
+                <button class="w-1/2 p-1 bg-white rounded-full" id="showFriends">Friends</button>
             </div>
         </div>
         
-            <div id="groups" class="flex-col m-3 mt-6 gap-3 flex">
-                <ul>
+            <div id="groups" class="flex-col m-3 mt-16 gap-3 flex">
+                <ul class="flex flex-col gap-2">
                     <% for(let i = 0; i < groups.length; i++) {%>
                         <%- include('templates/groupsHomepage', { group: groups[i] }) %>
                     <% } %>
+                    <button class="text-primary pt-4 text-center underline hidden" id="showMoreGroups">Show more</button>
+                    <button class="text-primary pt-4 text-center underline hidden" id="showLessGroups">Show less</button>
                 </ul>
                 
-                            
             </div>
-            <div id="friends" class="hidden flex-col m-3 mt-6 gap-3">
+            <div id="friends" class="hidden flex-col m-3 mt-16 gap-3">
                 <ul class="flex flex-col gap-2">
                     <% for(let i = 0; i < friends.length; i++ ) { %>
                         <%- include('templates/friendsHomepage', { friend: friends[i] }) %>
-                    <% } %>
-                </ul>
+                        <% } %>
+                        <button class="text-primary pt-4 text-center underline hidden" id="showMoreFriends">Show more</button>
+                        <button class="text-primary pt-4 text-center underline hidden" id="showLessFriends">Show less</button>
+                    </ul>
             </div>
                 
             
             </div>
-            <div class="hidden flex-row justify-center mt-10" id="addFriendSecondaryDiv">
+            <div class="hidden flex-row justify-center mt-10 mb-[150px]" id="addFriendSecondaryDiv">
                 <a id="addFriendSecondary" href="/addFriend" class="flex flex-row items-center border py-3 px-9 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
                     <img src="/images/homepageIconsAndPlaceholders/addFriend.svg" id="addFriendPic" class="w-8 h-8" alt=""> <span>Add a friend</span></a>
             </div>
