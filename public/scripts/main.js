@@ -291,6 +291,7 @@ function deleteFriendHandler(removableFriends) {
 function settledUpFriendAndGroupHandler(entity) {
     const parentDivs = document.querySelectorAll(`.parentDiv${entity}`);
     const showMore = document.getElementById(`showMore${entity}`);
+    const dataLength = showMore.dataset.length;
     const showLess = document.getElementById(`showLess${entity}`);
     let balanceZeroParentDivs = [];
     parentDivs.forEach(parentDiv => {
@@ -299,8 +300,12 @@ function settledUpFriendAndGroupHandler(entity) {
         if (balanceZeroDiv) {
             console.log(parentDiv.querySelector('.group'))
             balanceZeroParentDivs.push(parentDiv);
-            parentDiv.classList.add('hidden');
-            showMore.classList.remove('hidden');
+
+
+            if (dataLength > 4) {
+                parentDiv.classList.add('hidden');
+                showMore.classList.remove('hidden');
+            }
         }
     });
     showMore.addEventListener('click', function () {
