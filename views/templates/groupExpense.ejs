@@ -1,9 +1,9 @@
 <li>
     <a href="/individualExpense?expenseId=<%= transaction._id %>" class="m-2 flex flex-row p-3 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
         <div class="flex flex-col items-center">
-            <% let transactionDateString = transaction.date.toString() %>
-            <p><%= transactionDateString.substring(4, 7) %></p>
-            <p><%= transactionDateString.substring(8, 10) %></p>
+            <% let transactionDateString = transaction.date.toUTCString() %>
+            <p><%= transactionDateString.substring(8, 11) %></p>
+            <p><%= transactionDateString.substring(5, 7) %></p>
         </div>
         <% let groupTransactionsCategory = transaction.category %>
         <img class="mx-3" src="/images/addGroupIcons/<%= groupTransactionsCategory %>Black.svg" alt="" height="40" width="40">

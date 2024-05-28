@@ -21,7 +21,6 @@ async function createTransporter() {
                     clientId: process.env.CLIENTID,
                     clientSecret: process.env.CLIENTSECRET,
                     refreshToken: process.env.REFRESHTOKEN,
-                    accessToken: accessToken.token,
                 },
             });
         } else {

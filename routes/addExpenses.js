@@ -9,10 +9,10 @@ const mongoose = require('mongoose');
 router.get('/addExpenses', async (req, res) => {
     try {
         let transactionId = req.query.expenseId;
-        let transaction = await Transaction.findOne({ _id: transactionId }).populate({path: 'group_id', select: 'group_name', select: 'members'}).populate({path: 'payee', select: 'username'}).populate('payments').populate({path: 'group_id', populate: {path: 'members.user_id'}});
+        let transaction = await Transaction.findOne({ _id: transactionId }).populate({ path: 'group_id', select: 'group_name', select: 'members' }).populate({ path: 'payee', select: 'username' }).populate('payments').populate({ path: 'group_id', populate: { path: 'members.user_id' } });
         // Retrieve groups data for the current user
         let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
-        
+
         // Process group data, if needed
         groups.forEach(group => {
             if (group.group_pic && group.group_pic.data) {
@@ -24,9 +24,8 @@ router.get('/addExpenses', async (req, res) => {
                 }
             });
         });
-        console.log(transaction)
         // Render the add expenses page with groups data
-        res.render('addExpenses', { path: req.path, groups: groups, transaction: transaction});
+        res.render('addExpenses', { path: req.path, groups: groups, transaction: transaction });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -82,7 +81,28 @@ router.post('/addExpenses', async (req, res) => {
 
         if (hasNonEmptyPayment) {
             // Create new transaction
-            const newTransaction = new Transaction({
+            if (!req.body.expenseId) {
+                const newTransaction = new Transaction({
+                    name: selectedExpenseName,
+                    group_id: group._id,
+                    category: selectedCategory,
+                    total_cost: selectedExpenseAmount,
+                    date: selectedDate,
+                    payee: selectedPaidBy,
+                    payments: payments
+                });
+
+                // Save transaction
+                await newTransaction.save();
+                await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
+                res.redirect('/home');
+            } else {
+                res.status(400).json({ error: 'No valid payment values provided' });
+            }
+        } else {
+            // Update existing transaction
+            let transactionId = req.query.expenseId;
+            await Transaction.findByIdAndUpdate(transactionId, {
                 name: selectedExpenseName,
                 group_id: group._id,
                 category: selectedCategory,
@@ -90,14 +110,7 @@ router.post('/addExpenses', async (req, res) => {
                 date: selectedDate,
                 payee: selectedPaidBy,
                 payments: payments
-            });
-
-            // Save transaction
-            await newTransaction.save();
-            await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
-            res.redirect('/home');
-        } else {
-            res.status(400).json({ error: 'No valid payment values provided' });
+            })
         }
     } catch (error) {
         console.error(error);

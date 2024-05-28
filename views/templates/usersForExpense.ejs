@@ -1,7 +1,7 @@
 <% if (transaction) { %>
     <% if (transaction.payee.username == option.user_id.username) { %>
-        <option class="text-center" value="<% transaction.payee.username %>" selected><%= transaction.payee.username %></option>
+        <option class="text-center" value="<%= transaction.payee._id %>" selected><%= transaction.payee.username %></option>
     <% } else { %>
-        <option class="text-center" value="<% option.user_id.username %>"><%= option.user_id.username %></option>
+        <option class="text-center" value="<%= option.user_id._id %>"><%= option.user_id.username %></option>
     <% } %>
 <% } %>

@@ -10,7 +10,7 @@
                 <p class="font-semibold px-2"><%= friend.username %></p>
             </div>
             <div class="relative w-1/2">
-                <input type="number" id="<%= group._id %><%= friend._id %>AmountManual" name="<%= group._id %><%= friend._id %>AmountManual" min="0" data-user-id="<%= friend._id %>"
+                <input type="number" id="<%= group._id %><%= friend._id %>AmountManual" name="<%= group._id %><%= friend._id %>AmountManual" data-user-id="<%= friend._id %>"
                     class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 z-0 w-full ml-auto manual friendAmountManual" value="<%= transaction.amount_paid.toFixed(2) %>">
                 <div class="absolute inset-y-0 start-0 flex items-center">
                     <span class="text-gray-400 text-xl font-semibold">$</span>
@@ -26,7 +26,7 @@
                 <p class="font-semibold px-2"><%= friend.username %></p>
             </div>
             <div class="relative w-1/2">
-                <input type="number" id="<%= group._id %><%= friend._id %>AmountManual" name="<%= group._id %><%= friend._id %>AmountManual" min="0" data-user-id="<%= friend._id %>"
+                <input type="number" id="<%= group._id %><%= friend._id %>AmountManual" name="<%= group._id %><%= friend._id %>AmountManual" data-user-id="<%= friend._id %>"
                     class="text-xl font-semibold px-2 text-right focus:outline-none focus:border-b-2 z-0 w-full ml-auto manual friendAmountManual" placeholder="0.00">
                 <div class="absolute inset-y-0 start-0 flex items-center">
                     <span class="text-gray-400 text-xl font-semibold">$</span>

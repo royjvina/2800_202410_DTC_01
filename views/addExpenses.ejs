@@ -49,9 +49,9 @@
                             </div>
                             <% if (transaction) { %>
                                 <% let transactionDate = new Date(transaction.date) %>
-                                <% let year = transactionDate.getYear() %>
+                                <% let year = transaction.date.getFullYear() %>
                                 <% let month = transactionDate.getMonth() + 1 %>
-                                <% let day = transactionDate.getDay() %>
+                                <% let day = transactionDate.getDate() %>
                                 <input type="date" id="selectedDate" name="selectedDate"
                                 value="<%= year + "-" + month + "-" + day %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
                             <% } else { %>    
@@ -84,8 +84,11 @@
                                 <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="miscellaneous"><span><img class="w-8 h-8" src="/images/addGroupIcons/miscellaneousBlack.svg" alt=""></span><span>Miscellaneous</span></li>
                             </ul> 
                         <% } %>               
-                    
-                    <input type="text" id="categoryInput" class="hidden" value="miscellaneous" name="selectedCategory">
+                    <% if (transaction) { %>
+                        <input type="text" id="categoryInput" class="hidden" value="<%= transaction.category %>" name="selectedCategory">
+                    <% } else { %>
+                        <input type="text" id="categoryInput" class="hidden" value="miscellaneous" name="selectedCategory">
+                    <% } %>
                 </div>
 
                 <!-- Select user -->
@@ -148,7 +151,7 @@
             
             <!-- Percentage Split -->
             <% if (transaction) { %>
-                <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[125px] mb-[90px] hidden">
+                <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[195px] mb-[90px] hidden">
             <% } else { %>
                 <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[340px] mb-[90px] hidden">
             <% } %>
@@ -163,7 +166,7 @@
             
             <!-- Manual Split -->
             <% if (transaction) { %>
-                <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[125px] mb-[90px]">
+                <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[195px] mb-[90px]">
             <% } else { %>
                 <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[340px] mb-[90px] hidden">
             <% } %>
