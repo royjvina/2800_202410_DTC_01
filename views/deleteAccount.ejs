@@ -1,0 +1,38 @@
+<%- include('templates/header') %>
+  <div class="mx-auto bg-white shadow-xl rounded-lg overflow-hidden h-dvh">
+    <div class="p-4 flex items-center justify-between shadow border-b">
+      <a href="/settings" class="cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 text-gray-600 stroke-gray-600 icon icon-tabler icon-tabler-chevron-left" width="44" height="44"
+          viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M15 6l-6 6l6 6" />
+        </svg>
+      </a>
+      <h2 class="text-lg font-semibold text-center flex-1">Delete Account</h2>
+      <div class="">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-white icon icon-tabler icon-tabler-chevron-left"
+          width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M15 6l-6 6l6 6" />
+        </svg>
+      </div>
+    </div>
+
+    <div class='flex flex-col items-center h-dvh w-dvw'>
+      <div id='spacer' class="bg-inherit h-[10%]"></div>
+      <div class="text-center">
+        <h1 class="text-lg pb-2">Delete Your Account</h1>
+        <p class='pb-4'>Are you sure you want to delete your account? <br>This action cannot be undone.</p>
+      </div>
+      <form action="/settings/deleteAccount" method="POST"
+        class="flex flex-col items-center w-full justify-center gap-y-4 text-center">
+        <button type="submit" id="deleteAccount"
+          class="bg-red-500 mx-auto text-white font-medium w-1/2 text-lg p-2 border-red-500 border-2 rounded-full shadow-md hover:bg-red-600">
+          Delete Account
+        </button>
+      </form>
+    </div>
+    <%- include('templates/footer') %>
