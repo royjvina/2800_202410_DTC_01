@@ -12,10 +12,10 @@
                             <%= friend.username %>
                         </p>
         </div>
-        <p class="w-full font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 text-gray-400"
+        <p class="w-full font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 text-gray-400 equalDisplay"
             type="number" id="<%= group._id %><%= friend._id %>AmountEqual"
             name="<%= group._id %><%= friend._id %>AmountEqual" min="0" placeholder="$0.00">$0.00</p>
-        <input class="visually-hidden" type="hidden" id="<%= group._id %><%= friend._id %>AmountEqualInput"
+        <input class="visually-hidden equalValue" type="hidden" id="<%= group._id %><%= friend._id %>AmountEqualInput"
             name="<%= group._id %><%= friend._id %>AmountEqual" min="0">
     </div>
     <style>

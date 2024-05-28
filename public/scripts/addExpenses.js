@@ -65,6 +65,27 @@ function percentageExpenseTabHandler(event) {
     splitExpenseManually.classList.add('hidden');
     splitExpensePercentage.classList.remove('hidden');
     splitExpensePercentage.classList.add('flex-col');
+
+    let equalTotals = document.querySelectorAll('input.equalValue')
+    equalTotals.forEach(total => {
+        total.value = "";
+    })
+
+    let equalDisplays = document.querySelectorAll('p.equalDisplay')
+    equalDisplays.forEach(display => {
+        display.innerHTML = '$0.00';
+    })
+
+    let equalChecks = document.querySelectorAll('.userEqualSplit')
+    equalChecks.forEach(check => {
+        check.checked = false;
+    })
+
+    let manualInputs = document.querySelectorAll('input.manual')
+    manualInputs.forEach(input => {
+        input.value = "";
+        input.placeholder = "0.00";
+    })
 }
 
 /**
