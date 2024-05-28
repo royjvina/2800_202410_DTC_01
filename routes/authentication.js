@@ -52,12 +52,17 @@ router.post('/', async (req, res) => {
         } else {
             req.session.profilePic = null;
         }
-
         req.session.phoneNumber = user.phone;
         req.session.email = user.email;
         req.session.authenticated = true;
         req.session.authorisation = user.authorisation;
-        return res.redirect('/home');
+        req.session.save((err) => {
+            if (err) {
+                console.error('Error saving session:', err);
+                return res.status(500).send('Error logging in');
+            }
+            return res.redirect('/home');
+        });
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).send('Error logging in');
