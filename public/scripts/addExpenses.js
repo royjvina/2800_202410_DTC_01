@@ -330,14 +330,14 @@ function categoryHandler() {
             categories.forEach(category => {
                 category.classList.remove("bg-primary");
                 category.classList.add("bg-secondary");
-                category.classList.remove("text-white");
+                category.classList.remove("text-secondary");
                 let img = category.querySelector('img');
                 let categoryId = category.id;
                 img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
             });
             category.classList.toggle("bg-secondary");
             category.classList.toggle("bg-primary");
-            category.classList.toggle("text-white");
+            category.classList.toggle("text-secondary");
             let img = category.querySelector('img');
             let categoryId = category.id;
 

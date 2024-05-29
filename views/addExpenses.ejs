@@ -23,6 +23,17 @@
 
             <!-- Select Group -->
             <div class="fixed top-14 w-full bg-white z-10">
+                <% if (transaction) { %>
+                    <div class="m-2 p-3 outline outline-1 rounded-xl hidden">
+                        <label class="font-semibold" for="selectedGroup">Group: </label>
+                        <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
+                            <option value="" selected disabled class="hidden">Select A Group</option>
+                            <% for(let i = 0; i < groups.length; i++) {%>
+                                <%- include('templates/nameExpense', { id: groups[i]._id, option: groups[i].group_name, transaction: transaction }) %>
+                            <% } %>
+                        </select> 
+                    </div>
+                <% } else { %>
                 <div class="m-2 p-3 outline outline-1 rounded-xl">
                     <label class="font-semibold" for="selectedGroup">Group: </label>
                     <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
@@ -32,6 +43,7 @@
                         <% } %>
                     </select> 
                 </div>
+                <% } %>
                 
                 <!-- Expense Info -->
                 <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
@@ -162,7 +174,7 @@
                 <% if (transaction) { %>
                     <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[35px] mb-[90px] hidden">
                 <% } else { %>
-                    <div id="splitExpensePercentage" class="overflow-auto bg-primaryhidden">
+                    <div id="splitExpensePercentage" class="overflow-auto bg-primary hidden">
                 <% } %>
                     <% for(let i = 0; i < groups.length; i++) { %>
                         <div id="<%= groups[i]._id %>-percentage" class="split-container hidden">
