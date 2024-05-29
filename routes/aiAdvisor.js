@@ -8,6 +8,15 @@ const path = require('path');
 const ChatHistory = require('../models/chatHistory');
 const { getUserGroups, getUserTransactions, getUserDetails } = require('../controllers/dataFetcherController');
 
+/**
+ * Route for rendering the chat history page
+ * @name get/history
+ * @function
+ * @memberof module:routers/ai
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/history', async (req, res) => {
     if (!req.session.userId) {
         return res.redirect('/login');
@@ -17,10 +26,28 @@ router.get('/history', async (req, res) => {
     res.render('aiLog', { chatHistories, path: '/AI' });
 });
 
+/**
+ * Route for rendering the AI advisor page
+ * @name get/AI
+ * @function
+ * @memberof module:routers/ai
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/AI', (req, res) => {
     res.render('aiAdvisor', { username: req.session.username, path: req.path });
 });
 
+/**
+ * Route for handling AI advisor requests
+ * @name post/advisor
+ * @function
+ * @memberof module:routers/ai
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/advisor', async function (req, res) {
     let { userMessages, assistantMessages } = req.body;
 
@@ -72,7 +99,7 @@ router.post('/advisor', async function (req, res) {
     while (retries < maxRetries) {
         try {
             completion = await openai.chat.completions.create({
-                model: "gpt-4o",
+                model: "gpt-4",
                 messages: messages
             });
             break;
@@ -98,6 +125,15 @@ router.post('/advisor', async function (req, res) {
     res.json({ assistant: chatGPTResult });
 });
 
+/**
+ * Route for saving the current conversation to the database
+ * @name post/saveConversation
+ * @function
+ * @memberof module:routers/ai
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/saveConversation', async (req, res) => {
     console.log('Save conversation route hit');
     if (req.session.chatHistory) {
@@ -119,6 +155,15 @@ router.post('/saveConversation', async (req, res) => {
     }
 });
 
+/**
+ * Route for saving a chat to a text file
+ * @name post/saveChat/:id
+ * @function
+ * @memberof module:routers/ai
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/saveChat/:id', async (req, res) => {
     const chatId = req.params.id;
     const chat = await ChatHistory.findById(chatId);
@@ -140,6 +185,15 @@ router.post('/saveChat/:id', async (req, res) => {
     }
 });
 
+/**
+ * Route for deleting a chat from the database
+ * @name post/deleteChat/:id
+ * @function
+ * @memberof module:routers/ai
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/deleteChat/:id', async (req, res) => {
     const chatId = req.params.id;
     const result = await ChatHistory.deleteOne({ _id: chatId, userId: req.session.userId });

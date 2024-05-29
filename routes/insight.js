@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const insightFetcher = require('../controllers/insightFetcherController');
 
+/**
+ * Route for rendering the insight page with user expenses
+ * @name get/insight
+ * @function
+ * @memberof module:routers/insight
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/insight', async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -13,6 +22,15 @@ router.get('/insight', async (req, res) => {
   }
 });
 
+/**
+ * API route for fetching user expenses by category
+ * @name get/api/insight
+ * @function
+ * @memberof module:routers/insight
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/api/insight', async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -24,6 +42,5 @@ router.get('/api/insight', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 module.exports = router;

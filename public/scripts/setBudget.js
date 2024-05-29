@@ -1,11 +1,17 @@
+/**
+ * Event listener for DOMContentLoaded to ensure the DOM is fully loaded before executing the script.
+ */
 document.addEventListener('DOMContentLoaded', function () {
-  const form = document.getElementById('budget-form');
-  const addCategoryButton = document.getElementById('add-category');
-  const removeCategoryButton = document.getElementById('remove-category');
-  const categoriesContainer = document.getElementById('categories');
+  const form = document.getElementById('budget-form'); // Budget form element
+  const addCategoryButton = document.getElementById('add-category'); // Button to add a new category
+  const removeCategoryButton = document.getElementById('remove-category'); // Button to remove the last category
+  const categoriesContainer = document.getElementById('categories'); // Container to hold category inputs
 
-  let categoryCount = 4;
+  let categoryCount = 4; // Initial count of categories
 
+  /**
+   * Function to add a new category input field.
+   */
   const addCategory = () => {
     categoryCount++;
     const categoryDiv = document.createElement('div');
@@ -20,12 +26,15 @@ document.addEventListener('DOMContentLoaded', function () {
       <input type="text" name="category-label-${categoryCount}" class="ml-2 text-sm text-gray-800 bg-transparent outline-none w-24" placeholder="Category ${categoryCount}">
       <div class="flex items-center rounded-lg ml-auto px-3 py-1">
         <span class="mr-1">$</span>
-        <input type="" name="category-value-${categoryCount}" class="bg-transparent outline-none w-16" placeholder="1234.00">
+        <input type="text" name="category-value-${categoryCount}" class="bg-transparent outline-none w-16" placeholder="1234.00">
       </div>
     `;
     categoriesContainer.appendChild(categoryDiv);
   };
 
+  /**
+   * Function to remove the last category input field.
+   */
   const removeCategory = () => {
     if (categoryCount > 4) {
       categoriesContainer.removeChild(categoriesContainer.lastChild);
@@ -33,11 +42,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   };
 
+  // Add event listener to the add category button
   addCategoryButton.addEventListener('click', addCategory);
+  
+  // Add event listener to the remove category button
   removeCategoryButton.addEventListener('click', removeCategory);
 
+  /**
+   * Event listener for form submission to save budget data.
+   * @param {Event} event - The submit event
+   */
   form.addEventListener('submit', function (event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevent the default form submission
 
     const budgetData = [];
     const categories = [];
