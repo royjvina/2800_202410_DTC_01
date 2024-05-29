@@ -33,7 +33,7 @@
                             <% } %>
                         <% } %>
                     </div>
-                    <% } %>
+                    <% } else { %>
                     <div id="lessThanThreeUsers" class="text-gray-400 text-xs pb-1 moreUsers">
                         <% for (let i=0; i < group.members.length; i++) { %>
                             <% if (i == group.members.length - 1) { %>
@@ -43,6 +43,7 @@
                             <% } %>
                         <% } %>
                     </div>
+                    <% } %>
                 </p>
                 <a href="/suggestedReimbursements?groupId=<%=group._id%>" class="flex justify-start font-medium">
                     <p class="px-2 text-[#4b061a] outline outline-1 outline-[#4b061a] hover:bg-[#4b061a] hover:text-white rounded-lg flex flex-row items-center">

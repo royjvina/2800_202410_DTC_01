@@ -82,7 +82,7 @@
                     <% } %>
                     <ul class="grid grid-cols-3 gap-2" id="groupCategoryChoices">
                     <% if (transaction) { %>
-                        <% let categories = ['travel', 'home', 'food', 'entertainment', 'recreation', 'miscellaneous'] %>
+                        <% let categories = ['travel', 'home', 'food', 'business', 'recreation', 'miscellaneous'] %>
                         <% for (category of categories) { %>
                             <%- include('templates/categoryCards', {transaction: transaction, category: category}) %>
                         <% } %>
@@ -139,15 +139,15 @@
             </div>
 
             <% if (transaction) { %>
-                <div id="allSplitMethods"></div>
+                <div id="allSplitMethods" class="mt-[30px]"></div>
             <% } else { %>
-                <div id="allSplitMethods" class="hidden">
+                <div id="allSplitMethods" class="hidden mt-[470px] mb-[90px]">
             <% } %>
                 <!-- Equal Split -->
                 <% if (transaction) { %>
-                    <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[250px] mb-[90px] hidden"></div>
+                    <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[370px] mb-[100px] hidden"></div>
                 <% } else { %>
-                    <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[340px] mb-[90px]">
+                    <div id="splitExpenseEqually" class="overflow-auto bg-primary">
                 <% } %>
                     <% for(let i = 0; i < groups.length; i++) { %>
                         <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
@@ -160,9 +160,9 @@
                 
                 <!-- Percentage Split -->
                 <% if (transaction) { %>
-                    <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[250px] mb-[90px] hidden">
+                    <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[35px] mb-[90px] hidden">
                 <% } else { %>
-                    <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[340px] mb-[90px] hidden">
+                    <div id="splitExpensePercentage" class="overflow-auto bg-primaryhidden">
                 <% } %>
                     <% for(let i = 0; i < groups.length; i++) { %>
                         <div id="<%= groups[i]._id %>-percentage" class="split-container hidden">
@@ -175,9 +175,9 @@
                 
                 <!-- Manual Split -->
                 <% if (transaction) { %>
-                    <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[250px] mb-[90px]">
+                    <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[35px] mb-[90px]">
                 <% } else { %>
-                    <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[340px] mb-[90px] hidden">
+                    <div id="splitExpenseManually" class="overflow-auto bg-primary hidden">
                 <% } %>
                     <% for(let i = 0; i < groups.length; i++) { %>
                         <div id="<%= groups[i]._id %>-manually" class="split-container hidden">
@@ -208,6 +208,10 @@
         </dialog>
     </div>
 
-    
+    <style>
+        body {
+            background-color: #6E0924;
+        }
+    </style>
     <script src="/scripts/addExpenses.js"></script>
     <%- include('templates/footer') %>

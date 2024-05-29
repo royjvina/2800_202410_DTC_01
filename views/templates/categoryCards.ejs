@@ -1,5 +1,9 @@
-<% if (transaction.category == category) { %>
+<% if (transaction.category == category && category != "miscellaneous") { %>
      <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-primary rounded-xl text-seconday" id="<%= transaction.category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= transaction.category %>White.svg" alt=""></span><span><%= transaction.category[0].toUpperCase() + transaction.category.substring(1) %></span></li>
-<% } else { %>
+<% } else if (transaction.category == category && category == "miscellaneous") { %>
+    <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-primary rounded-xl text-seconday" id="<%= transaction.category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= transaction.category %>White.svg" alt=""></span><span>Misc.</span></li>
+<% } else if (transaction.category != category && category != "miscellaneous") { %>
     <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="<%= category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= category %>Black.svg" alt=""></span><span><%= category[0].toUpperCase() + category.substring(1) %></span></li>
+<% } else if (transaction.category != category && category == "miscellaneous") { %>
+    <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="<%= category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= category %>Black.svg" alt=""></span><span>Misc.</span></li>
 <% } %>
