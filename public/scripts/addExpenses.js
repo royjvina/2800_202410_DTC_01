@@ -9,9 +9,20 @@
 
 function goBackFromAddExpenses() {
     document.querySelector('.addExpenseCancelButton').addEventListener('click', () => {
-        history.back();
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams) {
+            history.back()
+        } else {
+            window.location.href = '/home';
+        }
     })
 }
+
+// function goBackFromAddExpenses() {
+//     cancelAddExpense.addEventListener('click', () => {
+//         history.back();
+//     })
+// }
 
 
 /**
