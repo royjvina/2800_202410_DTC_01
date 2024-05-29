@@ -12,17 +12,17 @@ List team members and/or short bios here...
 
 ## 3. Technologies and Resources Used
 List technologies (with version numbers), APIs, icons, fonts, images, media, or data sources that were used.
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
-* Joi for validation
+* HTML, CSS, JavaScript, Node.js, Express, ejs
+* MongoDB for database management
 * Tailwind CSS for UI, https://tailwindcss.com/
+* Google Fonts, https://fonts.google.com/
 * Nodemailer for email handling
 * Google OAuth2 for authentication
-* Font Awesome for icons, https://fontawesome.com/
-* Google Fonts, https://fonts.google.com/
-* ChatGPT for advisor feature, https://openai.api.com/
+* OpenAI API for the AI financial advisor
+* Joi for validation
+* Multer for file uploads
+* Inputmask for form input formatting
+* Various SVG icons and images for UI elements
 
 ## 4. Complete Setup/Installation/Usage
 The current version 1.0 of the application is hosted on https://pennywisedtc01.online/
@@ -58,7 +58,6 @@ The current version 1.0 of the application is hosted on https://pennywisedtc01.o
   - **Overview:** View a summary of your groups, friends, and recent activities.
   - **Navigation:** Use the navigation bar to switch between different sections such as groups, friends, and recent activities.
 
-
 - **Groups and Friends Management:**
   - **Add Group:** Create a new group by providing a group name and adding friends.
   - **Update Group:** Edit existing group details and manage group members.
@@ -71,12 +70,17 @@ The current version 1.0 of the application is hosted on https://pennywisedtc01.o
   - **Update Expense:** Edit existing expense details.
   - **Delete Expense:** Remove an expense from the group.
 
+- **Insight Feature:**
+  - **Expense Insights:** View insights into your spending habits categorized by different types of expenses.
+  - **Budget Tracking:** Monitor how your spending compares to your set budgets.
+  - **Historical Data:** Analyze your spending over different time periods.
+
 - **Settings:**
   - **Profile Information:** Update your username, email, phone number, and profile picture.
   - **Change Password:** Update your account password.
   - **Delete Account:** Permanently delete your account and all associated data.
 
-  - **AI Advisor:**
+- **AI Advisor:**
   - **Chat:** Interact with the AI financial advisor for personalized financial advice.
   - **History:** View the history of your interactions with the AI advisor.
 
