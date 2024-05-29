@@ -180,9 +180,9 @@
                             <% for(let j = 0; j < groups[i].members.length; j++) { %>
                                 <% if (transaction) { %>
                                     <% if (transaction.name != 'Reimbursement') { %>
-                                        <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j] }) %>
+                                        <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j], transactionGroup: transaction.group_id}) %>
                                     <% } else if (transaction.name == 'Reimbursement') { %>
-                                        <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[0] }) %>
+                                        <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[0], transactionGroup: transaction.group_id }) %>
                                     <% } %>
                                 <% } else { %>
                                     <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: null }) %>

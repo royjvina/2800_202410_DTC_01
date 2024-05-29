@@ -419,7 +419,7 @@ function displayEmptyFieldModal(event) {
         let errorMessage = 'Please ensure that the total percentage of the expense is 100.';
         displayErrorModal(errorMessage);
     } else if (splitMethod == 'Manual' && !calculateExpenseManual()) {
-        // event.preventDefault();
+        event.preventDefault();
         let errorMessage = 'Please ensure that your manual inputs are equal to the total expense amount.';
         displayErrorModal(errorMessage);
     } else if (splitMethod == 'Equal' && selectedExpenseAmount.value == 0) {
