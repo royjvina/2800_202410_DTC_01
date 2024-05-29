@@ -107,11 +107,9 @@ Content of the project folder:
  Top level of project folder: 
 ├── .env                                # Environment variables file
 ├── .gitignore                          # Git ignore file
-├── about.html                          # About page
 ├── constants.json                      # Constants used in the project
 ├── databaseConnection.js               # Database connection setup
 ├── include_config.js                   # Configuration include setup
-├── package-lock.json                   # Package lock file
 ├── package.json                        # Package file
 ├── README.md                           # Information about our application, bugs, future features, about us
 ├── server.js                           # Main server file
