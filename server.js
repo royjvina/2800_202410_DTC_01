@@ -1,6 +1,8 @@
+// Load global configurations and environment variables
 require('./include_config.js');
 require('dotenv').config();
 
+// Import necessary packages
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
@@ -8,19 +10,24 @@ const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+// Define constants for port and session expiration time
 const port = process.env.PORT || 3000;
 const expireTime = 1 * 60 * 60 * 1000;
 
+// Create an Express application
 const app = express();
 
+// Define MongoDB configuration variables
 const mongodb_uri = process.env.MONGODB_URI;
 const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 
+// Set the view engine to EJS and define the views directory
 app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
+// Connect to MongoDB using Mongoose
 mongoose.connect(mongodb_uri)
     .then(() => {
         console.log('Connected to MongoDB');
@@ -29,6 +36,7 @@ mongoose.connect(mongodb_uri)
         console.error('Error connecting to MongoDB:', error);
     });
 
+// Create a session store using MongoDB
 var mongoStore = MongoStore.create({
     mongoUrl: mongodb_uri,
     crypto: {
@@ -36,6 +44,7 @@ var mongoStore = MongoStore.create({
     },
 });
 
+// Configure session management
 app.use(session({
     secret: node_session_secret,
     resave: false,
@@ -47,8 +56,10 @@ app.use(session({
     }
 }));
 
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Enable CORS, JSON parsing, and URL-encoded form parsing
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -63,7 +74,7 @@ const sessionValidation = (req, res, next) => {
     }
 };
 
-// Routes
+// Import route modules
 const authRouter = require("./routes/authentication");
 const aiAdvisorRouter = require("./routes/aiAdvisor");
 const homeRouter = require("./routes/home");
@@ -77,6 +88,7 @@ const expensePersonalRouter = require("./routes/expensePersonal");
 const recentActivityRouter = require("./routes/recentActivity");
 const insightRouter = require("./routes/insight");
 
+// Use routes with session validation where needed
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
 app.use("/", sessionValidation, homeRouter);
@@ -108,6 +120,7 @@ app.use((err, req, res, next) => {
     }
 });
 
+// Start the server and listen on the specified port
 app.listen(port, () => {
     console.log('Server is running on port ' + port);
 });

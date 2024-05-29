@@ -1,8 +1,5 @@
 /** JavaScript for handling add group form elements */
 
-
-
-
 /**
  * Function to handle the friend selection in the add group form
  * @balpreet787
@@ -21,7 +18,6 @@ function addFriendsToGroupHandler() {
                 friendInput.value += friendId.replace("selectFriend", "");
                 friendInput.value += ",";
                 document.getElementById(addFriendbtnId).textContent = '-';
-                console.log(addFriendbtnId)
             }
             else {
                 let friendValue = friendId.replace("selectFriend", "");
@@ -34,7 +30,7 @@ function addFriendsToGroupHandler() {
     });
 }
 
-
+// Error handling for add group form
 document.getElementById("confirmAddGroup").addEventListener("click", function (event) {
     if (document.getElementById("groupName").value.trim() === "") {
         event.preventDefault();
@@ -47,6 +43,7 @@ document.getElementById("confirmAddGroup").addEventListener("click", function (e
     }
 });
 
+// Image preview for add group form
 groupImage.addEventListener("change", function () {
     const file = this.files[0];
     if (file) {
@@ -68,7 +65,6 @@ function deleteGroupHandler() {
             deleteGroup.addEventListener('click', function () {
             let deleteGroupId = (this.id).replace('Delete', '');
             let selectedGroup = document.getElementById(deleteGroupId + 'Selected');
-            console.log(deleteGroupId);
             let confirmDeleteOptions = document.getElementById(deleteGroupId + 'ConfirmDeleteOptions');
             let cancelDelete = document.getElementById(deleteGroupId + 'CancelDelete');
             confirmDeleteOptions.classList.toggle('hidden');

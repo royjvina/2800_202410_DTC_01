@@ -5,11 +5,24 @@ const Transaction = require('../models/Transaction');
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
-// Route for rendering the add expenses page
+/**
+ * Route for rendering the add expenses page
+ * @name get/addExpenses
+ * @function
+ * @memberof module:routers/expenses
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/addExpenses', async (req, res) => {
     try {
         let transactionId = req.query.expenseId;
-        let transaction = await Transaction.findOne({ _id: transactionId }).populate({ path: 'group_id', select: 'group_name', select: 'members' }).populate({ path: 'payee', select: 'username' }).populate('payments').populate({ path: 'group_id', populate: { path: 'members.user_id' } });
+        let transaction = await Transaction.findOne({ _id: transactionId })
+            .populate({ path: 'group_id', select: 'group_name members' })
+            .populate({ path: 'payee', select: 'username' })
+            .populate('payments')
+            .populate({ path: 'group_id', populate: { path: 'members.user_id' } });
+
         // Retrieve groups data for the current user
         let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
 
@@ -24,6 +37,7 @@ router.get('/addExpenses', async (req, res) => {
                 }
             });
         });
+
         // Render the add expenses page with groups data
         res.render('addExpenses', { path: req.path, groups: groups, transaction: transaction });
     } catch (error) {
@@ -32,14 +46,21 @@ router.get('/addExpenses', async (req, res) => {
     }
 });
 
-// Route for handling form submission to add expenses
+/**
+ * Route for handling form submission to add expenses
+ * @name post/addExpenses
+ * @function
+ * @memberof module:routers/expenses
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/addExpenses', async (req, res) => {
     try {
         // Extract form data
         const { selectedGroup, selectedDate, selectedExpenseName, selectedExpenseAmount, selectedCategory, selectedPaidBy } = req.body;
 
         // Get group by ID to check if it exists
-        let groupsData = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
         let groupId = new ObjectId(req.body.selectedGroup);
         const group = await Group.findOne({ _id: groupId });
 
@@ -63,11 +84,11 @@ router.post('/addExpenses', async (req, res) => {
             if (paymentPercent && paymentPercent.trim() !== "") {
                 paymentValue = parseFloat(paymentPercent);
                 hasNonEmptyPayment = true;
-            } else if (paymentEqual && paymentEqual.trim() !== "") {
-                paymentValue = parseFloat(paymentEqual);
-                hasNonEmptyPayment = true;
             } else if (paymentManual && paymentManual.trim() !== "") {
                 paymentValue = parseFloat(paymentManual);
+                hasNonEmptyPayment = true;
+            } else if (paymentEqual && paymentEqual.trim() !== "") {
+                paymentValue = parseFloat(paymentEqual);
                 hasNonEmptyPayment = true;
             }
 
@@ -114,6 +135,5 @@ router.post('/addExpenses', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
 
 module.exports = router;

@@ -103,13 +103,13 @@ function removeSecondaryButtons() {
 function deleteFriendHandler() {
     document.querySelectorAll('.deleteFriend').forEach(deleteFriend => {
         deleteFriend.addEventListener('click', function () {
-            let deleteFriendPhone = (this.id).replace('Delete', '');
-            let selectedFriend = document.getElementById(deleteFriendPhone + 'Selected');
-            let confirmDeleteOptions = document.getElementById(deleteFriendPhone + 'ConfirmDeleteOptionsFriends');
-            let cancelDelete = document.getElementById(deleteFriendPhone + 'CancelDelete');
+            let deleteFriendid = (this.id).replace('Delete', '');
+            let selectedFriend = document.getElementById(deleteFriendid + 'Selected');
+            let confirmDeleteOptions = document.getElementById(deleteFriendid + 'ConfirmDeleteOptionsFriends');
+            let cancelDelete = document.getElementById(deleteFriendid + 'CancelDelete');
             confirmDeleteOptions.classList.toggle('hidden');
             confirmDeleteOptions.classList.add('hideManually');
-            selectedFriend.value = deleteFriendPhone;
+            selectedFriend.value = deleteFriendid;
             setTimeout(() => {
                 confirmDeleteOptions.classList.toggle('hideManually');
             }, 10);
@@ -131,17 +131,16 @@ function deleteFriendHandler() {
 /**
  * This function is used to handle the form fields for settling a debt with a friend
  * @balpreet787
- * @param {string} friendPhone 
+ * @param {string} friendid 
  */
-function formFieldsHandler(friendPhone) {
-    const totalPayable = document.getElementById('payAmount' + friendPhone);
+function formFieldsHandler(friendid) {
+    const totalPayable = document.getElementById('payAmount' + friendid);
 
-    const enterAmount = document.getElementById('enterAmount' + friendPhone);
-    const submitSettle = document.getElementById('submitSettle' + friendPhone);
-    const confirmfriend = document.getElementById('confirmfriend' + friendPhone);
-    const cancelSettle = document.getElementById('cancelSettle' + friendPhone);
-    const EnterAmountWarning = document.getElementById('EnterAmountWarning' + friendPhone);
-    console.log(totalPayable.textContent);
+    const enterAmount = document.getElementById('enterAmount' + friendid);
+    const submitSettle = document.getElementById('submitSettle' + friendid);
+    const confirmfriend = document.getElementById('confirmfriend' + friendid);
+    const cancelSettle = document.getElementById('cancelSettle' + friendid);
+    const EnterAmountWarning = document.getElementById('EnterAmountWarning' + friendid);
     enterAmount.value = totalPayable.textContent.slice(1);
     enterAmount.addEventListener('input', function () {
         confirmfriend.classList.add('hidden');
@@ -183,7 +182,7 @@ function formFieldsHandler(friendPhone) {
 
 
 }
-
+// Event listeners for the secondary buttons activated on hover
 addFriendSecondary.addEventListener('mouseenter', function () {
     const addFriendPic = document.getElementById('addFriendPic');
     addFriendPic.src = "/images/homepageIconsAndPlaceholders/addFriendHover.svg";
@@ -201,15 +200,18 @@ addGroupSecondary.addEventListener('mouseleave', function () {
     addGroupPic.src = '/images/homepageIconsAndPlaceholders/addGroup.svg';
 });
 
-
+/**
+ * This function is used to handle to toggle the display of the settle up form for a friend
+ * @balpreet787
+ * */
 function toggleFriendSettleUp() {
     document.querySelectorAll('.friend').forEach(friend => {
         const friendId = friend.id;
-        let friendPhone = friendId.substring(6, friendId.length);
-        if (document.getElementById("payAmount" + friendPhone)) {
+        let friendid = friendId.substring(6, friendId.length);
+        if (document.getElementById("payAmount" + friendid)) {
             friend.addEventListener('click', function () {
-                const formFriend = document.getElementById("formFriend" + friendPhone);
-                const settleArrow = document.getElementById("settleArrow" + friendPhone);
+                const formFriend = document.getElementById("formFriend" + friendid);
+                const settleArrow = document.getElementById("settleArrow" + friendid);
                 if (settleArrow.src.includes('downArrow')) {
                     settleArrow.src = settleArrow.src.replace('downArrow', 'upArrow');
                 }
@@ -229,26 +231,28 @@ function toggleFriendSettleUp() {
                     this.classList.remove('bg-secondary');
                     this.classList.remove('text-[#6E0924]');
                 }
-                formFieldsHandler(friendPhone);
+                formFieldsHandler(friendid);
             });
         }
-
     });
 }
 
+/**
+ * This function is used to toggle the display of the settle up form for a group
+ * @balpreet787
+ * */
 function deleteFriendHandler(removableFriends) {
     if (removableFriends && removableFriends.length > 0) {
         removableFriends.forEach(removableFriend => {
-            const phone = removableFriend.id.replace('Div', '');
-            console.log(phone);
-            const friendDiv = document.getElementById('friend' + phone);
+            const id = removableFriend.id.replace('Div', '');
+            const friendDiv = document.getElementById('friend' + id);
             friendDiv.addEventListener('click', function () {
 
-                const deleteOptions = document.getElementById(phone + 'ConfirmDeleteOptionsFriends');
-                const settleArrow = document.getElementById("settleArrow" + phone);
-                const deleteBtn = document.getElementById(phone + 'Delete');
-                const deleteForm = document.getElementById(phone + 'DeleteForm');
-                const cancelDelete = document.getElementById(phone + 'CancelDelete');
+                const deleteOptions = document.getElementById(id + 'ConfirmDeleteOptionsFriends');
+                const settleArrow = document.getElementById("settleArrow" + id);
+                const deleteBtn = document.getElementById(id + 'Delete');
+                const deleteForm = document.getElementById(id + 'DeleteForm');
+                const cancelDelete = document.getElementById(id + 'CancelDelete');
                 if (settleArrow.src.includes('downArrow')) {
                     settleArrow.src = settleArrow.src.replace('downArrow', 'upArrow');
                 }
@@ -263,7 +267,7 @@ function deleteFriendHandler(removableFriends) {
                 deleteOptions.classList.toggle('flex');
                 deleteBtn.addEventListener('click', function () {
                     deleteBtn.parentNode.parentNode.classList.add('hidden');
-                    document.getElementById(phone + 'Selected').value = phone;
+                    document.getElementById(id + 'Selected').value = id;
                     deleteForm.classList.remove('hidden');
                     deleteForm.classList.add('hideManually');
                     setTimeout(() => {
@@ -272,7 +276,7 @@ function deleteFriendHandler(removableFriends) {
                     deleteForm.classList.add('flex');
                 });
                 cancelDelete.addEventListener('click', function () {
-                    document.getElementById(phone + 'Selected').value = '';
+                    document.getElementById(id + 'Selected').value = '';
                     deleteForm.classList.add('hidden');
                     deleteForm.classList.remove('hideManually');
                     deleteForm.classList.remove('flex');
@@ -282,12 +286,14 @@ function deleteFriendHandler(removableFriends) {
 
             });
         });
-    } else {
-        console.log('No removable friends found.');
     }
 }
 
-
+/**
+ * This function is used to get the settled up friends and groups and toggle their display if the number of friends or groups exceeds 4
+ * @param {string} entity - The entity to be handled
+ * @balpreet787
+ * */
 function settledUpFriendAndGroupHandler(entity) {
     const parentDivs = document.querySelectorAll(`.parentDiv${entity}`);
     const showMore = document.getElementById(`showMore${entity}`);
@@ -298,7 +304,6 @@ function settledUpFriendAndGroupHandler(entity) {
         const balanceZeroDiv = parentDiv.querySelector('.balanceZero');
 
         if (balanceZeroDiv) {
-            console.log(parentDiv.querySelector('.group'))
             balanceZeroParentDivs.push(parentDiv);
 
 
@@ -326,14 +331,13 @@ function settledUpFriendAndGroupHandler(entity) {
             showLess.classList.add('hidden');
         });
     });
-    console.log(balanceZeroParentDivs);
     if (entity === 'Friends') {
         deleteFriendHandler(balanceZeroParentDivs);
     }
 }
 
 
-
+// Event listener for the dom content loaded event calling the functions to handle the friends and groups
 document.addEventListener('DOMContentLoaded', function () {
     settledUpFriendAndGroupHandler('Groups');
     settledUpFriendAndGroupHandler('Friends');

@@ -15,26 +15,26 @@
             <div class="flex flex-col items-center justify-center">
             </div>
                 
-            <input type = "text" name = "email" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('email') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('email') ? 'Invalid email' : 'Enter your email' %>"
+            <input type = "text" name = "email" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('email') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('email') ? 'Invalid email' : 'Enter your email*' %>"
             <% if(signUpFields['email'] != "") { %>
                 value="<%= signUpFields['email'] %>">
             <% } else {%>
                 >
             <% } %>
-            <input type = "tel" name = "phone" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('phone') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('phone') ? 'Invalid phone #' : 'Enter your phone #' %>"
+            <input type = "tel" id="phoneNumber" name = "phone" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('phone') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('phone') ? 'Invalid phone #' : 'Enter your phone #*' %>"
             <% if(signUpFields['phone'] != "") { %>
                 value="<%= signUpFields['phone'] %>">
             <% } else { %>
                 >
             <% } %>
-            <input type = "text" name =  "username" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('username') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('username') ? 'Invalid name' : 'Enter your name' %>"
+            <input type = "text" name =  "username" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('username') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('username') ? 'Invalid name' : 'Enter your name*' %>"
             <% if(signUpFields['username'] != "") { %>
                 value="<%= signUpFields['username'] %>">
             <% } else { %>
                 >
             <% } %>
 
-            <input type = "password" name = "password" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('email') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('password') ? 'Invalid password' : 'Enter a password' %>">
+            <input type = "password" name = "password" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('email') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('password') ? 'Invalid password' : 'Enter a password*' %>">
             <p class="mx-8 text-xs pb-2">
                 Min. 8 characters, 1 lowercase, 1 uppercase, and 1 number. ONLY the following special characters are allowed: @ $ ! % * ? &   
             </p>

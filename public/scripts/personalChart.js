@@ -1,3 +1,6 @@
+/**
+ * Event listener for DOMContentLoaded to ensure the DOM is fully loaded before executing the script.
+ */
 document.addEventListener('DOMContentLoaded', function () {
   const defaultCategories = ['grocery', 'travel', 'rent', 'tuition'];
   const defaultBudgetData = [200, 150, 300, 250];
@@ -6,6 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const budgetData = JSON.parse(localStorage.getItem('budgetData')) || defaultBudgetData;
   const categories = JSON.parse(localStorage.getItem('categories')) || defaultCategories;
 
+  /**
+   * Returns the chart options for the donut chart.
+   * @returns {Object} Chart options object
+   */
   const getChartOptions = () => {
     return {
       series: spendingData,
@@ -36,9 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 fontFamily: "Inter, sans-serif",
                 formatter: function (w) {
                   const sum = w.globals.seriesTotals.reduce((a, b) => {
-                    return a + b
-                  }, 0)
-                  return '$' + sum + 'k'
+                    return a + b;
+                  }, 0);
+                  return '$' + sum + 'k';
                 },
               },
               value: {
@@ -46,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 fontFamily: "Inter, sans-serif",
                 offsetY: -20,
                 formatter: function (value) {
-                  return value + "k"
+                  return value + "k";
                 },
               },
             },
@@ -70,14 +77,14 @@ document.addEventListener('DOMContentLoaded', function () {
       yaxis: {
         labels: {
           formatter: function (value) {
-            return value + "k"
+            return value + "k";
           },
         },
       },
       xaxis: {
         labels: {
           formatter: function (value) {
-            return value + "k"
+            return value + "k";
           },
         },
         axisTicks: {
@@ -87,15 +94,19 @@ document.addEventListener('DOMContentLoaded', function () {
           show: false,
         },
       },
-    }
-  }
+    };
+  };
 
   if (document.getElementById("donut-chart") && typeof ApexCharts !== 'undefined') {
     const chart = new ApexCharts(document.getElementById("donut-chart"), getChartOptions());
     chart.render();
   }
 
-  // Bar Chart 
+  /**
+   * Updates the bar chart with budget and spending data.
+   * @param {Array} budgetData - Array of budget amounts for each category
+   * @param {Array} spendingData - Array of spending amounts for each category
+   */
   const updateBarChart = (budgetData, spendingData) => {
     const barChart = document.getElementById('bar-chart');
     barChart.innerHTML = '';
