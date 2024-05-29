@@ -12,7 +12,7 @@ const cors = require('cors');
 
 // Define constants for port and session expiration time
 const port = process.env.PORT || 3000;
-const expireTime = 24 * 60 * 60 * 1000; // 1 week
+const expireTime = 2 * 60 * 60 * 1000; // 2 hours
 
 // Create an Express application
 const app = express();

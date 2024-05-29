@@ -22,7 +22,7 @@
             </header>
 
             <!-- Select Group -->
-            <div class="fixed top-14 w-full bg-white z-10">
+            <div class=" w-full bg-white">
                 <div class="m-2 p-3 outline outline-1 rounded-xl">
                     <label class="font-semibold" for="selectedGroup">Group: </label>
                     <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
@@ -40,7 +40,7 @@
                             <input type="text" id="selectedExpenseName" name="selectedExpenseName"
                             value="<%= transaction.name %>" class="focus:outline-none focus:border-b-2 px-4 m-1">
                         <% } else { %>
-                        <input type="text" id="selectedExpenseName" name="selectedExpenseName"
+                            <input type="text" id="selectedExpenseName" name="selectedExpenseName"
                             placeholder="Expense Name" class="focus:outline-none focus:border-b-2 px-4 m-1">
                         <% } %> 
                         <div class="flex flex-row px-2">
@@ -136,9 +136,9 @@
 
             <!-- Equal Split -->
             <% if (transaction) { %>
-                <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[250px] mb-[90px] hidden"></div>
+                <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px] hidden"></div>
             <% } else { %> 
-                <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[340px] mb-[90px]">
+                <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px]">
             <% } %>
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
@@ -155,9 +155,9 @@
             
             <!-- Percentage Split -->
             <% if (transaction) { %>
-                <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[125px] mb-[90px] hidden">
+                <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
             <% } else { %>
-                <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[340px] mb-[90px] hidden">
+                <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
             <% } %>
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-percentage" class="split-container hidden">
@@ -170,9 +170,9 @@
             
             <!-- Manual Split -->
             <% if (transaction) { %>
-                <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[125px] mb-[90px]">
+                <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px]">
             <% } else { %>
-                <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[340px] mb-[90px] hidden">
+                <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px] hidden">
             <% } %>
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-manually" class="split-container hidden">

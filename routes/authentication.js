@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
             req.session.loginEmail = email;
             return res.redirect('/?error=invalidLogin');
         }
-        
+
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
@@ -117,12 +117,13 @@ router.post('/logout', (req, res) => {
  */
 router.get("/register", (req, res) => {
     const incorrectFields = req.query.error ? req.query.error.split(',') : [];
+    const message = req.query.message
     const signUpFields = req.session.signUpFields || {};
     incorrectFields.forEach(field => {
         signUpFields[field] = '';
     });
 
-    res.render('register.ejs', { error: incorrectFields, signUpFields, path: req.path });
+    res.render('register.ejs', { error: incorrectFields, message: message, signUpFields, path: req.path });
 });
 
 /**
@@ -162,24 +163,18 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
             return res.redirect(`/register?error=${incorrectFields.join(',')}`);
         }
 
-        let profileImage;
-        if (req.file) {
-            profileImage = {
+        const profileImage = req.file ? {
             data: req.file.buffer,
             contentType: req.file.mimetype
-            }
-        } else {
-            profileImage = null;
-        }
+        } : null;
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         const emailVerificationToken = crypto.randomBytes(32).toString('hex');
         const emailVerificationExpires = Date.now() + 3600000; // 1 hour from now
-        var emailLower = email.toLowerCase();
 
         const newUser = new User({
-            email: emailLower,
+            email: email,
             phone: phone,
             username: username,
             password: hashedPassword,
