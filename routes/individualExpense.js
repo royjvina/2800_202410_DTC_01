@@ -13,11 +13,12 @@ router.get('/individualExpense', async (req, res) => {
     res.render('individualExpense', { path: '/groups', transaction: transaction, userId: userId });
 })
 
+// Route to delete an expense
 router.post('/deleteExpense', async (req, res) => {
     try {
         const transactionId = new ObjectId(req.body.expenseId);
-        await Transaction.deleteOne({ _id: transactionId });
-        await Group.updateOne({ 'transactions': transactionId }, { $pull: { 'transactions': transactionId } });
+        await Transaction.deleteOne({ _id: transactionId });//deletes the transaction
+        await Group.updateOne({ 'transactions': transactionId }, { $pull: { 'transactions': transactionId } });//removes the transaction from the group
         console.log('Transaction removed successfully');
     } catch (error) {
         console.error('Error removing transaction:', error);

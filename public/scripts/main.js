@@ -141,7 +141,6 @@ function formFieldsHandler(friendPhone) {
     const confirmfriend = document.getElementById('confirmfriend' + friendPhone);
     const cancelSettle = document.getElementById('cancelSettle' + friendPhone);
     const EnterAmountWarning = document.getElementById('EnterAmountWarning' + friendPhone);
-    console.log(totalPayable.textContent);
     enterAmount.value = totalPayable.textContent.slice(1);
     enterAmount.addEventListener('input', function () {
         confirmfriend.classList.add('hidden');
@@ -183,7 +182,7 @@ function formFieldsHandler(friendPhone) {
 
 
 }
-
+// Event listeners for the secondary buttons activated on hover
 addFriendSecondary.addEventListener('mouseenter', function () {
     const addFriendPic = document.getElementById('addFriendPic');
     addFriendPic.src = "/images/homepageIconsAndPlaceholders/addFriendHover.svg";
@@ -201,7 +200,10 @@ addGroupSecondary.addEventListener('mouseleave', function () {
     addGroupPic.src = '/images/homepageIconsAndPlaceholders/addGroup.svg';
 });
 
-
+/**
+ * This function is used to handle to toggle the display of the settle up form for a friend
+ * @balpreet787
+ * */
 function toggleFriendSettleUp() {
     document.querySelectorAll('.friend').forEach(friend => {
         const friendId = friend.id;
@@ -232,15 +234,17 @@ function toggleFriendSettleUp() {
                 formFieldsHandler(friendPhone);
             });
         }
-
     });
 }
 
+/**
+ * This function is used to toggle the display of the settle up form for a group
+ * @balpreet787
+ * */
 function deleteFriendHandler(removableFriends) {
     if (removableFriends && removableFriends.length > 0) {
         removableFriends.forEach(removableFriend => {
             const phone = removableFriend.id.replace('Div', '');
-            console.log(phone);
             const friendDiv = document.getElementById('friend' + phone);
             friendDiv.addEventListener('click', function () {
 
@@ -282,12 +286,14 @@ function deleteFriendHandler(removableFriends) {
 
             });
         });
-    } else {
-        console.log('No removable friends found.');
     }
 }
 
-
+/**
+ * This function is used to get the settled up friends and groups and toggle their display if the number of friends or groups exceeds 4
+ * @param {string} entity - The entity to be handled
+ * @balpreet787
+ * */
 function settledUpFriendAndGroupHandler(entity) {
     const parentDivs = document.querySelectorAll(`.parentDiv${entity}`);
     const showMore = document.getElementById(`showMore${entity}`);
@@ -298,7 +304,6 @@ function settledUpFriendAndGroupHandler(entity) {
         const balanceZeroDiv = parentDiv.querySelector('.balanceZero');
 
         if (balanceZeroDiv) {
-            console.log(parentDiv.querySelector('.group'))
             balanceZeroParentDivs.push(parentDiv);
 
 
@@ -326,14 +331,13 @@ function settledUpFriendAndGroupHandler(entity) {
             showLess.classList.add('hidden');
         });
     });
-    console.log(balanceZeroParentDivs);
     if (entity === 'Friends') {
         deleteFriendHandler(balanceZeroParentDivs);
     }
 }
 
 
-
+// Event listener for the dom content loaded event calling the functions to handle the friends and groups
 document.addEventListener('DOMContentLoaded', function () {
     settledUpFriendAndGroupHandler('Groups');
     settledUpFriendAndGroupHandler('Friends');

@@ -1,3 +1,4 @@
+/* Error handling for add friend form */
 document.getElementById("confirmAddFriend").addEventListener("click", function (event) {
     if (friendName.value.trim() === "") {
         event.preventDefault();
