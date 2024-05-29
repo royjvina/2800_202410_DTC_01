@@ -1,3 +1,5 @@
+# Pennywise
+
 ## 1. Project Description
 Our team, DTC01, is developing Pennywise to help individuals manage their personal finances by creating a web application that provides tools for budgeting, expense tracking, and AI financial advisor. Our core features include a dashboard that details a user's financial overview, a transaction history, budget planning tools, and the ability to set and track financial goals.
 
