@@ -261,7 +261,10 @@ function categoryHandler() {
             if (category.classList.contains("bg-primary")) {
                 categoryInput.value = categoryId
                 img.src = `/images/addGroupIcons/${categoryId}White.svg`;
-                categoryHeader.textContent = category.textContent;
+                if (category.textContent == "Misc.")
+                    categoryHeader.textContent = "Miscellaneous"
+                else
+                    categoryHeader.textContent = category.textContent;
                 categoryHeader.classList.add("text-primary");
             }
             else {
