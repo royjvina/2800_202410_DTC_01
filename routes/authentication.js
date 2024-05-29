@@ -38,7 +38,8 @@ router.get("/", (req, res) => {
  * @param {callback} middleware - Express middleware.
  */
 router.post('/', async (req, res) => {
-    const { email, password } = req.body;
+    var { email, password } = req.body;
+    email = email.toLowerCase();
 
     try {
         const user = await User.findOne({ email });
@@ -116,12 +117,13 @@ router.post('/logout', (req, res) => {
  */
 router.get("/register", (req, res) => {
     const incorrectFields = req.query.error ? req.query.error.split(',') : [];
+    const message = req.query.message
     const signUpFields = req.session.signUpFields || {};
     incorrectFields.forEach(field => {
         signUpFields[field] = '';
     });
 
-    res.render('register.ejs', { error: incorrectFields, signUpFields, path: req.path });
+    res.render('register.ejs', { error: incorrectFields, message: message, signUpFields, path: req.path });
 });
 
 /**
@@ -172,13 +174,13 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
         const emailVerificationExpires = Date.now() + 3600000; // 1 hour from now
 
         const newUser = new User({
-            email,
-            phone,
-            username,
+            email: email,
+            phone: phone,
+            username: username,
             password: hashedPassword,
-            profileImage,
-            emailVerificationToken,
-            emailVerificationExpires
+            profileImage: profileImage,
+            emailVerificationToken: emailVerificationToken,
+            emailVerificationExpires: emailVerificationExpires
         });
 
         await newUser.save();

@@ -53,7 +53,7 @@ router.post('/reimburse', async (req, res) => {
         const reimbursements = await Transaction.create({
             name: "Reimbursement",
             group_id: groupId,
-            category: "miscellaneous",
+            category: "reimbursement",
             total_cost: amountTobePaid,
             payee: req.session.userId,
             payments: [{ user_id: friendId, amount_paid: amountTobePaid }]

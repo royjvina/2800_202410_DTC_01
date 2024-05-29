@@ -84,11 +84,11 @@ router.post('/addExpenses', async (req, res) => {
             if (paymentPercent && paymentPercent.trim() !== "") {
                 paymentValue = parseFloat(paymentPercent);
                 hasNonEmptyPayment = true;
-            } else if (paymentEqual && paymentEqual.trim() !== "") {
-                paymentValue = parseFloat(paymentEqual);
-                hasNonEmptyPayment = true;
             } else if (paymentManual && paymentManual.trim() !== "") {
                 paymentValue = parseFloat(paymentManual);
+                hasNonEmptyPayment = true;
+            } else if (paymentEqual && paymentEqual.trim() !== "") {
+                paymentValue = parseFloat(paymentEqual);
                 hasNonEmptyPayment = true;
             }
 

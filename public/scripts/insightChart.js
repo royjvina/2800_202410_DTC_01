@@ -42,12 +42,12 @@ function updateChart(expenses) {
     return;
   }
 
-  const categories = ['home', 'food', 'travel', 'entertainment', 'miscellaneous', 'recreation'];
+  const categories = ['home', 'food', 'travel', 'business', 'miscellaneous', 'recreation'];
   const categoryColors = {
     'home': '#1C64F2',
     'food': '#16BDCA',
     'travel': '#E74694',
-    'entertainment': '#6C5DD3',
+    'business': '#6C5DD3',
     'miscellaneous': '#FDBA8C',
     'recreation': '#F9A8D4'
   };
@@ -90,7 +90,7 @@ function updateChart(expenses) {
     series: series,
     chart: {
       type: 'donut',
-      height: 350
+      height: 390
     },
     labels: labels,
     colors: colors,
@@ -103,7 +103,7 @@ function updateChart(expenses) {
             total: {
               showAlways: true,
               show: true,
-              label: "You've spent",
+              label: "Total Spent",
               formatter: function () {
                 const total = series.reduce((a, b) => a + b, 0);
                 return '$' + total.toFixed(2);
@@ -201,3 +201,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     donutChartElement.innerHTML = '<p>Error loading chart data.</p>';
   }
 });
+

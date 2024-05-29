@@ -132,7 +132,7 @@ async function processTransaction(payeeId, groupID, payedToId, amount) {
         let reimbursement = new Transaction({//creates a new transaction
             name: "Reimbursement",
             group_id: groupID,
-            category: "miscellaneous",
+            category: "reimbursement",
             total_cost: amount,
             payee: payeeId,
             payments: [{ user_id: payedToId, amount_paid: amount }]

@@ -12,7 +12,7 @@ const cors = require('cors');
 
 // Define constants for port and session expiration time
 const port = process.env.PORT || 3000;
-const expireTime = 1 * 60 * 60 * 1000;
+const expireTime = 2 * 60 * 60 * 1000; // 2 hours
 
 // Create an Express application
 const app = express();
@@ -78,13 +78,11 @@ const sessionValidation = (req, res, next) => {
 const authRouter = require("./routes/authentication");
 const aiAdvisorRouter = require("./routes/aiAdvisor");
 const homeRouter = require("./routes/home");
-const personalRouter = require("./routes/personal");
 const addExpenseRouter = require("./routes/addExpenses");
 const groupsRouter = require("./routes/groups");
 const individualExpenseRouter = require("./routes/individualExpense");
 const settingsRouter = require("./routes/settings");
 const suggestedReimbursementsRouter = require("./routes/suggestedReimbursements");
-const expensePersonalRouter = require("./routes/expensePersonal");
 const recentActivityRouter = require("./routes/recentActivity");
 const insightRouter = require("./routes/insight");
 
@@ -92,15 +90,12 @@ const insightRouter = require("./routes/insight");
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
 app.use("/", sessionValidation, homeRouter);
-app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, addExpenseRouter);
 app.use("/", sessionValidation, groupsRouter);
 app.use("/", sessionValidation, individualExpenseRouter);
 app.use("/", sessionValidation, recentActivityRouter);
 app.use("/", sessionValidation, settingsRouter);
-app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, suggestedReimbursementsRouter);
-app.use("/", sessionValidation, expensePersonalRouter);
 app.use("/", sessionValidation, recentActivityRouter);
 app.use("/", sessionValidation, insightRouter);
 

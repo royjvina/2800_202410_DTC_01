@@ -18,7 +18,8 @@ function goBackFromAddExpenses() {
  * This function is used to handle the click event on the split expenses equal tab    
  * @claaudiaale
  */
-let GlobalGroupId;
+var GlobalGroupId;
+
 function equalExpenseTabHandler(event) {
     event.preventDefault();
     showPercentageExpense.classList.remove('bg-[#4b061a]');
@@ -178,8 +179,7 @@ function calculateUsersPercentage() {
 
 function calculateExpensePercentage() {
     var expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
-    var selectedGroup = document.getElementById('selectedGroup');
-    var groupId = selectedGroup.value;
+    var groupId = document.getElementById('selectedGroup').value;
     let totalPercentage = calculateUsersPercentage();
     let usersToSplitFor = [];
     
@@ -210,9 +210,7 @@ function calculateExpensePercentage() {
  * @claaudiaale
  */
 
-function calculateExpenseManual() {
-    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
-    var selectedGroup = document.getElementById('selectedGroup');
+function calculateExpenseManual() {    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let userTotal = 0;
     let manualInputs = document.querySelectorAll('.manual');
     
@@ -232,18 +230,18 @@ function calculateExpenseManual() {
  */
 function categoryHandler() {
     const categories = document.querySelectorAll("#groupCategoryChoices li");
-    groupDroupDown.addEventListener("click", function () {
-        if (groupCategoryChoices.classList.contains("hidden")) {
-            groupCategoryChoices.classList.remove("hidden");
-            groupCategoryChoices.classList.add("flex");
-            categoryArrow.src = "/images/otherIcons/upArrow.svg";
-        }
-        else {
-            groupCategoryChoices.classList.add("hidden");
-            groupCategoryChoices.classList.remove("flex");
-            categoryArrow.src = "/images/otherIcons/downArrow.svg";
-        }
-    });
+    // groupDroupDown.addEventListener("click", function () {
+    //     if (groupCategoryChoices.classList.contains("hidden")) {
+    //         groupCategoryChoices.classList.remove("hidden");
+    //         groupCategoryChoices.classList.add("flex");
+    //         categoryArrow.src = "/images/otherIcons/upArrow.svg";
+    //     }
+    //     else {
+    //         groupCategoryChoices.classList.add("hidden");
+    //         groupCategoryChoices.classList.remove("flex");
+    //         categoryArrow.src = "/images/otherIcons/downArrow.svg";
+    //     }
+    // });
     categories.forEach(category => {
         category.addEventListener("click", function () {
             categories.forEach(category => {
@@ -263,7 +261,10 @@ function categoryHandler() {
             if (category.classList.contains("bg-primary")) {
                 categoryInput.value = categoryId
                 img.src = `/images/addGroupIcons/${categoryId}White.svg`;
-                categoryHeader.textContent = category.textContent;
+                if (category.textContent == "Misc.")
+                    categoryHeader.textContent = "Miscellaneous"
+                else
+                    categoryHeader.textContent = category.textContent;
                 categoryHeader.classList.add("text-primary");
             }
             else {
@@ -329,9 +330,6 @@ function displayEmptyFieldModal(event) {
     }
 }
 
-const groupsDataElement = document.getElementById('groupsData');
-const groupsData = JSON.parse(groupsDataElement.dataset.groups);
-
 // Function to execute when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Get the current date and set it in the date input field
@@ -340,68 +338,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('selectedDate').value = formattedDate;
 });
 
-// Function to get group ID from group name
-async function getGroupIdFromName(groupId) {
-    try {
-        for (let i = 0; i < groupsData.length; i++) {
-            if (groupsData[i]._id === groupId) {
-                return groupsData[i]._id;
-            }
-        }
-        return null;
-    } catch (error) {
-        console.error('Error:', error);
-        return null;
-    }
-}
-
-// Function to get group index by ID
-function getGroupById(groupId) {
-    for (let i = 0; i < groupsData.length; i++) {
-        if (groupsData[i]._id === groupId) {
-            return groupsData[i];
-        }
-    }
-    console.log(`Group with ID '${groupId}' not found.`);
-    return null;
-}
-
 // Function to populate the dropdown menu with users from the selected group
-function populateUsersDropdown(groupId) {
+function populateUsersDropdown() {
     // Clear existing options
-    const selectElement = document.getElementById('selectedPaidBy');
-    selectElement.innerHTML = '<option value="" selected disabled class="hidden">Select User</option>';
+    const allUsers = document.querySelectorAll('.username');
+    const group = document.getElementById('selectedGroup').value;  
 
-    // Get the group by ID
-    const group = getGroupById(groupId);
-
-    // Check if group exists
-    if (group) {
-        // Iterate through members and add them to the dropdown
-        group.members.forEach(member => {
-            const option = document.createElement('option');
-            option.value = member.user_id._id;
-            option.textContent = member.user_id.username; 
-            selectElement.appendChild(option);
-        });
-
-    }
-}
-
-document.getElementById('selectedGroup').addEventListener('change', function() {
-    var selectedGroupId;
-    for (i = 0; i < groupsData.length; i++) {
-        if (groupsData[i]._id === document.getElementById('selectedGroup').value) {
-            selectedGroupId = groupsData[i]._id;
+    allUsers.forEach(user => {
+        if (user.classList.contains(group)) {
+            user.classList.remove('hidden');
+        } else {
+            user.classList.add('hidden');
         }
-    }
-    GlobalGroupId = selectedGroupId;
-    populateUsersDropdown(selectedGroupId);
-});
+    });
+}
 
 // Function to toggle visibility of split based on selected group
-async function toggleSplitVisibility() {
-    const selectedGroup = await getGroupIdFromName(document.getElementById('selectedGroup').value);
+function toggleSplitVisibility() {
+    const selectedGroup = document.getElementById('selectedGroup').value;
     const allSplits = document.querySelectorAll('.split-container');
 
     // resetCheckboxes(); // Reset checkboxes when switching groups            
@@ -428,11 +382,13 @@ function resetCheckboxes() {
 
 // Add onchange event listener to selectedGroup dropdown
 document.getElementById('selectedGroup').addEventListener('change', toggleSplitVisibility);
+document.getElementById('selectedGroup').addEventListener('change', populateUsersDropdown);
+document.getElementById('selectedGroup').addEventListener('change', () => {
+    GlobalGroupId = document.getElementById('selectedGroup').value;
+});
 
-// Call toggleSplitVisibility once initially to set the initial state based on the default selected group
+// Call once initially to set the initial state based on the default selected group
 toggleSplitVisibility();
-
-
 
 showEqualExpense.addEventListener('click', function (event) {equalExpenseTabHandler(event)});
 showPercentageExpense.addEventListener('click', function (event) {percentageExpenseTabHandler(event)});
@@ -441,9 +397,7 @@ document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('change', calculateExpenseEqually);
 });
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
-selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("")});
-selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Percentage")});
-selectedPaidBy.addEventListener('change', function() {addExpenseToPaidByUser("Manual")});
+selectedPaidBy.addEventListener('change', addExpenseToPaidByUser);
 
 splitExpensePercentage.addEventListener('change', calculateExpensePercentage);
 splitExpenseManually.addEventListener('change', calculateExpenseManual);

@@ -7,12 +7,12 @@ const Joi = require('joi');
 const registrationSchema = Joi.object({
     /**
      * Username of the user
-     * - Alphanumeric
+     * - Minimum length of 3 characters
      * - Maximum length of 20 characters
      * - Required
      * @example "johnDoe123"
      */
-    username: Joi.string().alphanum().max(20).required(),
+    username: Joi.string().min(3).max(20).required(),
     /**
      * Email of the user
      * - Must be a valid email format
