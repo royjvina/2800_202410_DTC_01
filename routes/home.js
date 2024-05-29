@@ -118,8 +118,8 @@ router.post('/addGroupSubmission', upload.single('groupImage'), async (req, res)
         let friends = (req.body.friends.split(',')).filter(friend => friend != '');
         let uniqueFriends = new Set(friends);
         let friendsinGroupID = [];
-        for (let phoneNumber of uniqueFriends) {
-            let friend = await User.findOne({ phone: phoneNumber });//find friend by phone number
+        for (let id of uniqueFriends) {
+            let friend = await User.findOne({ _id: id });//find friend by phone number
             if (friend) {
                 friendsinGroupID.push({ user_id: friend._id });//add friend to the group's member list
             }
@@ -181,8 +181,8 @@ router.post('/deleteGroup', async (req, res) => {
 // Post route for deleting a friend, and deletes the friend from the user's friend list and updates the friend's friend list
 router.post('/deleteFriend', async (req, res) => {
     try {
-        const friendPhone = req.body.friendDeletePhone;
-        let friend = await User.findOneAndUpdate({ phone: friendPhone }, { $pull: { friends: req.session.userId } });//update the friend's friend list by removing the user
+        const friendId = req.body.friendDeleteId;
+        let friend = await User.findOneAndUpdate({ _id: friendId }, { $pull: { friends: req.session.userId } });//update the friend's friend list by removing the user
 
         if (friend) {
             await User.findByIdAndUpdate(req.session.userId, { $pull: { friends: friend._id } });//update the user's friend list by removing the friend
@@ -200,7 +200,7 @@ router.post('/deleteFriend', async (req, res) => {
 // Post route for settling up with a friend, settles up with the friend in all common groups
 router.post('/settleUp', async (req, res) => {
     try {
-        let friend = await User.findOne({ phone: req.body.friendPhone });
+        let friend = await User.findOne({ _id: req.body.friendId });
         let amount = parseFloat(req.body.enterAmount);
         let maxValue = (amount == parseFloat(req.body.maxAmount));
         let friendsDebts = [];

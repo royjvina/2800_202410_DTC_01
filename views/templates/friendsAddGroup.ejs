@@ -1,5 +1,5 @@
 <% if (!group) { %>
-<li class="flex flex-row gap-1 justify-between items-center p-3 w-full bg-secondary rounded-xl" id="selectFriend<%= friend.phone%>"><div class="flex flex-row items-center gap-4">
+<li class="flex flex-row gap-1 justify-between items-center p-3 w-full bg-secondary rounded-xl" id="selectFriend<%= friend._id%>"><div class="flex flex-row items-center gap-4">
     <% if(!friend.profileImageBase64) { %>
         <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg" alt="<%= friend.username %>">
     <% } else { %>
@@ -7,11 +7,11 @@
     src="<%= friend.profileImageBase64 %>" alt="">
     <% } %>
     <div><%= friend.username %></div>
-</div><span id="addFriend<%= friend.phone%>">+</span></li>
+</div><span id="addFriend<%= friend._id%>">+</span></li>
 <% } else { %>
     <% let isMember = group.members.some(member => member.user_id.username === friend.username) %>
     <% if (isMember) { %>
-        <li class="hidden flex-row gap-1 justify-between items-center p-3 w-full bg-primary rounded-xl" id="selectFriend<%= friend.phone%>"><div class="flex flex-row items-center gap-4">
+        <li class="hidden flex-row gap-1 justify-between items-center p-3 w-full bg-primary rounded-xl" id="selectFriend<%= friend._id%>"><div class="flex flex-row items-center gap-4">
             <% if(!friend.profileImageBase64) { %>
                 <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg" alt="<%= friend.username %>">
             <% } else { %>
@@ -19,9 +19,9 @@
             src="<%= friend.profileImageBase64 %>" alt="">
             <% } %>
             <div><%= friend.username %></div>
-        </div><span id="addFriend<%= friend.phone%>">-</span></li>
+        </div><span id="addFriend<%= friend._id%>">-</span></li>
     <% } else { %>
-        <li class="flex flex-row gap-1 justify-between items-center p-3 w-full bg-secondary rounded-xl" id="selectFriend<%= friend.phone%>"><div class="flex flex-row items-center gap-4">
+        <li class="flex flex-row gap-1 justify-between items-center p-3 w-full bg-secondary rounded-xl" id="selectFriend<%= friend._id%>"><div class="flex flex-row items-center gap-4">
             <% if(!friend.profileImageBase64) { %>
                 <img class="w-8 h-8 ml-auto rounded-full hover:cursor-pointer" src="/images/homepageIconsAndPlaceholders/profilePicPlaceholder.svg" alt="<%= friend.username %>">
             <% } else { %>
@@ -29,6 +29,6 @@
             src="<%= friend.profileImageBase64 %>" alt="">
             <% } %>
             <div><%= friend.username %></div>
-            </div><span id="addFriend<%= friend.phone%>">+</span></li>
+            </div><span id="addFriend<%= friend._id%>">+</span></li>
     <% } %>
 <% } %>
