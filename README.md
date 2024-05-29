@@ -1,7 +1,7 @@
 # Pennywise
 
 ## 1. Project Description
-Our team, DTC01, is developing Pennywise to help individuals manage their personal finances by creating a web application that provides tools for budgeting, expense tracking, and AI financial advisor. Our core features include a dashboard that details a user's financial overview, a transaction history, budget planning tools, and the ability to set and track financial goals.
+Our team, DTC01, is developing Pennywise to help individuals manage their group finances by creating a web application that provides tools for expense insight, and AI financial advisor. Our core features include a dashboard that details a user's financial overview, a transaction history, and the ability to set and track financial goals.
 
 ## 2. Names of Contributors
 List team members and/or short bios here...
@@ -74,7 +74,6 @@ The current version 1.0 of the application is hosted on https://pennywisedtc01.o
 
 - **Insight Feature:**
   - **Expense Insights:** View insights into your spending habits categorized by different types of expenses.
-  - **Budget Tracking:** Monitor how your spending compares to your set budgets.
   - **Historical Data:** Analyze your spending over different time periods.
 
 - **Settings:**
@@ -152,15 +151,12 @@ It has the following subfolders and files:
 │   │   ├── ai.js                       # Script for AI interactions
 │   │   ├── aiLog.js                    # Script for AI logs
 │   │   ├── easterEgg.js                # Script for easter eggs
-│   │   ├── expensePersonal.js          # Script for personal expenses
 │   │   ├── groups.js                   # Script for groups
 │   │   ├── individualExpense.js        # Script for individual expenses
 │   │   ├── insightChart.js             # Script for insight charts
 │   │   ├── main.js                     # Main script
-│   │   ├── personalChart.js            # Script for personal charts
 │   │   ├── register.js                 # Script for registration
 │   │   ├── reimbursement.js            # Script for reimbursements
-│   │   ├── setBudget.js                # Script for setting budgets
 │   │   └── settings.js                 # Script for settings
 │   └── style                           # Folder for styles
 │       ├── style.css                   # Main stylesheet
@@ -170,12 +166,10 @@ It has the following subfolders and files:
 │   ├── addExpenses.js                  # Routes for adding expenses
 │   ├── aiAdvisor.js                    # Routes for AI advisor
 │   ├── authentication.js               # Routes for authentication
-│   ├── expensePersonal.js              # Routes for personal expenses
 │   ├── groups.js                       # Routes for groups
 │   ├── home.js                         # Routes for home
 │   ├── individualExpense.js            # Routes for individual expenses
 │   ├── insight.js                      # Routes for insights
-│   ├── personal.js                     # Routes for personal section
 │   ├── recentActivity.js               # Routes for recent activities
 │   ├── settings.js                     # Routes for settings
 │   └── suggestedReimbursements.js      # Routes for suggested reimbursements
@@ -192,18 +186,15 @@ It has the following subfolders and files:
     ├── deleteAccount.ejs               # Delete account page
     ├── error400.ejs                    # 400 error page
     ├── error500.ejs                    # 500 error page
-    ├── expensePersonal.ejs             # Personal expenses page
     ├── groups.ejs                      # Groups page
     ├── index.ejs                       # Index page
     ├── individualExpense.ejs           # Individual expense page
     ├── insight.ejs                     # Insight page
     ├── main.ejs                        # Main page
-    ├── personal.ejs                    # Personal page
     ├── recentActivity.ejs              # Recent activity page
     ├── register.ejs                    # Register page
     ├── reset.ejs                       # Reset password page
     ├── resetForm.ejs                   # Reset password form
-    ├── setBudget.ejs                   # Set budget page
     ├── settings.ejs                    # Settings page
     ├── suggestedReimbursements.ejs     # Suggested reimbursements page
     ├── verificationSuccess.ejs         # Verification success page

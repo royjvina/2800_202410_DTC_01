@@ -90,7 +90,7 @@ function updateChart(expenses) {
     series: series,
     chart: {
       type: 'donut',
-      height: 350
+      height: 390
     },
     labels: labels,
     colors: colors,
@@ -103,7 +103,7 @@ function updateChart(expenses) {
             total: {
               showAlways: true,
               show: true,
-              label: "You've spent",
+              label: "Total Spent",
               formatter: function () {
                 const total = series.reduce((a, b) => a + b, 0);
                 return '$' + total.toFixed(2);
