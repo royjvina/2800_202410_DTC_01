@@ -71,7 +71,6 @@ router.post('/addExpenses', async (req, res) => {
         // Prepare payment data
         const payments = [];
         let hasNonEmptyPayment = false;
-        console.log(req.body)
         group.members.forEach(member => {
             let paymentValue = 0;
             let paymentPercentName = group._id + member.user_id._id + "AmountPercentage";

@@ -152,18 +152,18 @@ function addExpenseToPaidByUser() {
 
     if (expenseTotal > 0) {
         if (splitMethod == "Equal") {
-            console.log(paidByUser + 'Amount' + splitMethod)
             resetSplitAmounts();
             document.getElementById(paidByUser).checked = true;
             document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
         } else if (splitMethod == 'Percentage') {
             resetSplitAmounts();
-            document.getElementById(paidByUser + 'Percentage').value = 100;
-            document.getElementById(paidByUser + 'Percentage').placeholder = 100;
-            document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
+            document.getElementById(paidByUser + 'Percentage').value = "100";
+            document.getElementById(paidByUser + 'Percentage').placeholder = "100";
+            document.getElementById(paidByUser + 'PercentageAmount').innerHTML = ('$' + expenseTotal.toFixed(2));
         } else if (splitMethod == 'Manual') {
             resetSplitAmounts();
             document.getElementById(paidByUser + 'AmountManual').value = expenseTotal.toFixed(2);
+            document.getElementById(paidByUser + 'AmountManual').placeholder = expenseTotal.toFixed(2);
         }
     }
 }
@@ -178,10 +178,15 @@ function resetSplitAmounts() {
 
     document.querySelectorAll('.user' + splitMethod + 'Split').forEach(user => {
         user.checked = false;
-        document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
-        document.getElementById(user.id + 'Percentage').value = "";
-        document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
-        document.getElementById(user.id + 'Amount' + splitMethod).value = '$0.00';
+        if (splitMethod == 'Equal') {
+            document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
+        } else if (splitMethod == 'Percentage') {
+            document.getElementById(user.id).value = 0;
+            document.getElementById(user.id + 'Amount').innerHTML = '$0.00';
+        } else if (splitMethod == 'Manual') {
+            document.getElementById(user.id).value = 0.00;
+            document.getElementById(user.id).placeholder = 0.00;
+        }
     })
 
 }
