@@ -39,7 +39,6 @@ router.post('/addExpenses', async (req, res) => {
         const { selectedGroup, selectedDate, selectedExpenseName, selectedExpenseAmount, selectedCategory, selectedPaidBy } = req.body;
 
         // Get group by ID to check if it exists
-        let groupsData = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id');
         let groupId = new ObjectId(req.body.selectedGroup);
         const group = await Group.findOne({ _id: groupId });
 
@@ -63,11 +62,11 @@ router.post('/addExpenses', async (req, res) => {
             if (paymentPercent && paymentPercent.trim() !== "") {
                 paymentValue = parseFloat(paymentPercent);
                 hasNonEmptyPayment = true;
-            } else if (paymentEqual && paymentEqual.trim() !== "") {
-                paymentValue = parseFloat(paymentEqual);
-                hasNonEmptyPayment = true;
             } else if (paymentManual && paymentManual.trim() !== "") {
                 paymentValue = parseFloat(paymentManual);
+                hasNonEmptyPayment = true;
+            } else if (paymentEqual && paymentEqual.trim() !== "") {
+                paymentValue = parseFloat(paymentEqual);
                 hasNonEmptyPayment = true;
             }
 

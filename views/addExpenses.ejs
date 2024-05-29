@@ -6,13 +6,15 @@
                 <div class="flex flex-row justify-between font-bold px-3 pb-3 bg-primary items-center text-white h-[68px]">
                     <div><a id="cancelAddExpense" href="/home" class = "addExpenseCancelButton">
                             Cancel
-                        </a></div>
+                        </a>
+                    </div>
                     <div class="text-lg">
                         <% if (!transaction) { %>
-                            Add Expense
+                            <p>Add Expense</p>
                         <% } else { %>
-                            Edit <%= transaction.name %>
+                            <p>Edit <%= transaction.name %></p>
                         <% } %>
+                    </div>
                     <div class="">
                         <a href="/home"><button type="submit" form="addExpenseForm" id="confirmAddExpense">Done</button></a>
                     </div>
@@ -101,10 +103,10 @@
                             <label class="font-semibold my-2 text-base" for="selectedPaidBy">Paid By:</label>
                             <select class="float-right px-4 rounded-lg m-2 text-black" name="selectedPaidBy"
                                 id="selectedPaidBy" placeholder="Select User">
-                                <% if (transaction) { %>
-                                    <% let selectedGroup = transaction.group_id %>
-                                    <% for(let i = 0; i < selectedGroup.members.length; i++) {%>
-                                        <%- include('templates/usersForExpense', {  option: selectedGroup.members[i], transaction: transaction  }) %>
+                                <option value="" selected disabled class="hidden">Select User</option>
+                                <% for(let i = 0; i < groups.length; i++) {%>
+                                    <% for(let j = 0; j < groups[i].members.length; j++) {%>
+                                        <%- include('templates/usersForExpense', {  group: groups[i], friend: groups[i].members[j].user_id, transaction: locals.transaction  }) %>
                                     <% } %>
                                 <% } %>
                             </select>
@@ -198,10 +200,6 @@
                 </div>
             </div>
         </dialog>
-        <% for(let i = 0; i < groups.length; i++) { %>
-            <%- include('templates/keyExpense', { group: groups[i] }) %>
-        <% } %>
-        <div id="groupsData" style="display: none;" data-groups='<%= JSON.stringify(groups) %>'></div>
     </div>
     
     <script src="/scripts/addExpenses.js"></script>
