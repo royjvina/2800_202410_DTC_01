@@ -1,11 +1,14 @@
+/**
+ * Fetches expenses data by time range and updates the chart.
+ */
 function searchByTime() {
-  document.getElementById('searchIcon').style.filter = 'invert(1)';
-  const startDate = document.getElementById('startDate').value;
-  const endDate = document.getElementById('endDate').value;
+  document.getElementById('searchIcon').style.filter = 'invert(1)'; // Invert search icon color
+  const startDate = document.getElementById('startDate').value; // Get start date
+  const endDate = document.getElementById('endDate').value; // Get end date
 
   let url = '/api/insight';
   if (startDate && endDate) {
-    url += `?startDate=${startDate}&endDate=${endDate}`;
+    url += `?startDate=${startDate}&endDate=${endDate}`; // Append date range to URL
   }
 
   fetch(url, {
@@ -26,17 +29,18 @@ function searchByTime() {
     });
 }
 
+/**
+ * Updates the donut chart with expenses data.
+ * @param {Array} expenses - Array of expense objects
+ */
 function updateChart(expenses) {
-  const donutChartElement = document.getElementById('donut-chart');
-
+  const donutChartElement = document.getElementById('donut-chart'); // Get donut chart element
 
   if (!Array.isArray(expenses) || expenses.length === 0) {
     donutChartElement.innerHTML = '<p>No expenses data available.</p>';
     updateRanking({});
-
     return;
   }
-
 
   const categories = ['home', 'food', 'travel', 'entertainment', 'miscellaneous', 'recreation'];
   const categoryColors = {
@@ -49,7 +53,6 @@ function updateChart(expenses) {
   };
 
   const categoryMap = {};
-
 
   expenses.forEach(expense => {
     if (categories.includes(expense.category)) {
@@ -65,7 +68,6 @@ function updateChart(expenses) {
   const labels = [];
   const colors = [];
 
-
   for (const category in categoryMap) {
     if (categoryMap[category] > 0) {
       series.push(categoryMap[category]);
@@ -77,7 +79,6 @@ function updateChart(expenses) {
   if (series.length === 0) {
     donutChartElement.innerHTML = '<p>No expenses data available.</p>';
     updateRanking([]);
-
     return;
   }
 
@@ -127,12 +128,13 @@ function updateChart(expenses) {
   updateRanking(categoryMap);
 }
 
+/**
+ * Updates the ranking of categories based on the expenses data.
+ * @param {Object} categoryMap - Object mapping categories to their total costs
+ */
 function updateRanking(categoryMap) {
-
-  // Ranking
   const sortedCategories = Object.entries(categoryMap).sort((a, b) => b[1] - a[1]);
   const topThree = sortedCategories.slice(0, 3);
-
 
   topThree.forEach((item, index) => {
     const rankElement = document.getElementById(`rank-${index + 1}`);
@@ -151,10 +153,13 @@ function updateRanking(categoryMap) {
   if (topThree.length > 0) {
     document.getElementById('most-spent-category').textContent = topThree[0][0];
   } else {
-    document.getElementById('most-spent-category').textContent = 'Not degined yet';
+    document.getElementById('most-spent-category').textContent = 'Not defined yet';
   }
 }
 
+/**
+ * Initializes the donut chart and fetches initial expenses data on DOMContentLoaded.
+ */
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('DOM fully loaded and parsed');
 

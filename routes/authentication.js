@@ -12,6 +12,15 @@ const path = require("path");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+/**
+ * Route for rendering the home page
+ * @name get/
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/", (req, res) => {
     const errorMessage = req.query.error;
     const loginEmail = req.session.loginEmail || '';
@@ -19,6 +28,15 @@ router.get("/", (req, res) => {
     res.render('index.ejs', { error: errorMessage, loginEmail, message, path: req.path });
 });
 
+/**
+ * Route for handling user login
+ * @name post/
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/', async (req, res) => {
     const { email, password } = req.body;
 
@@ -68,6 +86,15 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * Route for handling user logout
+ * @name post/logout
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -78,6 +105,15 @@ router.post('/logout', (req, res) => {
     });
 });
 
+/**
+ * Route for rendering the registration page
+ * @name get/register
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/register", (req, res) => {
     const incorrectFields = req.query.error ? req.query.error.split(',') : [];
     const signUpFields = req.session.signUpFields || {};
@@ -88,6 +124,15 @@ router.get("/register", (req, res) => {
     res.render('register.ejs', { error: incorrectFields, signUpFields, path: req.path });
 });
 
+/**
+ * Route for handling user registration
+ * @name post/submitRegistration
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
     var { email, phone, username, password } = req.body;
     phone = phone.replace(/[^\d]/g, '');
@@ -166,6 +211,15 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
     }
 });
 
+/**
+ * Route for verifying a user's email
+ * @name get/verify/:token
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/verify/:token', async (req, res) => {
     const token = req.params.token;
 
@@ -194,11 +248,29 @@ router.get('/verify/:token', async (req, res) => {
     }
 });
 
+/**
+ * Route for rendering the password reset request page
+ * @name get/reset
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/reset", (req, res) => {
     const message = req.query.message;
     res.render('reset.ejs', { message, path: req.path });
 });
 
+/**
+ * Route for handling password reset requests
+ * @name post/reset
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/reset', async (req, res) => {
     const { email } = req.body;
 
@@ -241,6 +313,15 @@ router.post('/reset', async (req, res) => {
     }
 });
 
+/**
+ * Route for rendering the password reset form
+ * @name get/reset/:token
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/reset/:token', async (req, res) => {
     try {
         const token = req.params.token;
@@ -262,6 +343,15 @@ router.get('/reset/:token', async (req, res) => {
     }
 });
 
+/**
+ * Route for handling password reset submissions
+ * @name post/reset/:token
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/reset/:token', async (req, res) => {
     const { password, confirmPassword } = req.body;
 
