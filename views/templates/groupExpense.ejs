@@ -9,7 +9,11 @@
         <img class="mx-3" src="/images/addGroupIcons/<%= groupTransactionsCategory %>Black.svg" alt="" height="40" width="40">
         <div>
             <div class="flex flex-row justify-between">
+                <% if (transaction.name.length > 20) { %>
+                <p class="font-semibold"><%= transaction.name.substring(0, 20) + "..." %></p>
+                <% } else { %>
                 <p class="font-semibold"><%= transaction.name %></p>
+                <% } %>
             </div>
             <% let groupMembersList = group.members %>
             <% for (j=0; j < groupMembersList.length; j++) { %>

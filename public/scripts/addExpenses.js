@@ -7,22 +7,22 @@
  * @claaudiaale
  */
 
-function goBackFromAddExpenses() {
-    document.querySelector('.addExpenseCancelButton').addEventListener('click', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams) {
-            history.back()
-        } else {
-            window.location.href = '/home';
-        }
-    })
-}
-
 // function goBackFromAddExpenses() {
-//     cancelAddExpense.addEventListener('click', () => {
-//         history.back();
+//     document.querySelector('.addExpenseCancelButton').addEventListener('click', () => {
+//         const urlParams = new URLSearchParams(window.location.search);
+//         if (urlParams) {
+//             history.back()
+//         } else {
+//             window.location.href = '/home';
+//         }
 //     })
 // }
+
+function goBackFromAddExpenses() {
+    cancelAddExpense.addEventListener('click', () => {
+        history.back();
+    });
+}
 
 
 /**
@@ -317,7 +317,7 @@ function calculateExpenseManual() {
     let manualInputs = document.querySelectorAll('.manual');
 
     manualInputs.forEach(input => {
-        if (!input.value) {
+        if (input.value == "") {
             userTotal += 0;
         } else {
             userTotal += parseFloat(input.value);
@@ -419,7 +419,7 @@ function displayEmptyFieldModal(event) {
         let errorMessage = 'Please ensure that the total percentage of the expense is 100.';
         displayErrorModal(errorMessage);
     } else if (splitMethod == 'Manual' && !calculateExpenseManual()) {
-        event.preventDefault();
+        // event.preventDefault();
         let errorMessage = 'Please ensure that your manual inputs are equal to the total expense amount.';
         displayErrorModal(errorMessage);
     } else if (splitMethod == 'Equal' && selectedExpenseAmount.value == 0) {
@@ -575,6 +575,7 @@ showManualExpense.addEventListener('click', function (event) { manualExpenseTabH
 document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('change', calculateExpenseEqually);
 });
+
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
 selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("") });
 selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("Percentage") });
@@ -586,4 +587,6 @@ splitExpenseManually.addEventListener('change', calculateExpenseManual);
 confirmAddExpense.addEventListener('click', function (event) { displayEmptyFieldModal(event) });
 closeExpenseError.addEventListener('click', function () { errorModal.close() })
 categoryHandler();
+
+
 goBackFromAddExpenses();
