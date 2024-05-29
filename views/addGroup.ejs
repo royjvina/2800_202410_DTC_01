@@ -4,7 +4,13 @@
             <div><a id="cancelAddGroup" href="/home">
                     Cancel
                 </a></div>
-
+            <div class="text-lg">
+                <% if (!group) { %>
+                    Add Group
+                    <% } else { %>
+                        Edit <%= group.group_name %>
+                            <% } %>
+            </div>
             <div class="">
                 <button type="submit" form="addGroupForm" id="confirmAddGroup">Done</button>
             </div>
@@ -31,7 +37,7 @@
                                                     class="hidden">
                 </div>
                 <div class="flex flex-col w-full">
-                    <label for="groupName">Group name</label>
+                    <label for="groupName">Group name*</label>
                     <% if (!group) { %>
                         <input type="text" id="groupName" name="groupName"
                             class="w-full border-b pl-0 p-1 focus:outline-none focus:border-black">
@@ -48,7 +54,7 @@
                 </div>
             </div>
             <div class="flex flex-col w-full p-3 gap-2 mb-[70px]">
-                <div class="" class=""><span class="text-2xl">Add members</span></div>
+                <div class="" class=""><span class="text-2xl">Add members*</span></div>
                 <span class="text-red-700 hidden" id="emptyFriendWarning">Please select at least one friend</span>
                 <ul class="w-full flex flex-col gap-2" id="groupFriendChoices">
                     <% for(let i=0; i< friends.length; i ++) {%>

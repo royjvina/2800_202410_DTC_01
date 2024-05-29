@@ -1,12 +1,7 @@
 /* Error handling for add friend form */
 document.getElementById("confirmAddFriend").addEventListener("click", function (event) {
-    if (friendName.value.trim() === "") {
+    if (friendPhone.value === "" && friendEmail.value.trim() === "") {
         event.preventDefault();
-        emptyNameWarning.classList.remove("hidden");
-    }
-    else if (friendPhone.value === "" && friendEmail.value.trim() === "") {
-        event.preventDefault();
-        emptyNameWarning.classList.add("hidden");
         emptyEmailPhoneWarning.classList.remove("hidden");
 
     }
