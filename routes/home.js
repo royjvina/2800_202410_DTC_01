@@ -59,7 +59,7 @@ router.get("/home", async (req, res) => {
         res.render('main', { username: req.session.username, profilePic: req.session.profilePic, path: req.path, friends: friendsWithDebts, groups: groupsWithDebts, debtInfo: debtInfo });
     } catch (error) {
         console.log(error);
-        res.render('/main');
+        res.render('main');
     }
 });
 
