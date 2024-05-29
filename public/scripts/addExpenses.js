@@ -230,18 +230,18 @@ function calculateExpenseManual() {    let expenseTotal = parseFloat(document.ge
  */
 function categoryHandler() {
     const categories = document.querySelectorAll("#groupCategoryChoices li");
-    groupDroupDown.addEventListener("click", function () {
-        if (groupCategoryChoices.classList.contains("hidden")) {
-            groupCategoryChoices.classList.remove("hidden");
-            groupCategoryChoices.classList.add("flex");
-            categoryArrow.src = "/images/otherIcons/upArrow.svg";
-        }
-        else {
-            groupCategoryChoices.classList.add("hidden");
-            groupCategoryChoices.classList.remove("flex");
-            categoryArrow.src = "/images/otherIcons/downArrow.svg";
-        }
-    });
+    // groupDroupDown.addEventListener("click", function () {
+    //     if (groupCategoryChoices.classList.contains("hidden")) {
+    //         groupCategoryChoices.classList.remove("hidden");
+    //         groupCategoryChoices.classList.add("flex");
+    //         categoryArrow.src = "/images/otherIcons/upArrow.svg";
+    //     }
+    //     else {
+    //         groupCategoryChoices.classList.add("hidden");
+    //         groupCategoryChoices.classList.remove("flex");
+    //         categoryArrow.src = "/images/otherIcons/downArrow.svg";
+    //     }
+    // });
     categories.forEach(category => {
         category.addEventListener("click", function () {
             categories.forEach(category => {
