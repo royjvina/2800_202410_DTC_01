@@ -38,7 +38,8 @@ router.get("/", (req, res) => {
  * @param {callback} middleware - Express middleware.
  */
 router.post('/', async (req, res) => {
-    const { email, password } = req.body;
+    var { email, password } = req.body;
+    email = email.toLowerCase();
 
     try {
         const user = await User.findOne({ email });
@@ -47,7 +48,7 @@ router.post('/', async (req, res) => {
             req.session.loginEmail = email;
             return res.redirect('/?error=invalidLogin');
         }
-
+        
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
@@ -161,24 +162,30 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
             return res.redirect(`/register?error=${incorrectFields.join(',')}`);
         }
 
-        const profileImage = req.file ? {
+        let profileImage;
+        if (req.file) {
+            profileImage = {
             data: req.file.buffer,
             contentType: req.file.mimetype
-        } : null;
+            }
+        } else {
+            profileImage = null;
+        }
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         const emailVerificationToken = crypto.randomBytes(32).toString('hex');
         const emailVerificationExpires = Date.now() + 3600000; // 1 hour from now
+        var emailLower = email.toLowerCase();
 
         const newUser = new User({
-            email,
-            phone,
-            username,
+            email: emailLower,
+            phone: phone,
+            username: username,
             password: hashedPassword,
-            profileImage,
-            emailVerificationToken,
-            emailVerificationExpires
+            profileImage: profileImage,
+            emailVerificationToken: emailVerificationToken,
+            emailVerificationExpires: emailVerificationExpires
         });
 
         await newUser.save();
