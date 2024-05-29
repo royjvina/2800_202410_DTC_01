@@ -40,28 +40,6 @@ function equalExpenseTabHandler(event) {
 }
 
 /**
- * This function is used to erase the percentage and manual fields on change events in the equal tab 
- * @claaudiaale
- */
-function erasePercentageManualFields() {
-    let percentageInputs = document.querySelectorAll('input.percentage')
-    percentageInputs.forEach(input => {
-        input.value = "";
-    })
-
-    let percentageTotals = document.querySelectorAll('span.amountPercentage')
-    percentageTotals.forEach(total => {
-        total.innerHTML = '$0.00';
-    })
-
-    let manualInputs = document.querySelectorAll('input.manual')
-    manualInputs.forEach(input => {
-        input.value = "";
-        input.placeholder = "0.00";
-    })
-}
-
-/**
  * This function is used to handle the click event on the split expenses by percentage tab    
  * @claaudiaale
  */
@@ -80,32 +58,6 @@ function percentageExpenseTabHandler(event) {
     attachPercentageSplitEventListeners(); // Attach event listeners for percentage split
 }
 
-/**
- * This function is used to erase the equal and manual fields on change events in the percentage tab 
- * @claaudiaale
- */
-function eraseEqualManualFields() {
-    let equalTotals = document.querySelectorAll('input.equalValue')
-    equalTotals.forEach(total => {
-        total.value = "";
-    })
-
-    let equalDisplays = document.querySelectorAll('p.equalDisplay')
-    equalDisplays.forEach(display => {
-        display.innerHTML = '$0.00';
-    })
-
-    let equalChecks = document.querySelectorAll('.userEqualSplit')
-    equalChecks.forEach(check => {
-        check.checked = false;
-    })
-
-    let manualInputs = document.querySelectorAll('input.manual')
-    manualInputs.forEach(input => {
-        input.value = "";
-        input.placeholder = "0.00";
-    })
-}
 
 /**
  * This function is used to handle the click event on the split expenses manually tab    
@@ -127,34 +79,52 @@ function manualExpenseTabHandler(event) {
 }
 
 /**
- * This function is used to erase the equal and percentage fields on change events in the manual tab 
+ * This function is used to erase the percentage and manual fields on change events in the equal tab 
  * @claaudiaale
  */
-function eraseEqualPercentageFields() {
-    let equalTotals = document.querySelectorAll('input.equalValue')
-    equalTotals.forEach(total => {
-        total.value = "";
-    })
-
-    let equalDisplays = document.querySelectorAll('p.equalDisplay')
-    equalDisplays.forEach(display => {
-        display.innerHTML = '$0.00';
-    })
-
-    let equalChecks = document.querySelectorAll('.userEqualSplit')
-    equalChecks.forEach(check => {
-        check.checked = false;
-    })
-
-    let percentageInputs = document.querySelectorAll('input.percentage')
+function erasePercentageFields() {
+    let percentageInputs = document.querySelectorAll('input.percentage');
     percentageInputs.forEach(input => {
         input.value = "";
-    })
+    });
 
-    let percentageTotals = document.querySelectorAll('span.amountPercentage')
+    let percentageTotals = document.querySelectorAll('span.amountPercentage');
     percentageTotals.forEach(total => {
         total.innerHTML = '$0.00';
-    })
+    });
+}
+
+/**
+ * This function is used to erase the equal fields on change events in the equal tab 
+ * @claaudiaale
+ */
+function eraseEqualFields() {
+    let equalTotals = document.querySelectorAll('input.equalValue');
+    equalTotals.forEach(total => {
+        total.value = "";
+    });
+
+    let equalDisplays = document.querySelectorAll('p.equalDisplay');
+    equalDisplays.forEach(display => {
+        display.innerHTML = '$0.00';
+    });
+
+    let equalChecks = document.querySelectorAll('.userEqualSplit');
+    equalChecks.forEach(check => {
+        check.checked = false;
+    });
+}
+
+/**
+ * This function is used to erase the manual fields on change events in the manual tab 
+ * @claaudiaale
+ */
+function eraseManualFields() {
+    let manualInputs = document.querySelectorAll('input.manual');
+    manualInputs.forEach(input => {
+        input.value = "";
+        input.placeholder = "0.00";
+    });
 }
 
 /**
@@ -180,29 +150,43 @@ function addExpenseToPaidByUser() {
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let paidByUser = GlobalGroupId + document.getElementById('selectedPaidBy').value;
 
-    document.querySelectorAll('.user' + splitMethod + 'Split').forEach(user => {
-        user.checked = false;
-        if (splitMethod == 'Equal') {
-            document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
-        } else if (splitMethod == 'Percentage') {
-            document.getElementById(user.id + 'Percentage').value = "";
-        } else {
-            document.getElementById(user.id + 'Amount' + splitMethod).value = '$0.00';
-        }
-    })
-
     if (expenseTotal > 0) {
-        document.getElementById(paidByUser).checked = true;
         if (splitMethod == "Equal") {
+            console.log(paidByUser + 'Amount' + splitMethod)
+            resetSplitAmounts();
+            document.getElementById(paidByUser).checked = true;
             document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
         } else if (splitMethod == 'Percentage') {
+            resetSplitAmounts();
             document.getElementById(paidByUser + 'Percentage').value = 100;
+            document.getElementById(paidByUser + 'Percentage').placeholder = 100;
             document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
         } else if (splitMethod == 'Manual') {
+            resetSplitAmounts();
             document.getElementById(paidByUser + 'AmountManual').value = expenseTotal.toFixed(2);
         }
     }
 }
+
+/**
+ * This function is used to handle reset of the split amounts when the user changes the user who paid for the expense 
+ * @claaudiaale
+ */
+
+function resetSplitAmounts() {
+    let splitMethod = checkSplitMethod();
+
+    document.querySelectorAll('.user' + splitMethod + 'Split').forEach(user => {
+        user.checked = false;
+        document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
+        document.getElementById(user.id + 'Percentage').value = "";
+        document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
+        document.getElementById(user.id + 'Amount' + splitMethod).value = '$0.00';
+    })
+
+}
+
+
 
 /**
  * This function is used to handle computation of splitting an expense's total equally as users are selected   
@@ -292,7 +276,7 @@ function calculateExpensePercentage() {
  * This function is used to handle computation of splitting an expense's total manually as a user inputs given split amounts  
  * @claaudiaale
  */
-function calculateExpenseManual() {    
+function calculateExpenseManual() {
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let userTotal = 0;
     let manualInputs = document.querySelectorAll('.manual');
@@ -423,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function populateUsersDropdown() {
     // Clear existing options
     const allUsers = document.querySelectorAll('.username');
-    const group = document.getElementById('selectedGroup').value;  
+    const group = document.getElementById('selectedGroup').value;
 
     allUsers.forEach(user => {
         if (user.classList.contains(group)) {
@@ -439,7 +423,7 @@ function toggleSplitVisibility() {
     const selectedGroup = document.getElementById('selectedGroup').value;
     const allSplits = document.querySelectorAll('.split-container');
 
-    displayMembersToSplitFor();
+    // displayMembersToSplitFor();
     resetCheckboxes(); // Reset checkboxes when switching groups            
 
     allSplits.forEach(split => {
@@ -454,23 +438,23 @@ function toggleSplitVisibility() {
     });
 }
 
-/**
- * This function is used to ensure that a payee must be selected in order to view members to split for
- * @claaudiaale
- */
-function displayMembersToSplitFor() {
-    let payeeMenu = document.getElementById('selectedPaidBy');
-    let splitDisplay = document.getElementById('allSplitMethods');
+// /**
+//  * This function is used to ensure that a payee must be selected in order to view members to split for
+//  * @claaudiaale
+//  */
+// function displayMembersToSplitFor() {
+//     let payeeMenu = document.getElementById('selectedPaidBy');
+//     let splitDisplay = document.getElementById('allSplitMethods');
 
-    payeeMenu.addEventListener('change', function () {
-        let payee = payeeMenu.value;
-        if (payee !== "") {
-            splitDisplay.classList.remove('hidden');
-        } else {
-            splitDisplay.classList.add('hidden');
-        }
-    })
-}
+//     payeeMenu.addEventListener('change', function () {
+//         let payee = payeeMenu.value;
+//         if (payee !== "") {
+//             splitDisplay.classList.remove('hidden');
+//         } else {
+//             splitDisplay.classList.add('hidden');
+//         }
+//     })
+// }
 
 
 // Function to reset checkboxes
@@ -484,9 +468,13 @@ function resetCheckboxes() {
 // Add onchange event listener to selectedGroup dropdown
 document.getElementById('selectedGroup').addEventListener('change', toggleSplitVisibility);
 document.getElementById('selectedGroup').addEventListener('change', populateUsersDropdown);
-document.getElementById('selectedGroup').addEventListener('change', () => {
+if (!groupMenuDiv.classList.contains('hidden')) {
+    document.getElementById('selectedGroup').addEventListener('change', () => {
+        GlobalGroupId = document.getElementById('selectedGroup').value;
+    });
+} else if (groupMenuDiv.classList.contains('hidden')) {
     GlobalGroupId = document.getElementById('selectedGroup').value;
-});
+}
 
 // Call once initially to set the initial state based on the default selected group
 toggleSplitVisibility();
@@ -497,7 +485,8 @@ toggleSplitVisibility();
 function attachEqualSplitEventListeners() {
     let equalChecks = document.querySelectorAll('.userEqualSplit');
     equalChecks.forEach(check => {
-        check.addEventListener('click', erasePercentageManualFields);
+        check.addEventListener('click', erasePercentageFields);
+        check.addEventListener('click', eraseManualFields);
         check.addEventListener('change', calculateExpenseEqually);
     });
 }
@@ -508,7 +497,8 @@ function attachEqualSplitEventListeners() {
 function attachPercentageSplitEventListeners() {
     let percentageInputs = document.querySelectorAll('.percentage');
     percentageInputs.forEach(input => {
-        input.addEventListener('change', eraseEqualManualFields);
+        input.addEventListener('change', eraseEqualFields);
+        input.addEventListener('change', eraseManualFields);
         input.addEventListener('input', calculateExpensePercentage);
     });
 }
@@ -519,7 +509,8 @@ function attachPercentageSplitEventListeners() {
 function attachManualSplitEventListeners() {
     let manualInputs = document.querySelectorAll('.manual');
     manualInputs.forEach(input => {
-        input.addEventListener('change', eraseEqualPercentageFields);
+        input.addEventListener('change', eraseEqualFields);
+        input.addEventListener('change', erasePercentageFields);
         input.addEventListener('input', calculateExpenseManual);
     });
 }
@@ -534,9 +525,9 @@ showPercentageExpense.addEventListener('click', function (event) { percentageExp
 showManualExpense.addEventListener('click', function (event) { manualExpenseTabHandler(event) });
 
 
-showEqualExpense.addEventListener('click', function (event) {equalExpenseTabHandler(event)});
-showPercentageExpense.addEventListener('click', function (event) {percentageExpenseTabHandler(event)});
-showManualExpense.addEventListener('click', function (event) {manualExpenseTabHandler(event)});
+showEqualExpense.addEventListener('click', function (event) { equalExpenseTabHandler(event) });
+showPercentageExpense.addEventListener('click', function (event) { percentageExpenseTabHandler(event) });
+showManualExpense.addEventListener('click', function (event) { manualExpenseTabHandler(event) });
 document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('change', calculateExpenseEqually);
 });
