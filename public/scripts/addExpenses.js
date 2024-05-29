@@ -292,10 +292,8 @@ function calculateExpensePercentage() {
  * This function is used to handle computation of splitting an expense's total manually as a user inputs given split amounts  
  * @claaudiaale
  */
-function calculateExpenseManual() {
+function calculateExpenseManual() {    
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
-
-function calculateExpenseManual() {    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let userTotal = 0;
     let manualInputs = document.querySelectorAll('.manual');
 
