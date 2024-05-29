@@ -58,11 +58,11 @@
                 <span class="text-red-700 hidden" id="emptyFriendWarning">Please select at least one friend</span>
                 <ul class="w-full flex flex-col gap-2" id="groupFriendChoices">
                     <% for(let i=0; i< friends.length; i ++) {%>
-                        <%- include('templates/friendsAddGroup', {friend: friends[i]}) %>
+                        <%- include('templates/friendsAddGroup', {friend: friends[i], groupBalance: groupBalance}) %>
                             <% } %>
 
                 </ul>
-                <input type="textBox" name="friends" id="friendInput" class="hidden" value="">
+                <input type="textBox" name="friends" id="friendInput" class="" value="">
             </div>
         </div>
     </form>
