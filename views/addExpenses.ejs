@@ -53,7 +53,7 @@
                             value="<%= transaction.name %>" class="focus:outline-none focus:border-b-2 px-4 m-1">
                             <input type="text" value="<%= transaction._id %>" name="expenseId" class="hidden">
                         <% } else { %>
-                        <input type="text" id="selectedExpenseName" name="selectedExpenseName"
+                            <input type="text" id="selectedExpenseName" name="selectedExpenseName"
                             placeholder="Expense Name" class="focus:outline-none focus:border-b-2 px-4 m-1">
                         <% } %> 
                         <div class="flex flex-row px-2">
@@ -151,62 +151,59 @@
             </div>
 
             <% if (transaction) { %>
-                <div id="allSplitMethods" class="mt-[30px]"></div>
-            <% } else { %>
-                <div id="allSplitMethods" class="hidden mt-[470px] mb-[90px]">
+                <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px] hidden"></div>
+            <% } else { %> 
+                <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px]">
             <% } %>
-                <!-- Equal Split -->
-                <% if (transaction) { %>
-                    <div id="splitExpenseEqually" class="overflow-auto bg-primary mt-[370px] mb-[100px] hidden"></div>
-                <% } else { %>
-                    <div id="splitExpenseEqually" class="overflow-auto bg-primary">
-                <% } %>
-                    <% for(let i = 0; i < groups.length; i++) { %>
-                        <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
-                            <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                                    <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id}) %>
+                <% for(let i = 0; i < groups.length; i++) { %>
+                    <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
+                        <% for(let j = 0; j < groups[i].members.length; j++) { %>
+                            <% if (transaction) { %>
+                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j] }) %>
+                            <% } else { %>
+                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: null }) %>
                             <% } %>
-                        </div>
-                    <% } %>
-                </div>
-                
-                <!-- Percentage Split -->
-                <% if (transaction) { %>
-                    <div id="splitExpensePercentage" class="overflow-auto bg-primary mt-[35px] mb-[90px] hidden">
-                <% } else { %>
-                    <div id="splitExpensePercentage" class="overflow-auto bg-primary hidden">
+                        <% } %>
+                    </div>
                 <% } %>
-                    <% for(let i = 0; i < groups.length; i++) { %>
-                        <div id="<%= groups[i]._id %>-percentage" class="split-container hidden">
-                            <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                                <%- include('templates/friendsPercentExpense', { group: groups[i], friend: groups[i].members[j].user_id }) %>
-                            <% } %>
-                        </div>
-                    <% } %>
-                </div>
-                
-                <!-- Manual Split -->
-                <% if (transaction) { %>
-                    <div id="splitExpenseManually" class="overflow-auto bg-primary mt-[35px] mb-[90px]">
-                <% } else { %>
-                    <div id="splitExpenseManually" class="overflow-auto bg-primary hidden">
+            </div>
+            
+            <!-- Percentage Split -->
+            <% if (transaction) { %>
+                <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
+            <% } else { %>
+                <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
+            <% } %>
+                <% for(let i = 0; i < groups.length; i++) { %>
+                    <div id="<%= groups[i]._id %>-percentage" class="split-container hidden">
+                        <% for(let j = 0; j < groups[i].members.length; j++) { %>
+                            <%- include('templates/friendsPercentExpense', { group: groups[i], friend: groups[i].members[j].user_id }) %>
+                        <% } %>
+                    </div>
                 <% } %>
-                    <% for(let i = 0; i < groups.length; i++) { %>
-                        <div id="<%= groups[i]._id %>-manually" class="split-container hidden">
-                            <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                                <% if (transaction) { %>
-                                    <% if (transaction.name != 'Reimbursement') { %>
-                                        <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j], transactionGroup: transaction.group_id}) %>
-                                    <% } else if (transaction.name == 'Reimbursement') { %>
-                                        <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[0], transactionGroup: transaction.group_id }) %>
-                                    <% } %>
-                                <% } else { %>
-                                    <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: null }) %>
+            </div>
+            
+            <!-- Manual Split -->
+            <% if (transaction) { %>
+                <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px]">
+            <% } else { %>
+                <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px] hidden">
+            <% } %>
+                <% for(let i = 0; i < groups.length; i++) { %>
+                    <div id="<%= groups[i]._id %>-manually" class="split-container hidden">
+                        <% for(let j = 0; j < groups[i].members.length; j++) { %>
+                            <% if (transaction) { %>
+                                <% if (transaction.name != 'Reimbursement') { %>
+                                    <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j] }) %>
+                                <% } else if (transaction.name == 'Reimbursement') { %>
+                                    <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[0] }) %>
                                 <% } %>
+                            <% } else { %>
+                                <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: null }) %>
                             <% } %>
-                        </div>
-                    <% } %>
-                </div>
+                        <% } %>
+                    </div>
+                <% } %>
             </div>
         </form>
 
