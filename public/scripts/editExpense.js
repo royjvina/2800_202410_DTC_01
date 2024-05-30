@@ -1,4 +1,20 @@
 /**
+ * This function is used to handle the click event on cancel button in the add expense form   
+ * @claaudiaale
+ */
+
+function goBackFromAddExpenses() {
+    document.querySelector('.addExpenseCancelButton').addEventListener('click', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams) {
+            history.back()
+        } else {
+            window.location.href = '/home';
+        }
+    })
+}
+
+/**
  * This function is used to handle the click event on the split expenses equal tab    
  * @claaudiaale
  */
@@ -13,6 +29,7 @@ function equalExpenseTabHandler() {
     splitExpenseManually.classList.add('hidden');
     splitExpenseEqually.classList.remove('hidden');
     splitExpenseEqually.classList.add('flex-col');
+    selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser(equal = true) });
 
 }
 
@@ -277,6 +294,46 @@ function fullFormValidation() {
 }
 
 /**
+ * Function to handle the category selection in the add group form
+ * @balpreet787
+ */
+function categoryHandler() {
+    const categories = document.querySelectorAll("#groupCategoryChoices li");
+    categories.forEach(category => {
+        category.addEventListener("click", function () {
+            categories.forEach(category => {
+                category.classList.remove("bg-primary");
+                category.classList.add("bg-secondary");
+                category.classList.remove("text-secondary");
+                let img = category.querySelector('img');
+                let categoryId = category.id;
+                img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
+            });
+            category.classList.toggle("bg-secondary");
+            category.classList.toggle("bg-primary");
+            category.classList.toggle("text-secondary");
+            let img = category.querySelector('img');
+            let categoryId = category.id;
+
+            if (category.classList.contains("bg-primary")) {
+                categoryInput.value = categoryId
+                img.src = `/images/addGroupIcons/${categoryId}White.svg`;
+                if (category.textContent == "Misc.")
+                    categoryHeader.textContent = "Miscellaneous"
+                else
+                    categoryHeader.textContent = category.textContent;
+                categoryHeader.classList.add("text-primary");
+            }
+            else {
+                categoryInput.value = "miscellaneous";
+                categoryHeader.textContent = "miscellaneous";
+
+            }
+        });
+    });
+}
+
+/**
  * This function is used to handle the click event on the add expense button
  * @balpreet787
  */
@@ -301,16 +358,34 @@ function addExpenseHandler() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const showEqualExpense = document.getElementById('showEqualExpense');
-    const showPercentageExpense = document.getElementById('showPercentageExpense');
-    const showManualExpense = document.getElementById('showManualExpense');
-    percentageHandler();
-    equalHandler();
-    manualHandler();
-    addExpenseHandler();
-    showEqualExpense.addEventListener('click', equalExpenseTabHandler);
-    showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
-    showManualExpense.addEventListener('click', manualExpenseTabHandler);
-    closeExpenseError.addEventListener('click', function () { errorModal.close() })
-});
+/**
+ * This function is used to automatically add the expense total to the user who paid for an expense
+ * @claaudiaale
+ */
+function addExpenseToPaidByUser() {
+    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
+    let groupId = document.querySelector(".groupMenuSpan").id
+    let paidByUser = groupId + document.getElementById('selectedPaidBy').value;
+
+    if (expenseTotal > 0) {
+        refreshfields(equal = true, percentage = false, manual = false);
+        document.getElementById(paidByUser + "Equal").checked = true;
+        document.getElementById(paidByUser + "AmountEqualInput").value = expenseTotal.toFixed(2);
+    }
+}
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const showEqualExpense = document.getElementById('showEqualExpense');
+        const showPercentageExpense = document.getElementById('showPercentageExpense');
+        const showManualExpense = document.getElementById('showManualExpense');
+        percentageHandler();
+        equalHandler();
+        manualHandler();
+        addExpenseHandler();
+        showEqualExpense.addEventListener('click', equalExpenseTabHandler);
+        showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
+        showManualExpense.addEventListener('click', manualExpenseTabHandler);
+        closeExpenseError.addEventListener('click', function () { errorModal.close() })
+        goBackFromAddExpenses();
+        categoryHandler();
+    });
