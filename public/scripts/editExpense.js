@@ -29,7 +29,7 @@ function equalExpenseTabHandler() {
     splitExpenseManually.classList.add('hidden');
     splitExpenseEqually.classList.remove('hidden');
     splitExpenseEqually.classList.add('flex-col');
-    selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser( equal = true) });
+    selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser(equal = true) });
 
 }
 
@@ -362,42 +362,30 @@ function addExpenseHandler() {
  * This function is used to automatically add the expense total to the user who paid for an expense
  * @claaudiaale
  */
-function addExpenseToPaidByUser(equal = false, percentage = false, manual = false) {
+function addExpenseToPaidByUser() {
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let groupId = document.querySelector(".groupMenuSpan").id
     let paidByUser = groupId + document.getElementById('selectedPaidBy').value;
-    console.log(paidByUser);
 
     if (expenseTotal > 0) {
-        if (equal) {
-            refreshfields(equal = true, percentage = false, manual = false);
-            document.getElementById(paidByUser + "Equal").checked = true;
-            document.getElementById(paidByUser + "AmountEqualInput").value = (expenseTotal.toFixed(2));
-        } else if (percentage) {
-            refreshfields(equal = false, percentage = true, manual = false);
-            document.getElementById(paidByUser + 'Percentage').value = "100";
-            document.getElementById(paidByUser + 'Percentage').placeholder = "100";
-            document.getElementById(paidByUser + 'PercentageAmount').innerHTML = ('$' + expenseTotal.toFixed(2));
-        } else if (manual) {
-            refreshfields(equal = false, percentage = false, manual = true);
-            document.getElementById(paidByUser + 'AmountManual').value = expenseTotal.toFixed(2);
-            document.getElementById(paidByUser + 'AmountManual').placeholder = expenseTotal.toFixed(2);
-        }
+        refreshfields(equal = true, percentage = false, manual = false);
+        document.getElementById(paidByUser + "Equal").checked = true;
+        document.getElementById(paidByUser + "AmountEqualInput").value = expenseTotal.toFixed(2);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const showEqualExpense = document.getElementById('showEqualExpense');
-    const showPercentageExpense = document.getElementById('showPercentageExpense');
-    const showManualExpense = document.getElementById('showManualExpense');
-    percentageHandler();
-    equalHandler();
-    manualHandler();
-    addExpenseHandler();
-    showEqualExpense.addEventListener('click', equalExpenseTabHandler);
-    showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
-    showManualExpense.addEventListener('click', manualExpenseTabHandler);
-    closeExpenseError.addEventListener('click', function () { errorModal.close() })
-    goBackFromAddExpenses();
-    categoryHandler();
-});
+    document.addEventListener('DOMContentLoaded', () => {
+        const showEqualExpense = document.getElementById('showEqualExpense');
+        const showPercentageExpense = document.getElementById('showPercentageExpense');
+        const showManualExpense = document.getElementById('showManualExpense');
+        percentageHandler();
+        equalHandler();
+        manualHandler();
+        addExpenseHandler();
+        showEqualExpense.addEventListener('click', equalExpenseTabHandler);
+        showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
+        showManualExpense.addEventListener('click', manualExpenseTabHandler);
+        closeExpenseError.addEventListener('click', function () { errorModal.close() })
+        goBackFromAddExpenses();
+        categoryHandler();
+    });
