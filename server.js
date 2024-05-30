@@ -85,6 +85,7 @@ const settingsRouter = require("./routes/settings");
 const suggestedReimbursementsRouter = require("./routes/suggestedReimbursements");
 const recentActivityRouter = require("./routes/recentActivity");
 const insightRouter = require("./routes/insight");
+const editExpenseRouter = require("./routes/editExpense");
 
 // Use routes with session validation where needed
 app.use("/", authRouter);
@@ -98,6 +99,7 @@ app.use("/", sessionValidation, settingsRouter);
 app.use("/", sessionValidation, suggestedReimbursementsRouter);
 app.use("/", sessionValidation, recentActivityRouter);
 app.use("/", sessionValidation, insightRouter);
+app.use("/", sessionValidation, editExpenseRouter);
 
 // Catch-all route for 404 errors
 app.get('*', (req, res) => {
