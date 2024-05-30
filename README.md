@@ -181,9 +181,6 @@ It has the following subfolders and files:
     ├── addGroup.ejs                    # Add group page
     ├── aiAdvisor.ejs                   # AI advisor page
     ├── aiLog.ejs                       # AI log page
-    ├── changeNum.ejs                   # Change phone number page
-    ├── changePass.ejs                  # Change password page
-    ├── deleteAccount.ejs               # Delete account page
     ├── error400.ejs                    # 400 error page
     ├── error500.ejs                    # 500 error page
     ├── groups.ejs                      # Groups page
