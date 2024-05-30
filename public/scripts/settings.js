@@ -65,14 +65,76 @@ function changePasswordHandler() {
     });
 }
 
+/**
+ * show the change password form.
+ * */
 function showChangePassword() {
-    changePassForm.classList.toggle('hidden');
-    changePassForm.classList.toggle('flex');
-    if(passArrow.src.includes('down')) {
+    if (changePassForm.classList.contains('hidden')) {
+        changePassForm.classList.remove('hidden');
+        changePassForm.classList.add('hideManually');
+        setTimeout(() => {
+            changePassForm.classList.remove('hideManually');
+        }, 10);
+        changePassForm.classList.add('flex');
+    }
+    else {
+        changePassForm.classList.add('hidden');
+        changePassForm.classList.remove('flex');
+    }
+    if (passArrow.src.includes('down')) {
         passArrow.src = 'images/otherIcons/upArrowSettings.svg';
     }
     else {
         passArrow.src = 'images/otherIcons/downArrowSettings.svg';
+    }
+}
+
+
+/**
+ * Event handler for the change phone button.
+ * Validates the new phone number and displays a warning message if the phone number is invalid, shows a confirm change phone button if the phone number is valid.
+ * */
+function changePhoneHandler() {
+    changePhone.addEventListener('click', function () {
+        let newPhoneValue = newPhone.value;
+        newPhoneValue = newPhoneValue.replace(/\D/g, '');
+        if (newPhoneValue.length < 10 || newPhoneValue == "") {
+            phoneWarning.textContent = 'Please enter a phone number';
+        }
+        else {
+            confirmChangePhone.classList.remove('hidden');
+            confirmChangePhone.classList.add('hideManually');
+            changePhone.classList.add('hidden');
+            setTimeout(() => {
+                confirmChangePhone.classList.remove('hideManually');
+            }, 10);
+            confirmChangePhone.classList.add('flex');
+        }
+    });
+}
+
+/**
+ * show the change phone form.
+ * */
+function showChangePhone() {
+    if (changePhoneForm.classList.contains('hidden')) {
+        changePhoneForm.classList.remove('hidden');
+        changePhoneForm.classList.add('hideManually');
+        setTimeout(() => {
+            changePhoneForm.classList.remove('hideManually');
+        }, 10);
+        changePhoneForm.classList.add('flex');
+    }
+    else {
+        changePhoneForm.classList.add('hidden');
+        changePhoneForm.classList.remove('flex');
+    }
+
+    if (phoneArrow.src.includes('down')) {
+        phoneArrow.src = 'images/otherIcons/upArrowSettings.svg';
+    }
+    else {
+        phoneArrow.src = 'images/otherIcons/downArrowSettings.svg';
     }
 }
 
@@ -93,7 +155,7 @@ function cancelChangePassword() {
 
 /**
  * Event listener for DOMContentLoaded to ensure the DOM is fully loaded before executing the script.
- */
+*/
 document.addEventListener('DOMContentLoaded', function () {
     const settingsProfilePic = document.getElementById('settingsProfilePic'); // Element for the settings profile picture
     const settingsProfilePicSrc = settingsProfilePic.getAttribute('data-src'); // Data source for the profile picture
@@ -103,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /**
      * Event handler for profile picture error event.
      * Sets the profile picture source to a placeholder if an error occurs (e.g., image not found).
-     */
+    */
     settingsProfilePic.onerror = function () {
         settingsProfilePic.src = '/images/homepageIconsAndPlaceholders/profilePicPlaceholderSettings.svg'; // Placeholder image source
     };
@@ -114,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /**
      * Event listener for the profile image input change event.
      * Reads the selected file and updates the profile picture preview.
-     */
+    */
     profileImage.addEventListener("change", function () {
         const file = this.files[0];
         if (file) {
@@ -128,4 +190,14 @@ document.addEventListener('DOMContentLoaded', function () {
     changePasswordHandler();
     cancelChangePassword();
     changePassSetting.addEventListener('click', showChangePassword);
+    Inputmask({ "mask": "(999) 999-9999" }).mask(document.getElementById("newPhone"));
+    changePhoneHandler();
+    changePhoneSetting.addEventListener('click', showChangePhone);
+    cancelChangePhone.addEventListener('click', function () {
+        confirmChangePhone.classList.add('hidden');
+        changePhone.classList.remove('hidden');
+        phoneWarning.textContent = '';
+        newPhone.value = "";
+        showChangePhone();
+    });
 });

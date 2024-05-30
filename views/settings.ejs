@@ -100,29 +100,52 @@
               <img id="passArrow" src="images/otherIcons/downArrowSettings.svg" class="w-6 h-3" alt="">
             </div>
             <div>
-              <form action="/settings/changePass" method="GET" class="hidden flex-col items-center w-full" id="changePassForm">
+              <form action="/settings/changePass" method="post" class="hidden fadeOut flex-col items-center w-full" id="changePassForm">
                 <div class="text-sm text-center" id="passwordFormat">Must contain at least 8 characters including 1 uppercase, 1 lowercase, 1 number, and 1 special character.</div>
-                <input type="password" id="newPassword" name="password" class="focus:outline-none p-3 m-2 rounded-lg w-5/6" placeholder="new password">
-                <input type="password" id="confirmPassword" name="confirmPassword" class="focus:outline-none p-3 m-2 rounded-lg w-5/6" placeholder="Change password">
+                <input type="password" id="newPassword" name="password" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="new password">
+                <input type="password" id="confirmPassword" name="confirmPassword" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="Change password">
                 <div class="text-red-600 text-center text-sm mb-2" id="passwordWarning"></div>
                 <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePass">Submit</button>
                 <div id="confirmChangePass" class="hidden flex-row justify-center gap-2 fadeOut">
-                  <button type="submit" id="submitChangePass" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Submit</button>
+                  <button type="submit" id="submitChangePass" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
                   <button type="button" id="cancelChangePass" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
                 </div>
               </form>
             </div>
           </ul>
           <ul>
-            <a href="/settings/changeNum"
-              class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <div id="changePhoneSetting"
+              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
               <div class="flex items-center space-x-2">
                 <img src="images/otherIcons/phoneNumber.svg" alt="">
                 <span class="text-gray-700">Change Phone Number</span>
               </div>
-              <img src="images/otherIcons/rightArrow.svg" alt="">
-            </a>
+              <img id="phoneArrow" src="images/otherIcons/downArrowSettings.svg" class="w-6 h-3" alt="">
+            </div>
           </ul>
+          <div>
+            <% if(phoneExists) { %>
+            <form action="/settings/changeNum" method="post" class="flex fadeOut flex-col items-center w-full" id="changePhoneForm">
+              <input type="tel" id="newPhone" name="phone" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2  w-5/6" placeholder="new phone number">
+              <div class="text-red-600 text-center text-sm mb-2" id="phoneWarning">This phone number already exists in the system, please try another number</div>
+              <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePhone">Submit</button>
+              <div id="confirmChangePhone" class="hidden flex-row justify-center gap-2 fadeOut">
+                <button type="submit" id="submitChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
+                <button type="button" id="cancelChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
+              </div>
+            </form>
+            <% } else { %>
+              <form action="/settings/changeNum" method="post" class="hidden fadeOut flex-col items-center w-full" id="changePhoneForm">
+                <input type="tel" id="newPhone" name="phone" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2  w-5/6" placeholder="new phone number">
+                <div class="text-red-600 text-center text-sm mb-2" id="phoneWarning"></div>
+                <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePhone">Submit</button>
+                <div id="confirmChangePhone" class="hidden flex-row justify-center gap-2 fadeOut">
+                  <button type="submit" id="submitChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
+                  <button type="button" id="cancelChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
+                </div>
+              </form>
+              <% } %>
+          </div>
           <ul>
             <a href="/settings/deleteAccount"
               class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">

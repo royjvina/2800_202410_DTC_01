@@ -20,13 +20,13 @@ const saltRounds = 12;
  */
 router.get('/settings', async (req, res) => {
     try {
-        // Ensure user is authenticated
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
-
+      
         const user = await User.findById(req.session.userId);
         const formattedPhoneNumber = user.phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+        let phoneExists = false;
+        if (req.query.phoneExists) {
+            phoneExists = true;
+        }
 
         res.render('settings', {
             username: user.username,
@@ -34,7 +34,8 @@ router.get('/settings', async (req, res) => {
             profilePic: req.session.profilePic,
             email: user.email,
             editMode: false,
-            path: req.path
+            path: req.path,
+            phoneExists: phoneExists
         });
     } catch (error) {
         console.error(error);
@@ -53,10 +54,6 @@ router.get('/settings', async (req, res) => {
  */
 router.get('/settings/edit', async (req, res) => {
     try {
-        // Ensure user is authenticated
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
 
         const formattedPhoneNumber = req.session.phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
         res.render('settings', {
@@ -84,11 +81,7 @@ router.get('/settings/edit', async (req, res) => {
  */
 router.post('/settings', upload.single('profileImage'), async (req, res) => {
     try {
-        // Ensure user is authenticated
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
-
+       
         const user = await User.findById(req.session.userId);
         user.username = req.body.username;
 
@@ -188,24 +181,22 @@ router.get('/settings/changeNum', async (req, res) => {
  */
 router.post('/settings/changeNum', async (req, res) => {
     try {
-        const { phoneNumber } = req.body;
-
-        if (!phoneNumber.match(/^\d{10}$/)) {
-            return res.render('changeNum', { error: 'Invalid phone number format', path: req.path });
+        let { phone } = req.body;
+        phone = phone.replace(/[^\d]/g, '');
+        const phoneInDB = await User.findOne({ phone: phone });
+        let phoneExists = phoneInDB ? true : false;
+        if (phoneExists) {
+            res.redirect('/settings?phoneExists=true');
         }
+        else {
+            const user = await User.findById(req.session.userId);
+            user.phone = phone;
+            await user.save();
 
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
+            req.session.phone = phone;
+
+            res.redirect('/settings');
         }
-
-        const user = await User.findById(req.session.userId);
-        user.phone = phoneNumber;
-
-        await user.save();
-
-        req.session.phoneNumber = phoneNumber;
-
-        res.redirect('/settings');
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -236,10 +227,6 @@ router.get('/settings/deleteAccount', async (req, res) => {
  */
 router.post('/settings/deleteAccount', async (req, res) => {
     try {
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
-
         // Update user information instead of deleting
         const randomPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), saltRounds);
         await User.findByIdAndUpdate(req.session.userId, {
