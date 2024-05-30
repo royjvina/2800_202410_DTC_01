@@ -293,6 +293,46 @@ function fullFormValidation() {
 }
 
 /**
+ * Function to handle the category selection in the add group form
+ * @balpreet787
+ */
+function categoryHandler() {
+    const categories = document.querySelectorAll("#groupCategoryChoices li");
+    categories.forEach(category => {
+        category.addEventListener("click", function () {
+            categories.forEach(category => {
+                category.classList.remove("bg-primary");
+                category.classList.add("bg-secondary");
+                category.classList.remove("text-secondary");
+                let img = category.querySelector('img');
+                let categoryId = category.id;
+                img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
+            });
+            category.classList.toggle("bg-secondary");
+            category.classList.toggle("bg-primary");
+            category.classList.toggle("text-secondary");
+            let img = category.querySelector('img');
+            let categoryId = category.id;
+
+            if (category.classList.contains("bg-primary")) {
+                categoryInput.value = categoryId
+                img.src = `/images/addGroupIcons/${categoryId}White.svg`;
+                if (category.textContent == "Misc.")
+                    categoryHeader.textContent = "Miscellaneous"
+                else
+                    categoryHeader.textContent = category.textContent;
+                categoryHeader.classList.add("text-primary");
+            }
+            else {
+                categoryInput.value = "miscellaneous";
+                categoryHeader.textContent = "miscellaneous";
+
+            }
+        });
+    });
+}
+
+/**
  * This function is used to handle the click event on the add expense button
  * @balpreet787
  */
@@ -330,4 +370,5 @@ document.addEventListener('DOMContentLoaded', () => {
     showManualExpense.addEventListener('click', manualExpenseTabHandler);
     closeExpenseError.addEventListener('click', function () { errorModal.close() })
     goBackFromAddExpenses();
+    categoryHandler() ;
 });
