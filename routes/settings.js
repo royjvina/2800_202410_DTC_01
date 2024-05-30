@@ -240,7 +240,15 @@ router.post('/settings/deleteAccount', async (req, res) => {
             return res.status(401).send('Unauthorized');
         }
 
-        await User.findByIdAndDelete(req.session.userId);
+        // Update user information instead of deleting
+        const randomPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), saltRounds);
+        await User.findByIdAndUpdate(req.session.userId, {
+            email: `deleted@user.com`,
+            username: `Deleted User (${user.username})`,
+            profileImage: null,
+            phone: "0000000000",
+            password: randomPassword
+        });
 
         req.session.destroy((err) => {
             if (err) {
