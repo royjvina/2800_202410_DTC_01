@@ -34,7 +34,6 @@ router.get('/settings', async (req, res) => {
             settledInEveryGroup = true;
             }
         }
-        console.log(groupDebt);
         const formattedPhoneNumber = user.phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
         let phoneExists = false;
         if (req.query.phoneExists) {
@@ -60,7 +59,7 @@ router.get('/settings', async (req, res) => {
             phoneExists: phoneExists,
             settledInEveryGroup: settledInEveryGroup,
             deleteAccountAuthenticated: deleteAccountAuthenticated,
-            deleteAccountError: deleteAccountError
+            deleteAccountError: deleteAccountError,
         });
     } catch (error) {
         console.error(error);
