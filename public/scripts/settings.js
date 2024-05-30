@@ -114,6 +114,30 @@ function changePhoneHandler() {
 }
 
 /**
+ * show the delete account form.
+ * */
+function showDeleteAccount() {
+    if (deleteAccountFormAuth.classList.contains('hidden')) {
+        deleteAccountFormAuth.classList.remove('hidden');
+        deleteAccountFormAuth.classList.add('hideManually');
+        setTimeout(() => {
+            deleteAccountFormAuth.classList.remove('hideManually');
+        }, 10);
+        deleteAccountFormAuth.classList.add('flex');
+    }
+    else {
+        deleteAccountFormAuth.classList.add('hidden');
+        deleteAccountFormAuth.classList.remove('flex');
+    }
+    if (deleteArrow.src.includes('down')) {
+        deleteArrow.src = 'images/otherIcons/upArrowSettings.svg';
+    }
+    else {
+        deleteArrow.src = 'images/otherIcons/downArrowSettings.svg';
+    }
+    deleteAccountForm.classList.add('hidden');
+}
+/**
  * show the change phone form.
  * */
 function showChangePhone() {
@@ -154,6 +178,21 @@ function cancelChangePassword() {
 }
 
 /**
+ * Event handler for the delete account button.
+ * Validates the password and displays a warning message if the password is invalid.
+ * */
+function deleteAccountPassword() {
+    const deleteAccount = document.getElementById('deleteAccount'); // Delete account button
+    deleteAccount.addEventListener('click', function (event) {
+    if (deletePassword.value == "") {
+        event.preventDefault();
+        deleteWarning.textContent = 'Please enter your password';
+    }
+});
+
+}
+
+/**
  * Event listener for DOMContentLoaded to ensure the DOM is fully loaded before executing the script.
 */
 document.addEventListener('DOMContentLoaded', function () {
@@ -189,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     changePasswordHandler();
     pennywise.textContent = 'Settings';
+    pennywise.classList.add('text-lg');
     topLogo.innerHTML = `<button class="text-4xl flex flex-row items-center text-white pl-1 mb-2" id="backSettings"> &#8249; </button>`;
     backSettings.addEventListener('click', function () {
         history.back();
@@ -205,4 +245,14 @@ document.addEventListener('DOMContentLoaded', function () {
         newPhone.value = "";
         showChangePhone();
     });
+    deleteAccountSetting.addEventListener('click', showDeleteAccount);
+    cancelDeleteAccount.addEventListener('click', function () {
+        deleteAccountFormAuth.classList.add('hidden');
+        deleteAccountFormAuth.classList.remove('flex');
+        deleteAccountForm.classList.add('hidden');
+        deleteAccountForm.classList.remove('flex');
+        deleteWarning.textContent = '';
+        deletePassword.value = "";
+    });
+    deleteAccountPassword();
 });
