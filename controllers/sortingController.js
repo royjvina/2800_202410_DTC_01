@@ -3,6 +3,7 @@
  * @param {Array} entities - The list of entities (friends or groups).
  * @param {Object} debts - The corresponding debts for the entities.
  * @return {Array} - The sorted list of entities with their debts.
+ * 
  */
 function mapAndSortEntitiesWithDebts(entities, debts) {
     const entitiesWithDebts = entities.map(entity => ({

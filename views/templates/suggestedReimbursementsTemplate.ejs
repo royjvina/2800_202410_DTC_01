@@ -11,7 +11,7 @@
             <div >
                     
                 <form action="/reimburse" method="post" class="flex flex-col justify-between jusitfy-start w-full">
-                    <div class="flex flex-row items-center mb-2"><label for="reimburseAmount">$</label><input type="number" step=".01" name="reimburseAmount" id="amount<%= userId %>" class="font-medium pb-2 text-xl text-left border-b p-2 focus:outline-none focus:border-black items-start" value="<%= Math.abs(friendDebt.amount) %>"></div>
+                    <div class="flex flex-row items-center mb-2"><label for="reimburseAmount">$</label><input type="number" step=".01" name="reimburseAmount" id="amount<%= userId %>" class="font-medium pb-2 text-xl text-left border-b p-2 focus:outline-none focus:border-black items-start" value="<%= Math.abs(friendDebt.amount).toFixed(2) %>"></div>
                     <div class="flex flex-row w-full justify-center"><button class="text-[#4b061a] w-full outline outline-1 outline-[#4b061a] hover:text-white hover:bg-[#4b061a] rounded-lg px-2 text-sm flex flex-row justify-center items-center fadeOut displayConfirmReimburse" id="displayConfirmReimburse<%= userId %>"><span>Reimburse</span><span class="text-2xl pl-1 pb-1">&#8250;</span></button></div>
                 <div class="flex-row justify-center gap-3 hidden items-center w-full fadeOut text-center" id="confirmOption<%= userId %>">
                     <input type="hidden" name="reimburseFriendId" value="<%= userId %>">
@@ -31,7 +31,7 @@
                 <p class="font-medium">You</p>
             </div>
             <div>
-                <div class="font-medium flex pb-2 text-xl w-1/2 text-left pr-12"> $<%= Math.abs(friendDebt.amount) %> </div>
+                <div class="font-medium flex pb-2 text-xl w-1/2 text-left pr-12"> $<%= Math.abs(friendDebt.amount).toFixed(2) %> </div>
             </div>
         </div>
     <% } %>

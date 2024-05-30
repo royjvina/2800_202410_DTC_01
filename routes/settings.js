@@ -4,6 +4,7 @@ const multer = require('multer');
 const upload = multer();
 const User = require('../models/User');
 const { passwordSchema } = require('../models/UserPassword');
+const { getGroupDebt } = require('../controllers/groupController');
 const bcrypt = require('bcrypt');
 
 // Define salt rounds for password hashing
@@ -22,10 +23,30 @@ router.get('/settings', async (req, res) => {
     try {
       
         const user = await User.findById(req.session.userId);
+        let groupDebt = await getGroupDebt(req); // Get group debts of the user
+        let settledInEveryGroup = false;
+        for (const group in groupDebt) {
+            if (groupDebt[group] !== 0) {
+                settledInEveryGroup = false;
+                break;
+            }
+            else{
+            settledInEveryGroup = true;
+            }
+        }
         const formattedPhoneNumber = user.phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
         let phoneExists = false;
         if (req.query.phoneExists) {
             phoneExists = true;
+        }
+        let deleteAccountAuthenticated = false;
+        if (req.session.deleteAccountAuthenticated) {
+            deleteAccountAuthenticated = true;
+            delete req.session.deleteAccountAuthenticated;
+        }
+        let deleteAccountError = false;
+        if (req.query.deleteAccountError) {
+            deleteAccountError = true;
         }
 
         res.render('settings', {
@@ -35,7 +56,10 @@ router.get('/settings', async (req, res) => {
             email: user.email,
             editMode: false,
             path: req.path,
-            phoneExists: phoneExists
+            phoneExists: phoneExists,
+            settledInEveryGroup: settledInEveryGroup,
+            deleteAccountAuthenticated: deleteAccountAuthenticated,
+            deleteAccountError: deleteAccountError,
         });
     } catch (error) {
         console.error(error);
@@ -101,18 +125,6 @@ router.post('/settings', upload.single('profileImage'), async (req, res) => {
     }
 });
 
-/**
- * Route for rendering the change password page
- * @name get/settings/changePass
- * @function
- * @memberof module:routers/settings
- * @inner
- * @param {string} path - Express path
- * @param {callback} middleware - Express middleware.
- */
-router.get('/settings/changePass', async (req, res) => {
-    res.render('changePass', { error: null, path: req.path });
-});
 
 /**
  * Route for changing user password
@@ -125,25 +137,11 @@ router.get('/settings/changePass', async (req, res) => {
  */
 router.post('/settings/changePass', async (req, res) => {
     try {
-        const { password, confirmPassword } = req.body;
+        const { password } = req.body;
 
-        // Validate password input
-        const { error } = passwordSchema.validate({ password });
-        if (error) {
-            return res.render('changePass', { error: error.details[0].message, path: req.path });
-        }
-
-        // Ensure user is authenticated
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
 
         const user = await User.findById(req.session.userId);
 
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            return res.render('changePass', { error: "Passwords do not match", path: req.path });
-        }
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -157,18 +155,6 @@ router.post('/settings/changePass', async (req, res) => {
     }
 });
 
-/**
- * Route for rendering the change phone number page
- * @name get/settings/changeNum
- * @function
- * @memberof module:routers/settings
- * @inner
- * @param {string} path - Express path
- * @param {callback} middleware - Express middleware.
- */
-router.get('/settings/changeNum', async (req, res) => {
-    res.render('changeNum', { error: null, path: req.path });
-});
 
 /**
  * Route for changing user phone number
@@ -203,17 +189,24 @@ router.post('/settings/changeNum', async (req, res) => {
     }
 });
 
-/**
- * Route for rendering the delete account page
- * @name get/settings/deleteAccount
- * @function
- * @memberof module:routers/settings
- * @inner
- * @param {string} path - Express path
- * @param {callback} middleware - Express middleware.
- */
-router.get('/settings/deleteAccount', async (req, res) => {
-    res.render('deleteAccount', { path: req.path });
+
+
+router.post('/settings/deleteAccountAuthenticate', async (req, res) => {
+    try {
+        const { deletePassword } = req.body;
+        const user = await User.findById(req.session.userId);
+        let passwordMatch = await bcrypt.compare(deletePassword, user.password);
+        if (!passwordMatch) {
+            return res.redirect('/settings?deleteAccountError=true');
+        }
+        else {
+            req.session.deleteAccountAuthenticated = true;
+            res.redirect('/settings');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }   
 });
 
 /**

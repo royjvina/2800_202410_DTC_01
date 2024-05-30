@@ -18,13 +18,15 @@ List technologies (with version numbers), APIs, icons, fonts, images, media, or 
 * MongoDB for database management
 * Tailwind CSS for UI, https://tailwindcss.com/
 * Google Fonts, https://fonts.google.com/
+* InputMask for phone number formatting UI
 * Nodemailer for email handling
 * Google OAuth2 for authentication
 * OpenAI API for the AI financial advisor
 * Joi for validation
 * Multer for file uploads
 * Inputmask for form input formatting
-* Various SVG icons and images for UI elements
+* Various SVG icons and images for UI elements from SVG Repo,  https://www.svgrepo.com/
+* Chatgpt for minor debugging, https://chat.openai.com/
 
 ## 4. Complete Setup/Installation/Usage
 The current version 1.0 of the application is hosted on https://pennywisedtc01.online/
@@ -181,9 +183,6 @@ It has the following subfolders and files:
     ├── addGroup.ejs                    # Add group page
     ├── aiAdvisor.ejs                   # AI advisor page
     ├── aiLog.ejs                       # AI log page
-    ├── changeNum.ejs                   # Change phone number page
-    ├── changePass.ejs                  # Change password page
-    ├── deleteAccount.ejs               # Delete account page
     ├── error400.ejs                    # 400 error page
     ├── error500.ejs                    # 500 error page
     ├── groups.ejs                      # Groups page

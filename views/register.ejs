@@ -1,4 +1,5 @@
 <%- include('templates/headTags') %>
+    <!-- sign up form starts -->
         <form action = '/submitRegistration' method = "POST" enctype="multipart/form-data">
             <div class = 'flex flex-col items-center mt-12'>
                 <div id = 'spacer' class = "bg-inherit h-[10%]"></div>
@@ -46,6 +47,8 @@
             <p class = "">Already have an account? <span onclick = "window.location = '/'" class = 'font-bold cursor-pointer'>Login</span></p>
         </div>
     </div>
+    <!-- sign up form ends -->
+
 <script src="/scripts/register.js"></script>
 <% include('templates/footer') %>
     

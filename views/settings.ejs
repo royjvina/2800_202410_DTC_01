@@ -141,14 +141,32 @@
               <% } %>
           </div>
           <ul>
-            <a href="/settings/deleteAccount"
-              class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <div id="deleteAccountSetting" class="flex justify-between p-3 items-center bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
               <div class="flex items-center space-x-2">
                 <img src="images/otherIcons/trash.svg" alt="">
                 <span class="text-gray-700">Delete Account</span>
               </div>
-              <img src="images/otherIcons/downArrowSettings.svg" class="w-6 h-3" alt="">
-            </a>
+              <img src="images/otherIcons/downArrowSettings.svg" id="deleteArrow" class="w-6 h-3" alt="">
+            </div>
+            <form action="/settings/deleteAccountAuthenticate" id="deleteAccountFormAuth" method="POST" class="<%= deleteAccountError ? 'flex' : 'hidden' %> flex-col items-center w-full justify-center gap-4 text-center m-4 mx-auto fadeOut">
+              <% if(settledInEveryGroup) {%>
+              <input type="password" id="deletePassword" name="deletePassword" class="focus:outline-none focus:border-black border-b px-3 pt-2 w-5/6" placeholder="enter password">
+              <div class="text-red-600 text-center text-sm mb-2" id="deleteWarning"><%= deleteAccountError ? 'Password you entered is incorrect' : '' %> </div>
+              <button type="submit" id="deleteAccount"
+              class="bg-red-500 text-white px-3 py-2 border-red-500 border border-primary rounded-xl shadow-md hover:bg-red-600">
+              Delete Account
+            </button>
+          <% } else {%>
+            <div class="text-red-600 text-center text-sm mb-2">Your balance must must be zero in all groups for you to delete your account.</div>
+          <% } %>
+            </form>
+            <form action="/settings/deleteAccountAuthenticate" id="deleteAccountForm" method="POST" class="<%= deleteAccountAuthenticated ? 'flex': 'hidden' %> flex-col items-center w-full justify-center gap-4 my-3 text-center">
+              <div class="text-red-600 text-center text-sm mb-2">Are you sure you want to delete your account?</div>
+        <div id="confirmDeleteAccount" class="flex flex-row justify-center gap-2 fadeOut">
+          <button type="submit" id="submitDeleteAccount" class=" text-white border border-primary gap-3 rounded-xl bg-red-500 px-3 py-2">Confirm Deletion</button>
+          <button type="button" id="cancelDeleteAccount" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-green-400 px-3 py-2">Cancel</button>
+        </div>
+      </form>
           </ul>
         </div>
         <h4 class="font-semibold text-gray-700 pt-2 mt-2">Support & About</h4>
