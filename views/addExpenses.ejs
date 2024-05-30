@@ -1,19 +1,14 @@
-
 <%- include('templates/headTags') %>
-    <div class="bg-primary">
+    <div class="">
         <form action="/addExpenses" id="addExpenseForm" method="post">
-            <header class="sticky top-0">
+            <header class="fixed w-full top-0">
                 <div class="flex flex-row justify-between font-bold px-3 pb-3 bg-primary items-center text-white h-[68px]">
                     <div><a id="cancelAddExpense" class="addExpenseCancelButton">
                             Cancel
                         </a>
                     </div>
                     <div class="text-lg">
-                        <% if (!transaction) { %>
-                            <p>Add Expense</p>
-                        <% } else { %>
-                            <p>Edit <%= transaction.name %></p>
-                        <% } %>
+                        <p>Add Expense</p>
                     </div>
                     <div class="">
                         <a href=><button type="submit" form="addExpenseForm" id="confirmAddExpense">Done</button></a>
@@ -22,91 +17,45 @@
             </header>
 
             <!-- Select Group -->
-            <div class="fixed top-14 w-full bg-white z-10">
-                <% if (transaction) { %>
-                    <div class="m-2 p-3 outline outline-1 rounded-xl hidden">
-                        <label class="font-semibold" for="selectedGroup">Group: </label>
-                        <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
-                            <option value="" selected disabled class="hidden">Select A Group</option>
-                            <% for(let i = 0; i < groups.length; i++) {%>
-                                <%- include('templates/nameExpense', { id: groups[i]._id, option: groups[i].group_name, transaction: transaction }) %>
-                            <% } %>
-                        </select> 
-                    </div>
-                <% } else { %>
-                <div class="m-2 p-3 outline outline-1 rounded-xl">
+            <div class="mt-[90px] w-full bg-white z-10">
+                <div id="groupMenuDiv" class="m-2 p-3 outline outline-1 rounded-xl">
                     <label class="font-semibold" for="selectedGroup">Group: </label>
                     <select class="float-right px-4" name="selectedGroup" id="selectedGroup" placeholder="Group Name">
                         <option value="" selected disabled class="hidden">Select A Group</option>
                         <% for(let i = 0; i < groups.length; i++) {%>
-                            <%- include('templates/nameExpense', { id: groups[i]._id, option: groups[i].group_name, transaction: transaction }) %>
+                            <%- include('templates/nameExpense', { id: groups[i]._id, option: groups[i].group_name }) %>
                         <% } %>
                     </select> 
                 </div>
-                <% } %>
                 
                 <!-- Expense Info -->
                 <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
-                    <div class="flex flex-col gap-4">
-                        <% if (transaction) { %>
+                    <div class="flex flex-col items-start gap-4">
                             <input type="text" id="selectedExpenseName" name="selectedExpenseName"
-                            value="<%= transaction.name %>" class="focus:outline-none focus:border-b-2 px-4 m-1">
-                            <input type="text" value="<%= transaction._id %>" name="expenseId" class="hidden">
-                        <% } else { %>
-                            <input type="text" id="selectedExpenseName" name="selectedExpenseName"
-                            placeholder="Expense Name" class="focus:outline-none focus:border-b-2 px-4 m-1">
-                        <% } %> 
-                        <div class="flex flex-row px-2">
-                            <div class="flex flex-row px-2 justify-between">
-                                <span class="text-gray-400 text-xl">$</span>
-                                <% if (transaction) { %>
+                            placeholder="Expense Name" class="focus:outline-none focus:border-b-2 w-5/6 pl-1">
+                        <div class="flex flex-row items-center">
+                            <div class="flex flex-row justify-between">
+                                <span class=" text-xl pr-[2px]">$</span>  
                                     <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount"
-                                   value="<%= transaction.total_cost.toFixed(2) %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
-                                 <% } else { %>   
-                                    <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount"
-                                    placeholder="Expense Total" class="focus:outline-none focus:border-b-2 px-2 m-1">
-                                <% } %>    
-                            </div>
-                            <% if (transaction) { %>
-                                <% let transactionDate = new Date(transaction.date) %>
-                                <% let year = transaction.date.getFullYear() %>
-                                <% let month = transactionDate.getMonth() + 1 %>
-                                <% if (month < 10) { %>
-                                    <% month = "0" + month %>
-                                <% } %>
-                                <% let day = transactionDate.getUTCDate() %>
-                                <input type="date" id="selectedDate" data-date="<%= year + "-" + month + "-" + day %>" name="selectedDate"
-                                value="<%= year + "-" + month + "-" + day %>" class="focus:outline-none focus:border-b-2 px-2 m-1">
-                            <% } else { %>    
+                                    placeholder="Expense Total" class="focus:outline-none focus:border-b-2"> 
+                            </div>  
                                 <input type="date" id="selectedDate" name="selectedDate" data-date="0"
-                                class="focus:outline-none focus:border-b-2 px-2 m-1">
-                            <% } %>    
+                                class="focus:outline-none focus:border-b-2 px-2 m-1"> 
                         </div>
                     </div>
                 </div>
 
                 <!-- Category -->
                 <div class="flex flex-col w-full p-3 gap-2">
-                    <% if (transaction) { %>
-                        <div class="w-full flex flex-row items-center justify-between px-2" id="groupDroupDown"><span id="categoryHeader" class="text-2xl text-primary"><%= transaction.category[0].toUpperCase() + transaction.category.substring(1) %></span><span><img id="categoryArrow" class="w-6 h-6" src="/images/otherIcons/downArrow.svg" alt=""></span> </div>
-                    <% } else { %>
                         <div class="w-full flex flex-row items-center justify-between px-2" id="groupDroupDown"><span id="categoryHeader" class="text-2xl">Category</span></div>
-                    <% } %>
                     <ul class="grid grid-cols-3 gap-2" id="groupCategoryChoices">
-                    <% if (transaction) { %>
-                        <% let categories = ['travel', 'home', 'food', 'business', 'recreation', 'miscellaneous'] %>
-                        <% for (category of categories) { %>
-                            <%- include('templates/categoryCards', {transaction: transaction, category: category}) %>
-                        <% } %>
-                    <% } else { %>   
                             <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="travel"><span><img class="w-8 h-8" src="/images/addGroupIcons/travelBlack.svg" alt=""></span><span>Travel</span></li>
                             <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="home"><span><img class="w-8 h-8" src="/images/addGroupIcons/homeBlack.svg" alt=""></span><span>Home</span></li>
                             <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="food"><span><img class="w-8 h-8" src="/images/addGroupIcons/foodBlack.svg" alt=""></span><span>Food</span></li>
                             <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="business"><span><img class="w-8 h-8" src="/images/addGroupIcons/businessBlack.svg" alt=""></span><span>Business</span></li>
                             <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="recreation"><span><img class="w-8 h-8" src="/images/addGroupIcons/recreationBlack.svg" alt=""></span><span>Recreation</span></li>
                             <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="miscellaneous"><span><img class="w-8 h-8" src="/images/addGroupIcons/miscellaneousBlack.svg" alt=""></span><span>Misc.</span></li>
-                        </ul> 
-                    <% } %>               
+                        </ul>              
                     
                     <input type="text" id="categoryInput" class="hidden" value="miscellaneous" name="selectedCategory">
                 </div>
@@ -122,7 +71,7 @@
                                 <option value="" selected disabled class="hidden">Select User</option>
                                 <% for(let i = 0; i < groups.length; i++) {%>
                                     <% for(let j = 0; j < groups[i].members.length; j++) {%>
-                                        <%- include('templates/usersForExpense', {  group: groups[i], friend: groups[i].members[j].user_id, transaction: locals.transaction  }) %>
+                                        <%- include('templates/usersForExpense', {  group: groups[i], friend: groups[i].members[j].user_id}) %>
                                     <% } %>
                                 <% } %>
                             </select>
@@ -132,75 +81,43 @@
                     <!-- Split Type -->
                     <div class="text-black mt-2 flex mx-2 justify-center">
                         <div class="flex flex-row outline outline-1 rounded-full w-full justify-center bg-white">
-                            <% if (transaction) { %>
-                                <button class="w-1/2 p-1 rounded-full" id="showEqualExpense">Equal</button>
-                            <% } else { %>
                                 <button class="w-1/2 p-1 text-white bg-[#4b061a] rounded-full"
                                 id="showEqualExpense">Equal</button>
-                            <% } %>
-                            <button class="w-1/2 p-1 rounded-full" id="showPercentageExpense">Percentage</button>
-                            <% if (transaction) { %>
-                                <button class="w-1/2 p-1 text-white bg-[#4b061a] rounded-full"
-                                id="showManualExpense">Manual</button>
-                            <% } else { %>
+                                <button class="w-1/2 p-1 rounded-full" id="showPercentageExpense">Percentage</button>
                                 <button class="w-1/2 p-1 rounded-full" id="showManualExpense">Manual</button>
-                            <% } %>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <% if (transaction) { %>
-                <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px] hidden"></div>
-            <% } else { %> 
-                <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px]">
-            <% } %>
+            <!-- Equal Split -->
+            <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px]">
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
                         <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                            <% if (transaction) { %>
-                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j] }) %>
-                            <% } else { %>
-                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: null }) %>
-                            <% } %>
+                                <%- include('templates/friendsEqualExpense', { group: groups[i], friend: groups[i].members[j].user_id}) %>
                         <% } %>
                     </div>
                 <% } %>
             </div>
             
             <!-- Percentage Split -->
-            <% if (transaction) { %>
-                <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
-            <% } else { %>
-                <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
-            <% } %>
+            <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-percentage" class="split-container hidden">
                         <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                            <%- include('templates/friendsPercentExpense', { group: groups[i], friend: groups[i].members[j].user_id }) %>
+                            <%- include('templates/friendsPercentExpense', { group: groups[i], friend: groups[i].members[j].user_id}) %>
                         <% } %>
                     </div>
                 <% } %>
             </div>
             
             <!-- Manual Split -->
-            <% if (transaction) { %>
-                <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px]">
-            <% } else { %>
-                <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px] hidden">
-            <% } %>
+            <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px] hidden">
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-manually" class="split-container hidden">
                         <% for(let j = 0; j < groups[i].members.length; j++) { %>
-                            <% if (transaction) { %>
-                                <% if (transaction.name != 'Reimbursement') { %>
-                                    <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[j], transactionGroup: transaction.group_id }) %>
-                                <% } else if (transaction.name == 'Reimbursement') { %>
-                                    <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: transaction.payments[0], transactionGroup: transaction.group_id }) %>
-                                <% } %>
-                            <% } else { %>
-                                <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id, transaction: null }) %>
-                            <% } %>
+                            <%- include('templates/friendsManualExpense', { group: groups[i], friend: groups[i].members[j].user_id}) %>
                         <% } %>
                     </div>
                 <% } %>
@@ -217,10 +134,6 @@
         </dialog>
     </div>
 
-    <style>
-        body {
-            background-color: #6E0924;
-        }
-    </style>
+
     <script src="/scripts/addExpenses.js"></script>
     <%- include('templates/footer') %>
