@@ -149,23 +149,10 @@ function addExpenseToPaidByUser() {
     let splitMethod = checkSplitMethod();
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let paidByUser = GlobalGroupId + document.getElementById('selectedPaidBy').value;
-
-    if (expenseTotal > 0) {
-        if (splitMethod == "Equal") {
-            resetSplitAmounts();
-            document.getElementById(paidByUser).checked = true;
-            document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
-        } else if (splitMethod == 'Percentage') {
-            resetSplitAmounts();
-            document.getElementById(paidByUser + 'Percentage').value = "100";
-            document.getElementById(paidByUser + 'Percentage').placeholder = "100";
-            document.getElementById(paidByUser + 'PercentageAmount').innerHTML = ('$' + expenseTotal.toFixed(2));
-        } else if (splitMethod == 'Manual') {
-            resetSplitAmounts();
-            document.getElementById(paidByUser + 'AmountManual').value = expenseTotal.toFixed(2);
-            document.getElementById(paidByUser + 'AmountManual').placeholder = expenseTotal.toFixed(2);
-        }
-    }
+    
+    resetSplitAmounts();
+    document.getElementById(paidByUser).checked = true;
+    document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
 }
 
 /**
@@ -442,24 +429,6 @@ function toggleSplitVisibility() {
         }
     });
 }
-
-// /**
-//  * This function is used to ensure that a payee must be selected in order to view members to split for
-//  * @claaudiaale
-//  */
-// function displayMembersToSplitFor() {
-//     let payeeMenu = document.getElementById('selectedPaidBy');
-//     let splitDisplay = document.getElementById('allSplitMethods');
-
-//     payeeMenu.addEventListener('change', function () {
-//         let payee = payeeMenu.value;
-//         if (payee !== "") {
-//             splitDisplay.classList.remove('hidden');
-//         } else {
-//             splitDisplay.classList.add('hidden');
-//         }
-//     })
-// }
 
 
 // Function to reset checkboxes
