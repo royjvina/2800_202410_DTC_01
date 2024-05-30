@@ -1,4 +1,20 @@
 /**
+ * This function is used to handle the click event on cancel button in the add expense form   
+ * @claaudiaale
+ */
+
+function goBackFromAddExpenses() {
+    document.querySelector('.addExpenseCancelButton').addEventListener('click', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams) {
+            history.back()
+        } else {
+            window.location.href = '/home';
+        }
+    })
+}
+
+/**
  * This function is used to handle the click event on the split expenses equal tab    
  * @claaudiaale
  */
@@ -313,4 +329,5 @@ document.addEventListener('DOMContentLoaded', () => {
     showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
     showManualExpense.addEventListener('click', manualExpenseTabHandler);
     closeExpenseError.addEventListener('click', function () { errorModal.close() })
+    goBackFromAddExpenses();
 });
