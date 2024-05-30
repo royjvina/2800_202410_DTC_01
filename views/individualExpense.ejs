@@ -26,12 +26,14 @@
                         <p class="text-xl font-semibold">$<%= transaction.total_cost.toFixed(2) %>
                         </p>
                     </div>
-                    <% let transactionDateString=transaction.date.toString() %>
+                    <% let transactionDateString = transaction.date.toUTCString() %>
+                    <% let month = transactionDateString.substring(8, 12) %>
+                    <% let day = transactionDateString.substring(5, 7) %>
+                    <% let year = transactionDateString.substring(12, 16) %>
                         <div class="flex flex-row justify-between items-center">
                             <div>
                                 <p class="text-sm text-white font-normal leading-4">
-                                    <%= transactionDateString.substring(4, 10) + ", " +
-                                        transactionDateString.substring(11, 15) %>
+                                    <%= month + day + ", " + year %>
                                 </p>
                                 <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Paid
                                         By:</span>
