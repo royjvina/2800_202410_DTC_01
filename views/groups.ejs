@@ -22,24 +22,28 @@
                 <p class="text-gray-400 text-xs" id="usersOfAGroupHere">
                     <% if (group.members.length > 3) { %>
                     <div id="moreThanThreeUsers" class="text-gray-400 text-xs pb-1 moreUsers">
-                        <%= group.members[0].user_id.username%>, <%=group.members[1].user_id.username%>, <%=group.members[2].user_id.username%> and <%=group.members.length - 3%> more
+                        <%= !(group.members[0].user_id.username).includes('Deleted User') ? group.members[0].user_id.username+', ':''%><%=!(group.members[1].user_id.username).includes('Deleted User') ? group.members[1].user_id.username+', ':''%>%><%=!(group.members[2].user_id.username).includes('Deleted User') ? ', '+group.members[2].user_id.username:''%> and <%=group.members.length - 3%> more
                     </div>
                     <div id="allUsers" class="hidden text-gray-400 text-xs pb-1 moreUsers">
                         <% for (let i=0; i < group.members.length; i++) { %>
+                            <% if (!(group.members[i].user_id.username).includes('Deleted User')) {%>
                             <% if (i == group.members.length - 1) { %>
                                 <%= group.members[i].user_id.username %>
                             <% } else { %>
                                 <%= group.members[i].user_id.username %>, 
+                            <% } %>
                             <% } %>
                         <% } %>
                     </div>
                     <% } else { %>
                     <div id="lessThanThreeUsers" class="text-gray-400 text-xs pb-1 moreUsers">
                         <% for (let i=0; i < group.members.length; i++) { %>
+                            <% if (!(group.members[i].user_id.username).includes('Deleted User')) {%>
                             <% if (i == group.members.length - 1) { %>
                                 <%= group.members[i].user_id.username %>
                             <% } else { %>
                                 <%= group.members[i].user_id.username %>, 
+                            <% } %>
                             <% } %>
                         <% } %>
                     </div>
