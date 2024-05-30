@@ -1,15 +1,15 @@
 <%- include('templates/header') %>
 
-  <main class="bg-gray-50">
+  <main class="">
     <div class="mx-auto bg-white shadow-xl rounded-lg overflow-hidden h-dvh">
       <div class="p-4 flex items-center justify-between shadow border-b">
         <a href="javascript:history.back()"><img src="images/otherIcons/cancel.svg" alt=""></a>
         <h2 class="text-lg font-semibold text-center mr-40">Settings</h2>
       </div>
 
-      <div class="p-4 bg-gray-50 h-dvh">
-        <div class="flex justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
-          <% if (!editMode) { %>
+      <div class="p-4  h-dvh">
+        <% if (!editMode) { %>
+          <div class="flex justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
             <div class="w-16 min-w-16 h-16 flex items-center justify-center">
               <label for="profileImage" id="profileImage" class="">
                 <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Image" class="max-w-full max-h-full">
@@ -27,6 +27,7 @@
               </p>
             </div>
             <% } else { %>
+              <div class="flex flex-col justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
               <form id="editUserInfo" action="/settings" method="POST" enctype="multipart/form-data"
                 class="flex justify-between items-center">
                 <div class="w-16 min-w-16 h-16 border border-gray-400 flex items-center justify-center">
@@ -50,7 +51,7 @@
                 <div class="w-16 h-16 flex flex-row items-center">
                   <% if (!editMode) { %>
                     <form action="/settings/edit" method="GET" class="h-full w-full">
-                      <button type="submit" class="h-full w-full">
+                      <button type="submit" class="h-6 w-6 flex flex-row items-center">
                         <!-- Pencil -->
                         <svg xmlns="http://www.w3.org/2000/svg"
                           class="h-full w-full icon icon-tabler icon-tabler-pencil" width="20" height="20"
@@ -63,7 +64,8 @@
                       </button>
                     </form>
                     <% } else { %>
-                      <button type="submit" form="editUserInfo" class="w-16 h-16 font-bold text-lg">Save</button>
+                      <div class=""><button type="submit" form="editUserInfo"
+                          class="w-16 h-16 font-bold text-lg">Save</button></div>
                       <% } %>
                 </div>
         </div>
@@ -77,7 +79,7 @@
 
 
         <div>
-          <h4 class="font-semibold text-gray-700 pt-2 mt-3">Display</h4>
+          <!-- <h4 class="font-semibold text-gray-700 pt-2 mt-3">Display</h4>
           <ul>
             <a href="" class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
               <div class="flex items-center space-x-2">
@@ -86,29 +88,64 @@
               </div>
               <img src="images/otherIcons/rightArrow.svg" alt="">
             </a>
-          </ul>
+          </ul> -->
 
           <h4 class="font-semibold text-gray-700 pt-2 mt-3">Account settings</h4>
           <ul>
-            <a href="/settings/changePass"
-              class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <div id="changePassSetting" class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
               <div class="flex items-center space-x-2">
                 <img src="images/otherIcons/password.svg" alt="">
                 <span class="text-gray-700">Change Password</span>
               </div>
-              <img src="images/otherIcons/rightArrow.svg" alt="">
-            </a>
+              <img id="passArrow" src="images/otherIcons/downArrowSettings.svg" class="w-6 h-3" alt="">
+            </div>
+            <div>
+              <form action="/settings/changePass" method="post" class="hidden fadeOut flex-col items-center w-full" id="changePassForm">
+                <div class="text-sm text-center" id="passwordFormat">Must contain at least 8 characters including 1 uppercase, 1 lowercase, 1 number, and 1 special character.</div>
+                <input type="password" id="newPassword" name="password" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="new password">
+                <input type="password" id="confirmPassword" name="confirmPassword" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="Change password">
+                <div class="text-red-600 text-center text-sm mb-2" id="passwordWarning"></div>
+                <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePass">Submit</button>
+                <div id="confirmChangePass" class="hidden flex-row justify-center gap-2 fadeOut">
+                  <button type="submit" id="submitChangePass" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
+                  <button type="button" id="cancelChangePass" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
+                </div>
+              </form>
+            </div>
           </ul>
           <ul>
-            <a href="/settings/changeNum"
-              class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+            <div id="changePhoneSetting"
+              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
               <div class="flex items-center space-x-2">
                 <img src="images/otherIcons/phoneNumber.svg" alt="">
                 <span class="text-gray-700">Change Phone Number</span>
               </div>
-              <img src="images/otherIcons/rightArrow.svg" alt="">
-            </a>
+              <img id="phoneArrow" src="images/otherIcons/downArrowSettings.svg" class="w-6 h-3" alt="">
+            </div>
           </ul>
+          <div>
+            <% if(phoneExists) { %>
+            <form action="/settings/changeNum" method="post" class="flex fadeOut flex-col items-center w-full" id="changePhoneForm">
+              <input type="tel" id="newPhone" name="phone" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2  w-5/6" placeholder="new phone number">
+              <div class="text-red-600 text-center text-sm mb-2" id="phoneWarning">This phone number already exists in the system, please try another number</div>
+              <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePhone">Submit</button>
+              <div id="confirmChangePhone" class="hidden flex-row justify-center gap-2 fadeOut">
+                <button type="submit" id="submitChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
+                <button type="button" id="cancelChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
+              </div>
+            </form>
+            <% } else { %>
+              <form action="/settings/changeNum" method="post" class="hidden fadeOut flex-col items-center w-full" id="changePhoneForm">
+                <input type="tel" id="newPhone" name="phone" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2  w-5/6" placeholder="new phone number">
+                <div class="text-red-600 text-center text-sm mb-2" id="phoneWarning"></div>
+                <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePhone">Submit</button>
+                <div id="confirmChangePhone" class="hidden flex-row justify-center gap-2 fadeOut">
+                  <button type="submit" id="submitChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
+                  <button type="button" id="cancelChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
+                </div>
+              </form>
+              <% } %>
+          </div>
           <ul>
             <a href="/settings/deleteAccount"
               class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
