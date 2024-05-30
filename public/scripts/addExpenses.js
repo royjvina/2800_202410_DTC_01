@@ -8,11 +8,15 @@
  */
 
 function goBackFromAddExpenses() {
-    document.querySelector('.addExpenseCancelButton').addEvenetListener('click', () => {
-        history.back();
+    document.querySelector('.addExpenseCancelButton').addEventListener('click', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams) {
+            history.back()
+        } else {
+            window.location.href = '/home';
+        }
     })
 }
-
 
 /**
  * This function is used to handle the click event on the split expenses equal tab    
@@ -32,6 +36,7 @@ function equalExpenseTabHandler(event) {
     splitExpenseManually.classList.add('hidden');
     splitExpenseEqually.classList.remove('hidden');
     splitExpenseEqually.classList.add('flex-col');
+    attachEqualSplitEventListeners(); // Attach event listeners for equal split
 }
 
 /**
@@ -50,7 +55,9 @@ function percentageExpenseTabHandler(event) {
     splitExpenseManually.classList.add('hidden');
     splitExpensePercentage.classList.remove('hidden');
     splitExpensePercentage.classList.add('flex-col');
+    attachPercentageSplitEventListeners(); // Attach event listeners for percentage split
 }
+
 
 /**
  * This function is used to handle the click event on the split expenses manually tab    
@@ -68,6 +75,56 @@ function manualExpenseTabHandler(event) {
     splitExpensePercentage.classList.add('hidden');
     splitExpenseManually.classList.remove('hidden');
     splitExpenseManually.classList.add('flex-col');
+    attachManualSplitEventListeners(); // Attach event listeners for manual split
+}
+
+/**
+ * This function is used to erase the percentage and manual fields on change events in the equal tab 
+ * @claaudiaale
+ */
+function erasePercentageFields() {
+    let percentageInputs = document.querySelectorAll('input.percentage');
+    percentageInputs.forEach(input => {
+        input.value = "";
+    });
+
+    let percentageTotals = document.querySelectorAll('span.amountPercentage');
+    percentageTotals.forEach(total => {
+        total.innerHTML = '$0.00';
+    });
+}
+
+/**
+ * This function is used to erase the equal fields on change events in the equal tab 
+ * @claaudiaale
+ */
+function eraseEqualFields() {
+    let equalTotals = document.querySelectorAll('input.equalValue');
+    equalTotals.forEach(total => {
+        total.value = "";
+    });
+
+    let equalDisplays = document.querySelectorAll('p.equalDisplay');
+    equalDisplays.forEach(display => {
+        display.innerHTML = '$0.00';
+    });
+
+    let equalChecks = document.querySelectorAll('.userEqualSplit');
+    equalChecks.forEach(check => {
+        check.checked = false;
+    });
+}
+
+/**
+ * This function is used to erase the manual fields on change events in the manual tab 
+ * @claaudiaale
+ */
+function eraseManualFields() {
+    let manualInputs = document.querySelectorAll('input.manual');
+    manualInputs.forEach(input => {
+        input.value = "";
+        input.placeholder = "0.00";
+    });
 }
 
 /**
@@ -92,41 +149,46 @@ function addExpenseToPaidByUser() {
     let splitMethod = checkSplitMethod();
     let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let paidByUser = GlobalGroupId + document.getElementById('selectedPaidBy').value;
+    
+    resetSplitAmounts();
+    document.getElementById(paidByUser).checked = true;
+    document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
+}
+
+/**
+ * This function is used to handle reset of the split amounts when the user changes the user who paid for the expense 
+ * @claaudiaale
+ */
+
+function resetSplitAmounts() {
+    let splitMethod = checkSplitMethod();
 
     document.querySelectorAll('.user' + splitMethod + 'Split').forEach(user => {
         user.checked = false;
         if (splitMethod == 'Equal') {
             document.getElementById(user.id + 'Amount' + splitMethod).innerHTML = '$0.00';
         } else if (splitMethod == 'Percentage') {
-            document.getElementById(user.id + 'Percentage').value = "";
-        } else {
-            document.getElementById(user.id + 'Amount' + splitMethod).value = '$0.00';
+            document.getElementById(user.id).value = 0;
+            document.getElementById(user.id + 'Amount').innerHTML = '$0.00';
+        } else if (splitMethod == 'Manual') {
+            document.getElementById(user.id).value = 0.00;
+            document.getElementById(user.id).placeholder = 0.00;
         }
     })
 
-    if (expenseTotal > 0) {
-        document.getElementById(paidByUser).checked = true;
-        if (splitMethod == "Equal") {
-            document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
-        } else if (splitMethod == 'Percentage') {
-            document.getElementById(paidByUser + 'Percentage').value = 100;
-            document.getElementById(paidByUser + 'Amount' + splitMethod).innerHTML = ('$' + expenseTotal.toFixed(2));
-        } else if (splitMethod == 'Manual') {
-            document.getElementById(paidByUser + 'AmountManual').value = expenseTotal.toFixed(2);
-        }
-    }
 }
+
+
 
 /**
  * This function is used to handle computation of splitting an expense's total equally as users are selected   
  * @claaudiaale
  */
-
 function calculateExpenseEqually() {
     var expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     var selectedGroup = document.getElementById('selectedGroup');
     var groupId = selectedGroup.value;
-    
+
     // Query the users within the selected group's split container
     let usersToSplitFor = document.querySelectorAll(`.userEqualSplit:checked`);
     var numberOfUsers = usersToSplitFor.length;
@@ -136,23 +198,21 @@ function calculateExpenseEqually() {
         let userId = user.getAttribute('data-user-id');
         if (document.getElementById(`${groupId}${userId}AmountEqual`)) {
             document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$0.00';
-            document.getElementById(`${groupId}${userId}AmountEqualInput`).value = '0.00'; // Reset input value
+            document.getElementById(`${groupId}${userId}AmountEqualInput`).value = ''; // Reset input value
         }
     });
-    
+
     if (expenseTotal > 0 && numberOfUsers > 0) {
         var splitAmount = (expenseTotal / numberOfUsers).toFixed(2);
-        
+
         // Set amounts for users who are checked
         usersToSplitFor.forEach(user => {
             let userId = user.getAttribute('data-user-id');
             document.getElementById(`${groupId}${userId}AmountEqual`).textContent = '$' + splitAmount;
             document.getElementById(`${groupId}${userId}AmountEqualInput`).value = splitAmount; // Update input value
         });
-    } 
+    }
 }
-
-
 
 /**
  * This function is used to handle computation of calculating the total percentage that a user inputs for an expense
@@ -168,7 +228,7 @@ function calculateUsersPercentage() {
         } else {
             totalPercentage += parseFloat(input.value);
         }
-    }) 
+    })
     return totalPercentage;
 }
 
@@ -176,13 +236,12 @@ function calculateUsersPercentage() {
  * This function is used to handle computation of splitting an expense's total percentage wise as users are selected   
  * @claaudiaale
  */
-
 function calculateExpensePercentage() {
     var expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     var groupId = document.getElementById('selectedGroup').value;
     let totalPercentage = calculateUsersPercentage();
     let usersToSplitFor = [];
-    
+
     if (totalPercentage == 100) {
         let users = document.querySelectorAll('.percentage');
 
@@ -201,21 +260,21 @@ function calculateExpensePercentage() {
             }
             document.getElementById(`${groupId}${userId}PercentageAmount`).textContent = '$' + userAmount;
             document.getElementById(`${groupId}${userId}AmountPercentage`).value = userAmount;
-        }); 
-    } 
+        });
+    }
 }
 
 /**
  * This function is used to handle computation of splitting an expense's total manually as a user inputs given split amounts  
  * @claaudiaale
  */
-
-function calculateExpenseManual() {    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
+function calculateExpenseManual() {
+    let expenseTotal = parseFloat(document.getElementById('selectedExpenseAmount').value);
     let userTotal = 0;
     let manualInputs = document.querySelectorAll('.manual');
-    
+
     manualInputs.forEach(input => {
-        if (!input.value) {
+        if (input.value == "") {
             userTotal += 0;
         } else {
             userTotal += parseFloat(input.value);
@@ -247,14 +306,14 @@ function categoryHandler() {
             categories.forEach(category => {
                 category.classList.remove("bg-primary");
                 category.classList.add("bg-secondary");
-                category.classList.remove("text-white");
+                category.classList.remove("text-secondary");
                 let img = category.querySelector('img');
                 let categoryId = category.id;
                 img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
             });
             category.classList.toggle("bg-secondary");
             category.classList.toggle("bg-primary");
-            category.classList.toggle("text-white");
+            category.classList.toggle("text-secondary");
             let img = category.querySelector('img');
             let categoryId = category.id;
 
@@ -280,7 +339,6 @@ function categoryHandler() {
  * This function is used to handle the modal display when there is an error in the expense split
  * @claaudiaale
  */
-
 function displayErrorModal(errorMessage) {
     let errorModal = document.getElementById('errorModal');
     document.getElementById('errorMessage').innerHTML = errorMessage;
@@ -291,7 +349,6 @@ function displayErrorModal(errorMessage) {
  * This function is used to handle the modal display when there is an error in empty fields when adding an expense
  * @claaudiaale
  */
-
 function displayEmptyFieldModal(event) {
     let totalPercentage = calculateUsersPercentage();
     let splitMethod = checkSplitMethod();
@@ -331,7 +388,7 @@ function displayEmptyFieldModal(event) {
 }
 
 // Function to execute when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Get the current date and set it in the date input field
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
@@ -342,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function populateUsersDropdown() {
     // Clear existing options
     const allUsers = document.querySelectorAll('.username');
-    const group = document.getElementById('selectedGroup').value;  
+    const group = document.getElementById('selectedGroup').value;
 
     allUsers.forEach(user => {
         if (user.classList.contains(group)) {
@@ -358,12 +415,13 @@ function toggleSplitVisibility() {
     const selectedGroup = document.getElementById('selectedGroup').value;
     const allSplits = document.querySelectorAll('.split-container');
 
-    // resetCheckboxes(); // Reset checkboxes when switching groups            
+    // displayMembersToSplitFor();
+    resetCheckboxes(); // Reset checkboxes when switching groups            
 
     allSplits.forEach(split => {
         // Check if the split id matches the selected group
-        if (split.id === `${selectedGroup}-equally` || 
-            split.id === `${selectedGroup}-percentage` || 
+        if (split.id === `${selectedGroup}-equally` ||
+            split.id === `${selectedGroup}-percentage` ||
             split.id === `${selectedGroup}-manually`) {
             split.classList.remove('hidden');
         } else {
@@ -371,6 +429,7 @@ function toggleSplitVisibility() {
         }
     });
 }
+
 
 // Function to reset checkboxes
 function resetCheckboxes() {
@@ -383,32 +442,80 @@ function resetCheckboxes() {
 // Add onchange event listener to selectedGroup dropdown
 document.getElementById('selectedGroup').addEventListener('change', toggleSplitVisibility);
 document.getElementById('selectedGroup').addEventListener('change', populateUsersDropdown);
-document.getElementById('selectedGroup').addEventListener('change', () => {
+if (!groupMenuDiv.classList.contains('hidden')) {
+    document.getElementById('selectedGroup').addEventListener('change', () => {
+        GlobalGroupId = document.getElementById('selectedGroup').value;
+    });
+} else if (groupMenuDiv.classList.contains('hidden')) {
     GlobalGroupId = document.getElementById('selectedGroup').value;
-});
+}
 
 // Call once initially to set the initial state based on the default selected group
 toggleSplitVisibility();
 
-showEqualExpense.addEventListener('click', function (event) {equalExpenseTabHandler(event)});
-showPercentageExpense.addEventListener('click', function (event) {percentageExpenseTabHandler(event)});
-showManualExpense.addEventListener('click', function (event) {manualExpenseTabHandler(event)});
+/**
+ * Attach event listeners for equal split
+ */
+function attachEqualSplitEventListeners() {
+    let equalChecks = document.querySelectorAll('.userEqualSplit');
+    equalChecks.forEach(check => {
+        check.addEventListener('click', erasePercentageFields);
+        check.addEventListener('click', eraseManualFields);
+        check.addEventListener('change', calculateExpenseEqually);
+    });
+}
+
+/**
+ * Attach event listeners for percentage split
+ */
+function attachPercentageSplitEventListeners() {
+    let percentageInputs = document.querySelectorAll('.percentage');
+    percentageInputs.forEach(input => {
+        input.addEventListener('change', eraseEqualFields);
+        input.addEventListener('change', eraseManualFields);
+        input.addEventListener('input', calculateExpensePercentage);
+    });
+}
+
+/**
+ * Attach event listeners for manual split
+ */
+function attachManualSplitEventListeners() {
+    let manualInputs = document.querySelectorAll('.manual');
+    manualInputs.forEach(input => {
+        input.addEventListener('change', eraseEqualFields);
+        input.addEventListener('change', erasePercentageFields);
+        input.addEventListener('input', calculateExpenseManual);
+    });
+}
+
+// Initialize event listeners for the first load
+attachEqualSplitEventListeners();
+attachPercentageSplitEventListeners();
+attachManualSplitEventListeners();
+
+showEqualExpense.addEventListener('click', function (event) { equalExpenseTabHandler(event) });
+showPercentageExpense.addEventListener('click', function (event) { percentageExpenseTabHandler(event) });
+showManualExpense.addEventListener('click', function (event) { manualExpenseTabHandler(event) });
+
+
+showEqualExpense.addEventListener('click', function (event) { equalExpenseTabHandler(event) });
+showPercentageExpense.addEventListener('click', function (event) { percentageExpenseTabHandler(event) });
+showManualExpense.addEventListener('click', function (event) { manualExpenseTabHandler(event) });
 document.querySelectorAll('.userEqualSplit').forEach(user => {
     user.addEventListener('change', calculateExpenseEqually);
 });
 selectedExpenseAmount.addEventListener('input', calculateExpenseEqually);
+selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("") });
+selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("Percentage") });
+selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser("Manual") });
 selectedPaidBy.addEventListener('change', addExpenseToPaidByUser);
 
 splitExpensePercentage.addEventListener('change', calculateExpensePercentage);
 splitExpenseManually.addEventListener('change', calculateExpenseManual);
 
-let percentageInputs = document.querySelectorAll('.percentage');
-percentageInputs.forEach(input => {
-    input.addEventListener('input', calculateExpensePercentage);
-});
-
-confirmAddExpense.addEventListener('click', function(event) {displayEmptyFieldModal(event)});
-closeExpenseError.addEventListener('click', function() {errorModal.close()})
+confirmAddExpense.addEventListener('click', function (event) { displayEmptyFieldModal(event) });
+closeExpenseError.addEventListener('click', function () { errorModal.close() })
 categoryHandler();
-// goBackFromAddExpenses();
 
+goBackFromAddExpenses();

@@ -1,46 +1,83 @@
 <%- include('templates/header', { path: path }) %>
 
-  <main class="flex flex-col items-center justify-center bg-gray-50 min-h-screen px-4 sm:px-8">
+  <main class="flex flex-col items-center justify-center  min-h-screen px-4 sm:px-8">
+    <!-- Data range-->
     <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 mb-4 mt-5 sm:mt-10">
-      <h5 class="text-xl font-bold leading-none text-gray-900 pb-2">Date Range</h5>
+      <h5 class="text-xl font-bold leading-none text-gray-800 pb-2">Date Range</h5>
       <div class="justify-between flex flex-col sm:flex-row">
-        <div class="p-2">
-          <span class=" font-thin text-xs inline-block"> FROM</span>
-          <br>
-          <input type="date" id="startDate" placeholder="Start Date">
-          <br>
-          <span class="font-thin text-xs inline-block"> TO</span>
-          <br>
-          <input type="date" id="endDate" placeholder="End Date">
+        <div class="p-2 justify-between flex">
+          <div>
+            <span class=" font-thin text-xs inline-block"> FROM</span>
+            <input type="date" id="startDate" placeholder="Start Date">
+          </div>
+          <div>
+            <span class="font-thin text-xs inline-block"> TO</span>
+            <input type="date" id="endDate" placeholder="End Date">
+          </div>
         </div>
         <div class="p-2 flex items-center justify-center sm:justify-start">
           <div class="border border-primary px-3 py-2 rounded-xl hover:bg-primary">
             <button onclick="searchByTime()" class="search-button">
               <img src="/images/homepageIconsAndPlaceholders/search.svg" id="searchIcon" alt="" class="inline w-6 h-6">
-              <span class="text-primary hover:text-white">Search</span>
+              <span class="text-primary hover:text-white">Submit</span>
             </button>
           </div>
         </div>
       </div>
     </div>
+
     <div class="max-w-sm w-full bg-white rounded-lg shadow-xl p-4 mb-40">
       <div class="flex justify-between items-center mb-4">
-        <h5 class="text-xl font-bold text-gray-900 pb-2">Category Spending</h5>
+        <h5 class="text-xl font-bold text-gray-800 pb-2">Category Spending</h5>
       </div>
-      <div class="pb-6 border-b-2" id="donut-chart"></div>
-      <p class="pt-4 text-lg text-gray-700">
-        Spending in the <b id="most-spent-category" class="text-primary font-semibold "></b> category is higher than
-        other categories.
-      </p>
-      <div class="mt-4 space-y-2">
-        <p id="rank-1" class="text-md text-gray-700 bg-[#D3D0CB] shadow p-2 rounded-md"></p>
-        <p id="rank-2" class="text-md text-gray-700 bg-[#D3D0CB] shadow p-2 rounded-md"></p>
-        <p id="rank-3" class="text-md text-gray-700 bg-[#D3D0CB] shadow p-2 rounded-md"></p>
-      </div>
-    </div>
 
+      <!-- Donut chart-->
+      <div class="pb-6 border-b-2" id="donut-chart"></div>
+
+
+      <div class="pt-4 text-md text-gray-700 p-4 rounded-lg shadow border mt-3">
+        <h5 class="text-lg font-semibold text-gray-700 pb-2">Top 3 Expenses</h5>
+        <div class="text-gray-700 p-2 rounded-xl border border-white">
+          Spending in the <b id="most-spent-category" class="text-primary font-semibold underline"></b> category is
+          higher
+          than
+          other categories.
+          <div class="font-thin text-xs mt-2">
+            For more detail click the category below.
+          </div>
+        </div>
+
+        <!-- Ranking here-->
+        <div class="mt-4 space-y-4">
+          <div id="rank-1"
+            class="text-sm text-gray-700 bg-gray-100 shadow p-3 rounded-md border-l-4 border-red-800 transition duration-300">
+          </div>
+          <div id="rank-2"
+            class="text-sm text-gray-700 bg-gray-100 shadow p-3 rounded-md border-l-4 border-red-800 transition duration-300">
+          </div>
+          <div id="rank-3"
+            class="text-sm text-gray-700 bg-gray-100 shadow p-3 rounded-md border-l-4 border-red-800 transition duration-300">
+          </div>
+        </div>
+      </div>
 
   </main>
+  <style>
+    header {
+      z-index: 1000;
+      position: sticky;
+      top: 0;
+    }
+
+    .expense-details {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .expense-details.show {
+      display: block;
+    }
+  </style>
 
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 

@@ -71,7 +71,6 @@ router.post('/addExpenses', async (req, res) => {
         // Prepare payment data
         const payments = [];
         let hasNonEmptyPayment = false;
-
         group.members.forEach(member => {
             let paymentValue = 0;
             let paymentPercentName = group._id + member.user_id._id + "AmountPercentage";
@@ -100,20 +99,33 @@ router.post('/addExpenses', async (req, res) => {
 
         if (hasNonEmptyPayment) {
             // Create new transaction
-            const newTransaction = new Transaction({
-                name: selectedExpenseName,
-                group_id: group._id,
-                category: selectedCategory,
-                total_cost: selectedExpenseAmount,
-                date: selectedDate,
-                payee: selectedPaidBy,
-                payments: payments
-            });
+            if (!req.body.expenseId) {
+                const newTransaction = new Transaction({
+                    name: selectedExpenseName,
+                    group_id: group._id,
+                    category: selectedCategory,
+                    total_cost: selectedExpenseAmount,
+                    date: selectedDate,
+                    payee: selectedPaidBy,
+                    payments: payments
+                });
 
-            // Save transaction
-            await newTransaction.save();
-            await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
-            res.redirect('/home');
+                // Save transaction
+                await newTransaction.save();
+                await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
+                res.redirect('/home');
+            } else {
+                await Transaction.findByIdAndUpdate(req.body.expenseId, {
+                    name: selectedExpenseName,
+                    group_id: group._id,
+                    category: selectedCategory,
+                    total_cost: selectedExpenseAmount,
+                    date: selectedDate,
+                    payee: selectedPaidBy,
+                    payments: payments
+                })
+                res.redirect('/home');
+            }
         } else {
             res.status(400).json({ error: 'No valid payment values provided' });
         }

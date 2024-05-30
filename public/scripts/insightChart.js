@@ -6,11 +6,13 @@ function searchByTime() {
   const startDate = document.getElementById('startDate').value; // Get start date
   const endDate = document.getElementById('endDate').value; // Get end date
 
+
   let url = '/api/insight';
   if (startDate && endDate) {
-    url += `?startDate=${startDate}&endDate=${endDate}`; // Append date range to URL
+    url += `?startDate=${startDate}&endDate=${endDate}`;
   }
 
+  // Fetch expenses data
   fetch(url, {
     headers: {
       'Content-Type': 'application/json',
@@ -29,19 +31,55 @@ function searchByTime() {
     });
 }
 
+
+/**
+ * Updates the chart with the given expenses data on DOM load.
+ */
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+  const donutChartElement = document.getElementById('donut-chart');
+
+  try {
+    // Fetch initial expenses data
+    const response = await fetch('/api/insight', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      },
+      credentials: 'include'
+    });
+
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch expenses');
+    }
+
+    const expenses = await response.json();
+
+    updateChart(expenses); // Update chart with fetched expenses data
+
+  } catch (error) {
+    console.error('Error fetching or rendering chart:', error);
+    donutChartElement.innerHTML = '<p>Error loading chart data.</p>';
+  }
+});
+
 /**
  * Updates the donut chart with expenses data.
  * @param {Array} expenses - Array of expense objects
  */
+
 function updateChart(expenses) {
-  const donutChartElement = document.getElementById('donut-chart'); // Get donut chart element
+  const donutChartElement = document.getElementById('donut-chart');
 
   if (!Array.isArray(expenses) || expenses.length === 0) {
     donutChartElement.innerHTML = '<p>No expenses data available.</p>';
-    updateRanking({});
+    updateRanking([]);
     return;
   }
 
+  // Define categories and colors
   const categories = ['home', 'food', 'travel', 'business', 'miscellaneous', 'recreation'];
   const categoryColors = {
     'home': '#1C64F2',
@@ -54,12 +92,15 @@ function updateChart(expenses) {
 
   const categoryMap = {};
 
+  // Map expenses to categories
+
   expenses.forEach(expense => {
     if (categories.includes(expense.category)) {
       if (categoryMap[expense.category]) {
-        categoryMap[expense.category] += expense.totalCost;
+        categoryMap[expense.category].totalCost += expense.totalCost;
+        categoryMap[expense.category].details = categoryMap[expense.category].details.concat(expense.details);
       } else {
-        categoryMap[expense.category] = expense.totalCost;
+        categoryMap[expense.category] = { totalCost: expense.totalCost, details: expense.details };
       }
     }
   });
@@ -68,9 +109,10 @@ function updateChart(expenses) {
   const labels = [];
   const colors = [];
 
+  // populate series, labels, and colors
   for (const category in categoryMap) {
-    if (categoryMap[category] > 0) {
-      series.push(categoryMap[category]);
+    if (categoryMap[category].totalCost > 0) {
+      series.push(categoryMap[category].totalCost);
       labels.push(category);
       colors.push(categoryColors[category]);
     }
@@ -86,11 +128,12 @@ function updateChart(expenses) {
   console.log('Labels:', labels);
   console.log('Colors:', colors);
 
+  // Define chart options
   const chartOptions = {
     series: series,
     chart: {
       type: 'donut',
-      height: 350
+      height: 390
     },
     labels: labels,
     colors: colors,
@@ -103,7 +146,7 @@ function updateChart(expenses) {
             total: {
               showAlways: true,
               show: true,
-              label: "You've spent",
+              label: "Total Spent",
               formatter: function () {
                 const total = series.reduce((a, b) => a + b, 0);
                 return '$' + total.toFixed(2);
@@ -121,10 +164,9 @@ function updateChart(expenses) {
     }
   };
 
+  // Render chart
   const chart = new ApexCharts(donutChartElement, chartOptions);
   chart.render();
-  console.log('Chart rendered successfully');
-
   updateRanking(categoryMap);
 }
 
@@ -133,13 +175,24 @@ function updateChart(expenses) {
  * @param {Object} categoryMap - Object mapping categories to their total costs
  */
 function updateRanking(categoryMap) {
-  const sortedCategories = Object.entries(categoryMap).sort((a, b) => b[1] - a[1]);
+  const sortedCategories = Object.entries(categoryMap).sort((a, b) => b[1].totalCost - a[1].totalCost);
   const topThree = sortedCategories.slice(0, 3);
 
   topThree.forEach((item, index) => {
     const rankElement = document.getElementById(`rank-${index + 1}`);
     if (rankElement) {
-      rankElement.textContent = `${index + 1}. ${item[0]} - $${item[1].toFixed(2)}`;
+      rankElement.innerHTML = `
+      <div class="flex justify-between items-center">
+        <div class="flex-1">
+          <span class="font-bold">${index + 1}.</span> ${item[0]} - $${item[1].totalCost.toFixed(2)}
+        </div>
+        <span class="text-primary font-semibold">more</span>
+      </div>
+    `;
+      rankElement.classList.add('text-sm', 'text-gray-700', 'shadow-lg', 'p-3', 'rounded-md', 'border-l-4', 'hover:bg-gray-100', 'transition', 'duration-300');
+      rankElement.dataset.category = item[0]; // Store category name in data attribute
+      rankElement.dataset.details = JSON.stringify(item[1].details); // Store details in data attribute
+      rankElement.onclick = toggleDisplayExpenses; // Add click event listener
     }
   });
 
@@ -147,6 +200,8 @@ function updateRanking(categoryMap) {
     const rankElement = document.getElementById(`rank-${i + 1}`);
     if (rankElement) {
       rankElement.textContent = `${i + 1}. Not defined yet`;
+      rankElement.dataset.category = '';
+      rankElement.onclick = null;
     }
   }
 
@@ -157,48 +212,47 @@ function updateRanking(categoryMap) {
   }
 }
 
-/**
- * Initializes the donut chart and fetches initial expenses data on DOMContentLoaded.
- */
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log('DOM fully loaded and parsed');
+function toggleDisplayExpenses(event) {
+  const rankElement = event.currentTarget;
+  const category = rankElement.dataset.category;
+  const details = JSON.parse(rankElement.dataset.details);
 
-  var donutChartElement = document.getElementById('donut-chart');
-  console.log('Donut Chart Element:', donutChartElement);
+  console.log(`Displaying expenses for category: ${category}`, details);
 
-  if (!donutChartElement) {
-    console.error('Donut chart element not found');
-    return;
+  let expenseDetailsElement = rankElement.querySelector('.expense-details');
+
+  if (!expenseDetailsElement) {
+    expenseDetailsElement = document.createElement('div');
+    expenseDetailsElement.classList.add('expense-details');
+    rankElement.appendChild(expenseDetailsElement);
   }
 
-  if (typeof ApexCharts === 'undefined') {
-    console.error('ApexCharts is not defined');
-    return;
-  }
+  if (expenseDetailsElement.classList.contains('show')) {
+    expenseDetailsElement.classList.remove('show');
+    expenseDetailsElement.innerHTML = '';
+  } else {
+    expenseDetailsElement.classList.add('show');
+    expenseDetailsElement.innerHTML = `<h3 class="font-bold text-sm mb-2">Detail</h3>`;
 
-  try {
-    const response = await fetch('/api/insight', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
-      },
-      credentials: 'include'
-    });
-
-    console.log('Fetch response:', response);
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch expenses');
+    if (!details || details.length === 0) {
+      expenseDetailsElement.innerHTML += '<p class="text-gray-600">No expenses found for this category.</p>';
+      return;
     }
 
-    const expenses = await response.json();
-    console.log('Fetched expenses:', expenses);
+    // Sort details by date
+    details.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    updateChart(expenses);
+    details.forEach(expense => {
+      const expenseElement = document.createElement('div');
+      expenseElement.classList.add('expense-item', 'flex', 'items-center', 'py-2', 'border-b', 'border-gray-200');
 
-  } catch (error) {
-    console.error('Error fetching or rendering chart:', error);
-    donutChartElement.innerHTML = '<p>Error loading chart data.</p>';
+      expenseElement.innerHTML = `
+    <span class="date text-gray-600 w-1/4 text-xs">${new Date(expense.date).toLocaleDateString()}</span>
+    <span class="name text-gray-800 w-1/2 text-xs">${expense.name}</span>
+    <span class="cost text-red-600 w-1/4 text-">$${expense.total_cost.toFixed(2)}</span>
+  `;
+
+      expenseDetailsElement.appendChild(expenseElement);
+    });
   }
-});
-
+}

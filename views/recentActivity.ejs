@@ -1,4 +1,6 @@
 <%- include('templates/header') %>
+
+<!-- recent activity start -->
 <div id="recentActivity" class="overflow-auto mb-[90px]">
     <% recentActivities.forEach(activity => { %>
     <% if (activity.splitAmount > 0) { %>
@@ -23,4 +25,5 @@
     <% } %>
     <% }) %>
 </div>
+<!-- recent activity end -->
 <%- include('templates/footer') %>

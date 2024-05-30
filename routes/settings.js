@@ -4,6 +4,7 @@ const multer = require('multer');
 const upload = multer();
 const User = require('../models/User');
 const { passwordSchema } = require('../models/UserPassword');
+const { getGroupDebt } = require('../controllers/groupController');
 const bcrypt = require('bcrypt');
 
 // Define salt rounds for password hashing
@@ -20,13 +21,33 @@ const saltRounds = 12;
  */
 router.get('/settings', async (req, res) => {
     try {
-        // Ensure user is authenticated
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
-
+      
         const user = await User.findById(req.session.userId);
+        let groupDebt = await getGroupDebt(req); // Get group debts of the user
+        let settledInEveryGroup = false;
+        for (const group in groupDebt) {
+            if (groupDebt[group] !== 0) {
+                settledInEveryGroup = false;
+                break;
+            }
+            else{
+            settledInEveryGroup = true;
+            }
+        }
         const formattedPhoneNumber = user.phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+        let phoneExists = false;
+        if (req.query.phoneExists) {
+            phoneExists = true;
+        }
+        let deleteAccountAuthenticated = false;
+        if (req.session.deleteAccountAuthenticated) {
+            deleteAccountAuthenticated = true;
+            delete req.session.deleteAccountAuthenticated;
+        }
+        let deleteAccountError = false;
+        if (req.query.deleteAccountError) {
+            deleteAccountError = true;
+        }
 
         res.render('settings', {
             username: user.username,
@@ -34,7 +55,11 @@ router.get('/settings', async (req, res) => {
             profilePic: req.session.profilePic,
             email: user.email,
             editMode: false,
-            path: req.path
+            path: req.path,
+            phoneExists: phoneExists,
+            settledInEveryGroup: settledInEveryGroup,
+            deleteAccountAuthenticated: deleteAccountAuthenticated,
+            deleteAccountError: deleteAccountError,
         });
     } catch (error) {
         console.error(error);
@@ -53,10 +78,6 @@ router.get('/settings', async (req, res) => {
  */
 router.get('/settings/edit', async (req, res) => {
     try {
-        // Ensure user is authenticated
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
 
         const formattedPhoneNumber = req.session.phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
         res.render('settings', {
@@ -84,11 +105,7 @@ router.get('/settings/edit', async (req, res) => {
  */
 router.post('/settings', upload.single('profileImage'), async (req, res) => {
     try {
-        // Ensure user is authenticated
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
-
+       
         const user = await User.findById(req.session.userId);
         user.username = req.body.username;
 
@@ -108,18 +125,6 @@ router.post('/settings', upload.single('profileImage'), async (req, res) => {
     }
 });
 
-/**
- * Route for rendering the change password page
- * @name get/settings/changePass
- * @function
- * @memberof module:routers/settings
- * @inner
- * @param {string} path - Express path
- * @param {callback} middleware - Express middleware.
- */
-router.get('/settings/changePass', async (req, res) => {
-    res.render('changePass', { error: null, path: req.path });
-});
 
 /**
  * Route for changing user password
@@ -132,25 +137,11 @@ router.get('/settings/changePass', async (req, res) => {
  */
 router.post('/settings/changePass', async (req, res) => {
     try {
-        const { password, confirmPassword } = req.body;
+        const { password } = req.body;
 
-        // Validate password input
-        const { error } = passwordSchema.validate({ password });
-        if (error) {
-            return res.render('changePass', { error: error.details[0].message, path: req.path });
-        }
-
-        // Ensure user is authenticated
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
 
         const user = await User.findById(req.session.userId);
 
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            return res.render('changePass', { error: "Passwords do not match", path: req.path });
-        }
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -164,18 +155,6 @@ router.post('/settings/changePass', async (req, res) => {
     }
 });
 
-/**
- * Route for rendering the change phone number page
- * @name get/settings/changeNum
- * @function
- * @memberof module:routers/settings
- * @inner
- * @param {string} path - Express path
- * @param {callback} middleware - Express middleware.
- */
-router.get('/settings/changeNum', async (req, res) => {
-    res.render('changeNum', { error: null, path: req.path });
-});
 
 /**
  * Route for changing user phone number
@@ -188,41 +167,46 @@ router.get('/settings/changeNum', async (req, res) => {
  */
 router.post('/settings/changeNum', async (req, res) => {
     try {
-        const { phoneNumber } = req.body;
-
-        if (!phoneNumber.match(/^\d{10}$/)) {
-            return res.render('changeNum', { error: 'Invalid phone number format', path: req.path });
+        let { phone } = req.body;
+        phone = phone.replace(/[^\d]/g, '');
+        const phoneInDB = await User.findOne({ phone: phone });
+        let phoneExists = phoneInDB ? true : false;
+        if (phoneExists) {
+            res.redirect('/settings?phoneExists=true');
         }
+        else {
+            const user = await User.findById(req.session.userId);
+            user.phone = phone;
+            await user.save();
 
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
+            req.session.phone = phone;
+
+            res.redirect('/settings');
         }
-
-        const user = await User.findById(req.session.userId);
-        user.phone = phoneNumber;
-
-        await user.save();
-
-        req.session.phoneNumber = phoneNumber;
-
-        res.redirect('/settings');
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
 
-/**
- * Route for rendering the delete account page
- * @name get/settings/deleteAccount
- * @function
- * @memberof module:routers/settings
- * @inner
- * @param {string} path - Express path
- * @param {callback} middleware - Express middleware.
- */
-router.get('/settings/deleteAccount', async (req, res) => {
-    res.render('deleteAccount', { path: req.path });
+
+
+router.post('/settings/deleteAccountAuthenticate', async (req, res) => {
+    try {
+        const { deletePassword } = req.body;
+        const user = await User.findById(req.session.userId);
+        let passwordMatch = await bcrypt.compare(deletePassword, user.password);
+        if (!passwordMatch) {
+            return res.redirect('/settings?deleteAccountError=true');
+        }
+        else {
+            req.session.deleteAccountAuthenticated = true;
+            res.redirect('/settings');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }   
 });
 
 /**
@@ -236,11 +220,15 @@ router.get('/settings/deleteAccount', async (req, res) => {
  */
 router.post('/settings/deleteAccount', async (req, res) => {
     try {
-        if (!req.session.userId) {
-            return res.status(401).send('Unauthorized');
-        }
-
-        await User.findByIdAndDelete(req.session.userId);
+        // Update user information instead of deleting
+        const randomPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), saltRounds);
+        await User.findByIdAndUpdate(req.session.userId, {
+            email: `deleted@user.com`,
+            username: `Deleted User (${user.username})`,
+            profileImage: null,
+            phone: "0000000000",
+            password: randomPassword
+        });
 
         req.session.destroy((err) => {
             if (err) {

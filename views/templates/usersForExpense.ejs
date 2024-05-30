@@ -1,5 +1,3 @@
-<% if (transaction && transaction.payee.username == friend.username) { %>
-    <option class="text-center" value="<% transaction.payee._id %>" selected><%= transaction.payee.username %></option>
-<% } else { %>
-    <option class="text-center hidden username <%= group._id %>" id="<%= friend._id %>userName" value="<%= friend._id %>"><%= friend.username %></option>
+<% if (!friend.username.includes("Deleted User")) { %>
+    <option class="text-center username <%= group._id %>" id="<%= friend._id %>userName" value="<%= friend._id %>"><%= friend.username %></option>
 <% } %>

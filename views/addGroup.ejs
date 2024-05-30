@@ -1,5 +1,6 @@
 <%- include('templates/headTags') %>
-    <header class="sticky top-0 ">
+<!-- Form submission and cancel buttons start -->
+<header class="sticky top-0 ">
         <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
             <div><a id="cancelAddGroup" href="/home">
                     Cancel
@@ -16,15 +17,20 @@
             </div>
         </div>
     </header>
+    <!-- Form submission and cancel buttons end -->
+
+    <!--add/edit Form start -->
     <form action="/addGroupSubmission" method="post" id="addGroupForm" enctype="multipart/form-data" class="w-full ">
         <div class="flex flex-col gap-5 w-full">
             <div class="flex flex-row gap-3 m-2 mt-5">
                 <div>
                     <label for="groupImage" class="cursor-pointer">
-                        <% if (!group) { %>
+                        <!-- empty add form field group photo -->
+                        <% if (!group) { %>   
                             <img src="/images/homepageIconsAndPlaceholders/addGroup.svg" class="w-14 h-14"
                                 alt="Add photo" id="previewImage">
                             <% } else { %>
+                                <!-- pre filled edit group photo -->
                                 <% if(group.group_picBase64) { %>
                                     <img src="<%= group.group_picBase64%>" class="w-14 h-14" alt="Add photo"
                                         id="previewImage">
@@ -38,11 +44,13 @@
                 </div>
                 <div class="flex flex-col w-full">
                     <label for="groupName">Group name*</label>
+                    <!-- empty add form field group name -->
                     <% if (!group) { %>
                         <input type="text" id="groupName" name="groupName"
                             class="w-full border-b pl-0 p-1 focus:outline-none focus:border-black">
                         <input type="text" value="GroupDoesNotExist" id="checkGroup" class="hidden">
                         <% } else { %>
+                            <!-- pre filled edit group name -->
                             <input type="text" id="groupName" name="groupName"
                                 class="w-full border-b pl-0 p-1 focus:outline-none focus:border-black"
                                 value="<%= group.group_name %>">
@@ -57,6 +65,7 @@
                 <div class="" class=""><span class="text-2xl">Add members*</span></div>
                 <span class="text-red-700 hidden" id="emptyFriendWarning">Please select at least one friend</span>
                 <ul class="w-full flex flex-col gap-2" id="groupFriendChoices">
+                    <!-- fill in the friends list -->
                     <% for(let i=0; i< friends.length; i ++) {%>
                         <%- include('templates/friendsAddGroup', {friend: friends[i], groupBalance: groupBalance}) %>
                             <% } %>
@@ -66,6 +75,9 @@
             </div>
         </div>
     </form>
+    <!--add/edit Form end -->
+
+    <!-- delete group button and confirm delete options start if editing a group-->
     <% if (group) { %>
         <div class="flex flex-row justify-center">
             <button id="<%= group._id %>Delete"
@@ -92,6 +104,6 @@
             </form>
         </div>
         <% } %>
-
+            <!-- delete group button and confirm delete options end -->
             <script src="/scripts/addGroup.js"></script>
             <%- include('templates/footer') %>

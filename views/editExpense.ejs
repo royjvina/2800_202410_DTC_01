@@ -1,0 +1,140 @@
+<%- include('templates/headTags') %>
+    <div class="">
+        <form action="/editExpense" id="addExpenseForm" method="post">
+            <header class="fixed w-full top-0">
+                <div
+                    class="flex flex-row justify-between font-bold px-3 pb-3 bg-primary items-center text-white h-[68px]">
+                    <div><a id="cancelAddExpense" class="addExpenseCancelButton">
+                            Cancel
+                        </a>
+                    </div>
+                    <div class="text-lg">
+
+                        <p>
+                            Edit <%= transaction.name %>
+                        </p>
+                    </div>
+                    <div class="">
+                        <a href=><button type="submit" form="addExpenseForm" id="confirmAddExpense">Done</button></a>
+                    </div>
+                </div>
+            </header>
+            <div class="m-2 mt-[90px] p-3 px-5 outline outline-1 flex flex-row justify-between rounded-xl">
+                <span>Group</span> <span class="groupMenuSpan" id="<%= group._id %>">
+                    <input type="text" id="selectedGroup" class="visually-hidden"><%= group.group_name %></input>
+                </span>
+            </div>
+            <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
+                <div class="flex flex-col items-start gap-4">
+                    <input type="text" id="selectedExpenseName" name="selectedExpenseName"
+                        value="<%= transaction.name %>" class="focus:outline-none focus:border-b-2 w-5/6 pl-1">
+                    <input type="text" value="<%= transaction._id %>" name="expenseId" class="hidden">
+                    <div class="flex flex-row items-center">
+                        <div class="flex flex-row justify-between">
+                            <span class=" text-xl pr-[2px]">$</span>
+                            <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount"
+                                value="<%= transaction.total_cost.toFixed(2) %>"
+                                class="focus:outline-none focus:border-b-2">
+                        </div>
+                        <% let transactionDate=new Date(transaction.date) %>
+                            <% let year=transaction.date.getFullYear() %>
+                                <% let month=transactionDate.getMonth() + 1 %>
+                                    <% if (month < 10) { %>
+                                        <% month="0" + month %>
+                                            <% } %>
+                                                <% let day=transactionDate.getUTCDate() %>
+                                                    <input type="date" id="selectedDate" data-date="<%= year + " -" +
+                                                        month + "-" + day %>" name="selectedDate"
+                                                    value="<%= year + "-" + month + "-" + day %>"
+                                                        class="focus:outline-none focus:border-b-2 px-2 m-1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col w-full p-3 gap-2">
+                <div class="w-full flex flex-row items-center justify-between px-2" id="groupDroupDown"><span
+                        id="categoryHeader" class="text-2xl text-primary">
+                        <%= transaction.category[0].toUpperCase() + transaction.category.substring(1) %>
+                    </span> </div>
+
+                <ul class="grid grid-cols-3 gap-2" id="groupCategoryChoices">
+                    <% let categories=['travel', 'home' , 'food' , 'business' , 'recreation' , 'miscellaneous' ] %>
+                        <% for (category of categories) { %>
+                            <%- include('templates/categoryCards', {transaction: transaction, category: category}) %>
+                                <% } %>
+
+                                    <input type="text" id="categoryInput" class="hidden" value="miscellaneous"
+                                        name="selectedCategory">
+            </div>
+            <div class="bg-primary pb-3">
+                <div class="flex flex-row gap-10 items-center text-white bg-primary mt-4 p-3 rounded-t-3xl">
+                    <p class="font-semibold text-3xl px-4">Split</p>
+                    <div class="flex items-center">
+                        <label class="font-semibold my-2 text-base" for="selectedPaidBy">Paid By:</label>
+                        <select class=" rounded-lg m-2 text-black" name="selectedPaidBy" id="selectedPaidBy"
+                            placeholder="Select User">
+                            <% for(let i=0; i < group.members.length; i++) {%>
+                                <%- include('templates/usersForEditExpense', { group: group, friend:
+                                    group.members[i].user_id, transaction: transaction }) %>
+                                    <% } %>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-black mt-2 flex mx-2 justify-center">
+                    <div
+                        class="flex flex-row text-center outline outline-1 rounded-full w-full justify-center bg-white">
+
+                        <div class="w-1/2 p-1 rounded-full" id="showEqualExpense">Equal</div>
+
+                        <div class="w-1/2 p-1 rounded-full" id="showPercentageExpense">Percentage</div>
+
+                        <div class="w-1/2 p-1 text-white bg-[#4b061a] rounded-full" id="showManualExpense">Manual</div>
+                        <input type="text" class="hidden" name="splitType" id="splitType">
+                    </div>
+                </div>
+            </div>
+            <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px] hidden">
+                <div id="<%= group._id %>-equally" class="split-container">
+                    <% for(let i=0; i < group.members.length; i++) { %>
+                        <%- include('templates/editFriendsEqualExpense', { group: group, friend: group.members[i].user_id,
+                            transaction: transaction.payments[i] }) %>
+                            <% } %>
+                </div>
+            </div>
+
+            <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
+                <div id="<%= group._id %>-percentage" class="split-container">
+                    <% for(let i=0; i < group.members.length; i++) { %>
+
+                        <%- include('templates/editFriendsPercentExpense', { group: group, friend:
+                            group.members[i].user_id, transaction: transaction.payments[i]}) %>
+                            <% } %>
+                </div>
+            </div>
+                <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px]">
+       
+                    <div id="<%= group._id %>-manually" class="split-container ">
+                        <% for(let i = 0; i < group.members.length; i++) { %>
+                            
+                                <% if (transaction.name != 'Reimbursement') { %>
+                                    <%- include('templates/editFriendsManual', { group: group, friend: group.members[i].user_id, transaction: transaction.payments[i], transactionGroup: transaction.group_id }) %>
+                                <% } else if (transaction.name == 'Reimbursement') { %>
+                                    <%- include('templates/editFriendsManual', { group: group, friend: group.members[i].user_id, transaction: transaction.payments[0], transactionGroup: transaction.group_id }) %>
+                                <% } %>
+                            
+                        <% } %>
+                    </div>
+            </div>
+            <input type="text" class="hidden" name="groupId" value="<%= group._id %>">
+        </form>
+        <dialog id="errorModal" class="rounded-lg">
+            <div class="p-4 rounded-lg">
+                <p id="errorMessage"></p>
+                <div class="flex justify-center">
+                    <button id="closeExpenseError" class="p-3 py-1 bg-primary text-white rounded-lg m-2">Close</button>
+                </div>
+            </div>
+        </dialog>
+    </div>
+    <script src="/scripts/editExpense.js"></script>
+    <%- include('templates/footer') %>
