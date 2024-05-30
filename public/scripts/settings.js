@@ -1,3 +1,96 @@
+
+/**
+ * Validates the user's password.
+ * @param {*} password 
+ * @returns {boolean} True if the password is valid, false otherwise.
+ */
+function validatePassword(password) {
+    const minLength = 8;
+    const uppercasePattern = /[A-Z]/;
+    const lowercasePattern = /[a-z]/;
+    const numberPattern = /[0-9]/;
+    const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
+
+    if (password.length < minLength) {
+        return false;
+    }
+    if (!uppercasePattern.test(password)) {
+        return false;
+    }
+    if (!lowercasePattern.test(password)) {
+        return false;
+    }
+    if (!numberPattern.test(password)) {
+        return false;
+    }
+    if (!specialCharPattern.test(password)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Event handler for the change password button.
+ * Validates the new password and displays a warning message if the password is invalid, shows a confirm change password button if the password is valid.
+ * */
+function changePasswordHandler() {
+    changePass.addEventListener('click', function () {
+        console.log('clicked');
+        let newPassword = document.getElementById('newPassword').value;
+        let confirmPassword = document.getElementById('confirmPassword').value;
+        if (newPassword == "" || confirmPassword == "") {
+            passwordWarning.textContent = 'Please enter a password';
+            passwordFormat.classList.remove('text-red-500');
+        }
+        else if (newPassword !== confirmPassword) {
+            passwordWarning.textContent = 'Passwords do not match';
+            passwordFormat.classList.remove('text-red-500');
+        }
+        else if (!validatePassword(newPassword)) {
+            passwordFormat.classList.add('text-red-500');
+            passwordWarning.textContent = ""
+        }
+        else {
+            confirmChangePass.classList.remove('hidden');
+            confirmChangePass.classList.add('hideManually');
+            changePass.classList.add('hidden');
+            setTimeout(() => {
+                confirmChangePass.classList.remove('hideManually');
+            }, 10);
+            confirmChangePass.classList.add('flex');
+        }
+
+
+    });
+}
+
+function showChangePassword() {
+    changePassForm.classList.toggle('hidden');
+    changePassForm.classList.toggle('flex');
+    if(passArrow.src.includes('down')) {
+        passArrow.src = 'images/otherIcons/upArrowSettings.svg';
+    }
+    else {
+        passArrow.src = 'images/otherIcons/downArrowSettings.svg';
+    }
+}
+
+/**
+ * Event handler for the cancel change password button.
+ * Hides the confirm change password button and shows the change password button.
+ * */
+function cancelChangePassword() {
+    cancelChangePass.addEventListener('click', function () {
+        confirmChangePass.classList.add('hidden');
+        changePass.classList.remove('hidden');
+        passwordWarning.textContent = '';
+        document.getElementById('newPassword').value = "";
+        document.getElementById('confirmPassword').value = "";
+        showChangePassword();
+    });
+}
+
 /**
  * Event listener for DOMContentLoaded to ensure the DOM is fully loaded before executing the script.
  */
@@ -32,4 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
             reader.readAsDataURL(file); // Read the file as a data URL
         }
     });
+    changePasswordHandler();
+    cancelChangePassword();
+    changePassSetting.addEventListener('click', showChangePassword);
 });
