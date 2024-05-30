@@ -188,6 +188,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     changePasswordHandler();
+    pennywise.textContent = 'Settings';
+    topLogo.innerHTML = `<button class="text-4xl flex flex-row items-center text-white pl-1 mb-2" id="backSettings"> &#8249; </button>`;
+    backSettings.addEventListener('click', function () {
+        history.back();
+    });
     cancelChangePassword();
     changePassSetting.addEventListener('click', showChangePassword);
     Inputmask({ "mask": "(999) 999-9999" }).mask(document.getElementById("newPhone"));
