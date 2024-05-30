@@ -39,20 +39,20 @@ router.get("/home", async (req, res) => {
                 }
             });
         });
-
         let friendDebt = await getFriendDebt(req); // Get friend debts of the user
-        let TotalpositiveDebt = 0;
-        let TotalnegativeDebt = 0;
+        let totalPositiveDebt = 0;
+        let totalNegativeDebt = 0;
 
-        for (let friend in friendDebt) {
-            if (friendDebt[friend] > 0) {
-                TotalpositiveDebt += friendDebt[friend];
+        for (let group in groupDebt) {
+            if (groupDebt[group] > 0) {
+                totalPositiveDebt += groupDebt[group];
             } else {
-                TotalnegativeDebt += friendDebt[friend];
+                totalNegativeDebt += groupDebt[group];
             }
         }
 
-        let debtInfo = { TotalpositiveDebt: TotalpositiveDebt, TotalnegativeDebt: Math.abs(TotalnegativeDebt) }; // Get the total positive and negative debts of the user
+        let debtInfo = { totalPositiveDebt: Math.abs(totalPositiveDebt), totalNegativeDebt: Math.abs(totalNegativeDebt) }; // Get the total positive and negative debts of the user
+        console.log(debtInfo);
         const friendsWithDebts = mapAndSortEntitiesWithDebts(user.friends, friendDebt); // Sort the friends based on debts
         const groupsWithDebts = mapAndSortEntitiesWithDebts(groups, groupDebt); // Sort the groups based on debts
 
