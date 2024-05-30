@@ -11,9 +11,6 @@ const Group = require('../models/Group');
  * @returns {Promise<Array>} - A promise that resolves to an array of expense objects grouped by category
  * @async
  * @throws {Error} - Throws an error if the user is not found or any other issue occurs during fetching
- * @example
- * // Get expenses by category for user '12345' from '2023-01-01' to '2023-01-31'
- * getExpensesByCategory('12345', '2023-01-01', '2023-01-31').then(expenses => console.log(expenses));
  */
 async function getExpensesByCategory(userId, startDate, endDate) {
   try {
@@ -35,19 +32,20 @@ async function getExpensesByCategory(userId, startDate, endDate) {
       matchQuery.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
     }
 
-    // Aggregate transactions to group by category and sum the total cost
+    // Aggregate transactions to group by category and sum the total cost, while also retaining details
     const expenses = await Transaction.aggregate([
       { $match: matchQuery },
-      { $group: { _id: "$category", total_cost: { $sum: "$total_cost" } } }
+      { $group: { _id: "$category", totalCost: { $sum: "$total_cost" }, details: { $push: "$$ROOT" } } }
     ]);
 
-    // Process the aggregated expenses to map categories to total costs
+    // Process the aggregated expenses to map categories to total costs and details
     const expenseMap = expenses.reduce((acc, expense) => {
       const category = expense._id.toLowerCase();
       if (acc[category]) {
-        acc[category] += expense.total_cost;
+        acc[category].totalCost += expense.totalCost;
+        acc[category].details = acc[category].details.concat(expense.details);
       } else {
-        acc[category] = expense.total_cost;
+        acc[category] = { totalCost: expense.totalCost, details: expense.details };
       }
       return acc;
     }, {});
@@ -55,7 +53,8 @@ async function getExpensesByCategory(userId, startDate, endDate) {
     // Convert the expense map to an array of expense objects
     const result = Object.keys(expenseMap).map(key => ({
       category: key,
-      totalCost: expenseMap[key]
+      totalCost: expenseMap[key].totalCost,
+      details: expenseMap[key].details
     }));
 
     console.log(`Processed expenses: ${JSON.stringify(result)}`);
