@@ -1,17 +1,17 @@
-<%- include('templates/header') %>
+<%- include('templates/headtags') %>
 <link rel="stylesheet" href="/style/styleAi.css">
-<div id="wrapper" class = "">
+<div id="wrapper" class = "pb-[60px]">
     <div id="chatContainer" class = "">
-        <div id="chatHeader" class = "shadow-lg flex flex-row items-center justify-between w-full bg-primary rounded-t-xl h-16">
-            <div class = "pl-2">
-                <i href="#" class="fas fa-history history-icon"></i>
+        <div id="chatHeader" class = "shadow-lg flex flex-row items-center justify-between w-full bg-primary h-16">
+            <div class>
+                <i href="#" class="fas my-2 mx-1 fa-history history-icon"></i>
             </div>
             <div class = "">
                 <p id="toDo" class = "translate-x-4 text-lg hidden text-center mx-auto font-semibold">Ask me anything!</p>
             </div>
             <div>
                 <button id="saveBtn" class = "hidden font-semibold text-lg" onclick="saveConversation()">Save</button>
-            </div class = "pr-2">
+            </div>
         </div>
         <div id="chatContent" class = "">
             <div id="introContainer" class = "h-full flex flex-col items-center justify-center text-black">
@@ -26,15 +26,16 @@
             </div>
             <div id="chat" class="overflow-auto">
                 
-                <div class="messages" id="messageBox" data-src="<%= username %>"></div>
+                <div class="messages bg-primary" id="messageBox" data-src="<%= username %>"></div>
                 <div id="loading" class="fa-2x"><i class="fa-solid fa-spinner fa-spin-pulse"></i></div>
             </div>
         </div>
-        <div class="rounded-b-xl shadow-lg" id="inputContainer">
+        <div class="shadow-lg" id="inputContainer">
             <input type="text" id="userInput" placeholder="Type here">
-            <button id="sendBtn" onclick="sendMessage()"><i class="fa-regular fa-message"></i></button>
+            <button id="sendBtn" onclick="sendMessage()"><i class="fa-regular text-xl fa-message"></i></button>
         </div>
     </div>
+</div>
 </div>
 <script src="/scripts/ai.js"></script>
 <%- include('templates/footer') %>
