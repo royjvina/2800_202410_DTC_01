@@ -102,23 +102,23 @@ function refreshfields(equal = false, percentage = false, manual = false) {
         });
         inputValues = document.querySelectorAll('.equalValue');
         inputValues.forEach(inputValue => {
-            inputValue.value = "";
+            inputValue.value = "$0.00";
         });
     }
     if (percentage) {
         percentageFields = document.querySelectorAll('.percentage');
         percentageFields.forEach(percentageField => {
-            percentageField.value = "";
+            percentageField.value = "$0.00";
         });
         inputValues = document.querySelectorAll('.percentageValue');
         inputValues.forEach(inputValue => {
-            inputValue.value = "";
+            inputValue.value = "$0.00";
         });
     }
     if (manual) {
         manualFields = document.querySelectorAll('.friendAmountManual');
         manualFields.forEach(manualField => {
-            manualField.value = "";
+            manualField.value = "0.00";
         });
     }
 }
