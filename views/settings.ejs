@@ -12,11 +12,14 @@
             </div>
             <div id="userInfo" class="w-full flex flex-col items-center justify-center">
               <h3 class="w-4/5 border border-white text-lg font-semibold">
+                <!-- Display username -->
                 <%= username %>
               </h3>
+              <!-- Display email -->
               <p class="w-4/5 border border-white text-gray-600">
                 <%= email %>
               </p>
+              <!-- Display phone number -->
               <p class="w-4/5 border border-white text-gray-600">
                 <%= phoneNumber %>
               </p>
@@ -29,10 +32,12 @@
                 <div class="w-16 min-w-16 h-16 border border-gray-400 flex items-center justify-center">
                   <label for="profileImage" class="cursor-pointer">
                     <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Image" class="max-w-full max-h-full">
+                    <!-- Input field for editing profile image -->
                     <input id="profileImage" type="file" name="profileImage" capture class="hidden">
                   </label>
                 </div>
                 <div class="w-full flex flex-col items-center justify-center">
+                  <!-- Input field for editing username -->
                   <input type="text" name="username" value="<%= username %>"
                     class="w-4/5 focus:outline-none border border-gray-400 text-lg font-semibold" />
                   <p name="email" value="<%= email %>" class="w-4/5 border border-white text-gray-600">
@@ -48,7 +53,7 @@
                   <% if (!editMode) { %>
                     <form action="/settings/edit" method="GET" class="h-full w-full">
                       <button type="submit" class="h-6 w-6 flex flex-row items-center">
-                        <!-- Pencil -->
+                        <!-- Editing icon -->
                         <svg xmlns="http://www.w3.org/2000/svg"
                           class="h-full w-full icon icon-tabler icon-tabler-pencil" width="20" height="20"
                           viewBox="0 0 24 24" stroke-width="1.0" stroke="#000000" fill="none" stroke-linecap="round"
