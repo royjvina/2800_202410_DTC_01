@@ -3,7 +3,7 @@
   <main class="flex flex-col items-center justify-center  min-h-screen px-4 sm:px-8">
     <!-- Data range-->
     <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 mb-4 mt-5 sm:mt-10">
-      <h5 class="text-xl font-bold leading-none text-gray-800 pb-2">Date Range</h5>
+      <h5 class="text-xl font-bold leading-none text-gray-800 pb-2">Filter time period</h5>
       <div class="justify-between flex flex-col sm:flex-row">
         <div class="p-2 justify-between flex">
           <div>
@@ -28,7 +28,7 @@
 
     <div class="max-w-sm w-full bg-white rounded-lg shadow-xl p-4 mb-40">
       <div class="flex justify-between items-center mb-4">
-        <h5 class="text-xl font-bold text-gray-800 pb-2">Category Spending</h5>
+        <h5 class="text-xl font-bold text-gray-800 pb-2">Lifetime spending by category</h5>
       </div>
 
       <!-- Donut chart-->
@@ -37,20 +37,16 @@
 
       <div class="pt-4 text-md text-gray-700 p-4 rounded-lg shadow border mt-3">
         <h5 class="text-lg font-semibold text-gray-700 pb-2">Top 3 Expenses</h5>
-        <div class="text-gray-700 p-2 rounded-xl border border-white">
-          Spending in the <b id="most-spent-category" class="text-primary font-semibold underline"></b> category is
-          higher
-          than
-          other categories.
-          <div class="font-thin text-xs mt-2">
-            For more detail click the category below.
-          </div>
+        <div class="text-gray-700 p-2 rounded-xl text-sm border border-white">
+          You have spent the most amount of money in <b id="most-spent-category" class="text-lg text-primary font-semibold "></b> category.
         </div>
 
         <!-- Ranking here-->
         <div class="mt-4 space-y-4">
-          <div id="rank-1"
-            class="text-sm text-gray-700 bg-gray-100 shadow p-3 rounded-md border-l-4 border-red-800 transition duration-300">
+          <div>
+            <div id="rank-1"
+              class="text-sm text-gray-700 bg-gray-100 shadow p-3 rounded-md border-l-4 border-red-800 transition duration-300">
+            </div>
           </div>
           <div id="rank-2"
             class="text-sm text-gray-700 bg-gray-100 shadow p-3 rounded-md border-l-4 border-red-800 transition duration-300">
@@ -62,23 +58,7 @@
       </div>
 
   </main>
-  <style>
-    header {
-      z-index: 1000;
-      position: sticky;
-      top: 0;
-    }
-
-    .expense-details {
-      display: none;
-      margin-top: 10px;
-    }
-
-    .expense-details.show {
-      display: block;
-    }
-  </style>
-
+ 
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
   <script src="/scripts/insightChart.js"></script>
