@@ -1,10 +1,10 @@
 <%- include('templates/header') %>
-
-<!-- recent activity start -->
 <div id="recentActivity" class="overflow-auto mb-[90px]">
+    <!-- Display each user's expense -->
     <% recentActivities.forEach(activity => { %>
     <% if (activity.splitAmount > 0) { %>
     <a href="/individualExpense" class="usersActivity flex items-center flex-row rounded-xl m-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+        <!-- Display group/default picture -->
         <% if (activity.groupPic) { %>
         <img class="ml-4 rounded-full w-12 h-12" src="<%= activity.groupPic %>" alt="Group Pic" >
         <% } else { %>
@@ -12,18 +12,21 @@
         <% } %>
         <div class="flex flex-col text-xs m-4 text-gray-500 w-full mt-2">
             <div class="flex flex-row justify-between text-black">
+                <!-- Display group name -->
                 <p class="text-lg font-semibold flex items-center"><%= activity.groupName %></p>
                 <div class="flex ml-auto flex-col">
+                    <!-- Display user's given split in an expense -->
                     <p class="text-gray-500 text-center">Your split:</p>
                     <p class="text-xl font-semibold text-center">$<%= activity.splitAmount.toFixed(2) %></p>
                 </div>
             </div>
+            <!-- Display expense's payee, total cost, expense name, and who the expense was for  -->
             <div class="flex flex-row flex-wrap w-5/6"><%= activity.paidBy %> paid $<%= activity.totalCost.toFixed(2) %> for <%= activity.expenseName %> on behalf of <%= activity.paidFor.join(', ')%></div> 
+            <!-- Display expense's date -->
             <p class="leading-4">Date: <%= new Date(activity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
         </div>
     </a>
     <% } %>
     <% }) %>
 </div>
-<!-- recent activity end -->
 <%- include('templates/footer') %>
