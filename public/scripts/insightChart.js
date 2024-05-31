@@ -106,7 +106,7 @@ function updateChart(expenses) {
   const labels = [];
   const colors = [];
 
-  // populate series, labels, and colors
+  // populate series, labels, and colors arrays for chart
   for (const category in categoryMap) {
     if (categoryMap[category].totalCost > 0) {
       series.push(categoryMap[category].totalCost);
@@ -114,7 +114,7 @@ function updateChart(expenses) {
       colors.push(categoryColors[category]);
     }
   }
-
+  // handle case where no expenses are available
   if (series.length === 0) {
     donutChartElement.innerHTML = '<p>No expenses data available.</p>';
     updateRanking([]);
@@ -123,7 +123,7 @@ function updateChart(expenses) {
 
 
 
-  // Define chart options
+  // Define chart options for ApexCharts
   const chartOptions = {
     series: series,
     chart: {
@@ -173,6 +173,8 @@ function updateRanking(categoryMap) {
   const sortedCategories = Object.entries(categoryMap).sort((a, b) => b[1].totalCost - a[1].totalCost);
   const topThree = sortedCategories.slice(0, 3);
 
+
+  // Update the ranking display for top 3 categories 
   topThree.forEach((item, index) => {
     const rankElement = document.getElementById(`rank-${index + 1}`);
     if (rankElement) {
@@ -187,10 +189,11 @@ function updateRanking(categoryMap) {
       rankElement.classList.add('text-sm', 'text-gray-700', 'shadow-lg', 'p-3', 'rounded-md', 'border-l-4', 'hover:bg-gray-100', 'transition', 'duration-300');
       rankElement.dataset.category = item[0]; // Store category name in data attribute
       rankElement.dataset.details = JSON.stringify(item[1].details); // Store details in data attribute
-      rankElement.onclick = toggleDisplayExpenses; // Add click event listener
+      rankElement.onclick = toggleDisplayTransaction; // Add click event listener
     }
   });
 
+  // Handle case where less than 3 categories are available
   for (let i = topThree.length; i < 3; i++) {
     const rankElement = document.getElementById(`rank-${i + 1}`);
     if (rankElement) {
@@ -199,7 +202,7 @@ function updateRanking(categoryMap) {
       rankElement.onclick = null;
     }
   }
-
+  // Update most spent category
   if (topThree.length > 0) {
     document.getElementById('most-spent-category').textContent = topThree[0][0];
   } else {
@@ -207,7 +210,12 @@ function updateRanking(categoryMap) {
   }
 }
 
-function toggleDisplayExpenses(event) {
+/**
+ * Toggles the display of transactions for a category.
+ * @param {Event} event - Click event on a category rank element
+ * @returns 
+ */
+function toggleDisplayTransaction(event) {
   const rankElement = event.currentTarget;
   const category = rankElement.dataset.category;
   const details = JSON.parse(rankElement.dataset.details);
@@ -215,6 +223,7 @@ function toggleDisplayExpenses(event) {
 
   let expenseDetailsElement = rankElement.querySelector('.expense-details');
 
+  // Create or remove the expense details 
   if (!expenseDetailsElement) {
     expenseDetailsElement = document.createElement('div');
     expenseDetailsElement.classList.add('expense-details');
@@ -228,7 +237,7 @@ function toggleDisplayExpenses(event) {
     expenseDetailsElement.innerHTML = '';
   } else {
     expenseDetailsElement.classList.add('show');
-    expenseDetailsElement.innerHTML = `<h3 class="mt-2 mb-2 underline font-semibold">Transactions:</h3>`;
+    expenseDetailsElement.innerHTML = `<h3 class="mt-2 mb-2 underline font-semibold ">Transactions:</h3>`;
 
     if (!details || details.length === 0) {
       expenseDetailsElement.innerHTML += '<p class="text-gray-600">No expenses found for this category.</p>';
@@ -238,6 +247,8 @@ function toggleDisplayExpenses(event) {
     // Sort details by date
     details.sort((a, b) => new Date(a.date) - new Date(b.date));
 
+
+    // Append each expense detail to the list
     details.forEach(expense => {
       const expenseElement = document.createElement('div');
       expenseElement.classList.add('expense-item', 'flex', 'items-center', 'py-2', 'border-b', 'border-gray-200');
