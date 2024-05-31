@@ -1,10 +1,10 @@
 <%- include('templates/headTags') %>
-    <!-- sign up form starts -->
         <form action = '/submitRegistration' method = "POST" enctype="multipart/form-data">
             <div class = 'flex flex-col items-center mt-12'>
                 <div id = 'spacer' class = "bg-inherit h-[10%]"></div>
             <div class = "border-4 border-primary overflow-hidden max-w-[50%] w-fit my-4 h-fit rounded-full">
                 <label for="profileImage" class="cursor-pointer">
+                    <!-- Add profile picture -->
                     <img src="/images/homepageIconsAndPlaceholders/addProfilePic.svg" class="" id="previewProfileImage" alt="Add Photo">
                     <input id="profileImage" type="file" name="profileImage" capture class="hidden">
                 </label>
@@ -14,6 +14,7 @@
                 <h1 class = "text-2xl font-semibold pb-2">Select a Profile Picture</h1>
             </div>
             <div class = "flex flex-col items-center w-full justify-center gap-y-4 text-center">
+                <!-- Enter Email -->
             <input type = "text" name = "email" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('email') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('email') ? 'Invalid email' : 'Enter your email*' %>"
                 <% if(signUpFields['email'] != "") { %>
                     value="<%= signUpFields['email'] %>">
@@ -21,6 +22,7 @@
                     >
                 <% } %>
 
+            <!-- Enter Phone Number -->
             <input type = "tel" id="phoneNumber" name = "phone" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('phone') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('phone') ? 'Invalid phone #' : 'Enter your phone #*' %>"
                 <% if(signUpFields['phone'] != "") { %>
                     value="<%= signUpFields['phone'] %>">
@@ -28,6 +30,7 @@
                     >
                 <% } %>
 
+            <!-- Enter Username -->
             <input type = "text" name =  "username" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('username') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('username') ? 'Invalid name' : 'Enter your name*' %>"
                     <% if(signUpFields['username'] != "") { %>
                         value="<%= signUpFields['username'] %>">
@@ -35,6 +38,7 @@
                         >
                     <% } %>
                 
+                <!-- Enter Password -->
                 <input type = "password" name = "password" class="focus:outline-none mx-auto bg-white w-1/2 min-w-52 py-3 rounded-lg border-primary border-2 font-semibold shadow-md px-4 <%= error.includes('email') ? 'placeholder-red-400' : '' %>" placeholder = "<%= error.includes('password') ? 'Invalid password' : 'Enter a password*' %>">
                 <p class="mx-8 text-xs pb-2">
                     Min. 8 characters, 1 lowercase, 1 uppercase, and 1 number. ONLY the following special characters are allowed: @ $ ! % * ? &   
@@ -44,10 +48,10 @@
             </div>
         </form>
         <div class = "pt-4 text-center">
+            <!-- Redirect to Login page -->
             <p class = "">Already have an account? <span onclick = "window.location = '/'" class = 'font-bold cursor-pointer'>Login</span></p>
         </div>
     </div>
-    <!-- sign up form ends -->
 
 <script src="/scripts/register.js"></script>
 <% include('templates/footer') %>
