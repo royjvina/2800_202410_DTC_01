@@ -3,10 +3,12 @@
         <form action="/addExpenses" id="addExpenseForm" method="post">
             <header class="fixed w-full top-0">
                 <div class="flex flex-row justify-between font-bold px-3 pb-3 bg-primary items-center text-white h-[68px]">
+                    <!-- Cancel button -->
                     <div><a id="cancelAddExpense" class="addExpenseCancelButton">
                             Cancel
                         </a>
                     </div>
+                    <!-- Submission button -->
                     <div class="text-lg">
                         <p>Add Expense</p>
                     </div>
@@ -16,7 +18,7 @@
                 </div>
             </header>
 
-            <!-- Select Group -->
+            <!-- Select Group Dropdown Menu -->
             <div class="mt-[90px] w-full bg-white z-10">
                 <div id="groupMenuDiv" class="m-2 p-3 outline outline-1 rounded-xl">
                     <label class="font-semibold" for="selectedGroup">Group: </label>
@@ -31,21 +33,24 @@
                 <!-- Expense Info -->
                 <div class="flex flex-row m-2 p-3 outline outline-1 rounded-xl">
                     <div class="flex flex-col items-start gap-4">
+                        <!-- Input field for expense name -->
                             <input type="text" id="selectedExpenseName" name="selectedExpenseName"
                             placeholder="Expense Name" class="focus:outline-none focus:border-b-2 w-5/6 pl-1">
                         <div class="flex flex-row items-center">
                             <div class="flex flex-row justify-between">
                                 <span class=" text-xl pr-[2px]">$</span>  
+                                <!-- Input field of expense total amount -->
                                     <input type="number" step=".01" id="selectedExpenseAmount" name="selectedExpenseAmount"
                                     placeholder="Expense Total" class="focus:outline-none focus:border-b-2"> 
                             </div>  
+                            <!-- Input field for expense date  -->
                                 <input type="date" id="selectedDate" name="selectedDate" data-date="0"
                                 class="focus:outline-none focus:border-b-2 px-2 m-1"> 
                         </div>
                     </div>
                 </div>
 
-                <!-- Category -->
+                <!-- Expense Categories -->
                 <div class="flex flex-col w-full p-3 gap-2">
                         <div class="w-full flex flex-row items-center justify-between px-2" id="groupDroupDown"><span id="categoryHeader" class="text-2xl">Category</span></div>
                     <ul class="grid grid-cols-3 gap-2" id="groupCategoryChoices">
@@ -60,7 +65,7 @@
                     <input type="text" id="categoryInput" class="hidden" value="miscellaneous" name="selectedCategory">
                 </div>
 
-                <!-- Select user -->
+                <!-- Select user Dropdown Menu -->
                 <div class="bg-primary mt-4 p-3 rounded-t-3xl">
                     <div class="flex flex-row text-white">
                         <p class="font-semibold text-3xl px-4">Split</p>
@@ -78,7 +83,7 @@
                         </div>
                     </div>
 
-                    <!-- Split Type -->
+                    <!-- Split Type and Tabs -->
                     <div class="text-black mt-2 flex mx-2 justify-center">
                         <div class="flex flex-row outline outline-1 rounded-full w-full justify-center bg-white">
                                 <button class="w-1/2 p-1 text-white bg-[#4b061a] rounded-full"
@@ -90,7 +95,7 @@
                 </div>
             </div>
 
-            <!-- Equal Split -->
+            <!-- Equal Split Tab -->
             <div id="splitExpenseEqually" class="overflow-auto bg-primary mb-[90px]">
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-equally" class="split-container hidden">
@@ -101,7 +106,7 @@
                 <% } %>
             </div>
             
-            <!-- Percentage Split -->
+            <!-- Percentage Split Tab-->
             <div id="splitExpensePercentage" class="overflow-auto bg-primary mb-[90px] hidden">
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-percentage" class="split-container hidden">
@@ -112,7 +117,7 @@
                 <% } %>
             </div>
             
-            <!-- Manual Split -->
+            <!-- Manual Split Tab-->
             <div id="splitExpenseManually" class="overflow-auto bg-primary mb-[90px] hidden">
                 <% for(let i = 0; i < groups.length; i++) { %>
                     <div id="<%= groups[i]._id %>-manually" class="split-container hidden">
@@ -124,6 +129,7 @@
             </div>
         </form>
 
+        <!-- Hidden Display Modal -->
         <dialog id="errorModal" class="rounded-lg">
             <div class="p-4 rounded-lg">
                 <p id="errorMessage"></p>
