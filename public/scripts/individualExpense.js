@@ -10,6 +10,7 @@
  */
 
 function goBackToGroupsPage() {
+    // go back to previous page, remember history 
     document.getElementById('goBack').addEventListener('click', () => {
         history.back()
     })
@@ -21,6 +22,7 @@ function goBackToGroupsPage() {
  */
 function deleteExpenseHandler() {
     deleteExpense.addEventListener('click', () => {
+        // on click, show delete expense form and hide delete button
         deleteExpenseForm.classList.remove('hidden');
         deleteExpenseForm.classList.add('flex');
         deleteExpenseForm.classList.add('hideManually');
