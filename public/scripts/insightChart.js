@@ -228,7 +228,7 @@ function toggleDisplayExpenses(event) {
     expenseDetailsElement.innerHTML = '';
   } else {
     expenseDetailsElement.classList.add('show');
-    expenseDetailsElement.innerHTML = `<h3 class=" text-[12px] mb-2">Expenses in this category:</h3>`;
+    expenseDetailsElement.innerHTML = `<h3 class="mt-2 mb-2 underline font-semibold">Transactions:</h3>`;
 
     if (!details || details.length === 0) {
       expenseDetailsElement.innerHTML += '<p class="text-gray-600">No expenses found for this category.</p>';
