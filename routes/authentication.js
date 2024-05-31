@@ -22,6 +22,9 @@ const upload = multer({ storage: storage });
  * @param {callback} middleware - Express middleware.
  */
 router.get("/", (req, res) => {
+    if (req.session.authenticated) {
+        return res.redirect('/home');
+    }
     const errorMessage = req.query.error;
     const loginEmail = req.session.loginEmail || '';
     const message = req.query.message;
