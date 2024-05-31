@@ -73,12 +73,12 @@
                                         name="selectedCategory">
             </div>
             <div class="bg-primary pb-3">
-                <div class="flex flex-row gap-10 items-center text-white bg-primary mt-4 p-3 rounded-t-3xl">
+                <div class="flex flex-row gap-10 items-center justify-between text-white bg-primary mt-4 p-3 rounded-t-3xl">
                     <p class="font-semibold text-3xl px-4">Split</p>
                     <div class="flex items-center">
                         <label class="font-semibold my-2 text-base" for="selectedPaidBy">Paid By:</label>
                         <!-- Group Payee Dropdown Menu -->
-                        <select class=" rounded-lg m-2 text-black" name="selectedPaidBy" id="selectedPaidBy"
+                        <select class="float-right rounded-lg m-2 text-black" name="selectedPaidBy" id="selectedPaidBy"
                             placeholder="Select User">
                             <% for(let i=0; i < group.members.length; i++) {%>
                                 <%- include('templates/usersForEditExpense', { group: group, friend:
