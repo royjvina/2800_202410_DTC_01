@@ -6,7 +6,7 @@ const multer = require('multer');
 const { get } = require("http");
 const { ObjectId } = require('mongodb');
 const Transaction = require('../models/Transaction');
-const { addFriend, getFriends, getFriendDebt, processTransaction } = require('../controllers/friendController');
+const { addFriend, getFriends, getFriendDebt, processTransaction, getEveryFriendDebt } = require('../controllers/friendController');
 const { getGroupDebt, getGroupDebtForFriends } = require('../controllers/groupController');
 const { mapAndSortEntitiesWithDebts } = require('../controllers/sortingController');
 
@@ -27,7 +27,7 @@ router.get("/home", async (req, res) => {
         let user = await getFriends(req); // Get friends of the user
         let groupDebt = await getGroupDebt(req); // Get group debts of the user
         let groups = await Group.find({ 'members.user_id': req.session.userId }).populate('members.user_id'); // Get groups of the user and populate the members
-        
+
         // Get the group pic and profile pic of the user and friends
         groups.forEach(group => {
             if (group.group_pic && group.group_pic.data) {
@@ -88,8 +88,9 @@ router.get("/addFriend", (req, res) => {
 router.get("/addGroup", async (req, res) => {
     let user = await getFriends(req); // Get friends of the user
     let groupId = req.query.groupId;
-    let group = await Group.findOne({ _id: groupId }).populate('members.user_id'); // Get the group based on the group id and populate the members
-    
+    let group = await Group.findOne({ _id: groupId }).populate('members.user_id').populate('transactions'); // Get the group based on the group id and populate the members and transactions
+    let everyFriendDebt = await getEveryFriendDebt(group); // Get the debts of the friends in the group
+    (user.friends).push(user); // Get all the members of the group (friends and user
     // Get the group pic of the group if coming to the edit group page
     if (group) {
         if (group.group_pic && group.group_pic.data) {
@@ -97,7 +98,7 @@ router.get("/addGroup", async (req, res) => {
         }
     }
 
-    res.render('addGroup', { path: '/home', friends: user.friends, group: group });
+    res.render('addGroup', { path: '/home', friends: user.friends, group: group, groupBalance: everyFriendDebt });
 });
 
 /**
@@ -262,7 +263,7 @@ router.post('/settleUp', async (req, res) => {
         let totalPositiveDebt = 0;
         let totalNegativeDebt = 0;
         let commonGroups = await Group.find({ 'members.user_id': { $all: [req.session.userId, friend._id] } }).populate('transactions').populate({ path: 'members.user_id', select: 'username' });
-        
+
         // Calculate debts in common groups
         for (let group of commonGroups) {
             let friendsDebt = await getGroupDebtForFriends(group, req);

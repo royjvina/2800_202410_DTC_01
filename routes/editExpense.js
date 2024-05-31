@@ -55,7 +55,8 @@ router.post('/editExpense', async (req, res) => {
         const formObject = req.body;
         let modifiedFormObject = {};
         for (let key in formObject) {
-            if (formObject[key] !== "") {
+            if (formObject[key] !== "$0.00" && formObject[key] !== "0.00" && formObject[key] !== "") {
+                console.log(formObject[key]);
                 let newKey = key;
                 if (key.includes(`Amount${formObject.splitType}`) || key.includes(`Percentage`)) {
                     newKey = key.replace(`Amount${formObject.splitType}`, '').replace(`Percentage`, '').replace(formObject.groupId, '');
@@ -65,7 +66,6 @@ router.post('/editExpense', async (req, res) => {
                 }
             }
         }
-        console.log(modifiedFormObject);
         const { selectedExpenseName, expenseId, selectedExpenseAmount, selectedDate, selectedCategory, selectedPaidBy, splitType, groupId, ...splitData } = modifiedFormObject
         const payments = Object.keys(splitData).map(userId => {
             return {
