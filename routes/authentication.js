@@ -45,14 +45,14 @@ router.post('/', async (req, res) => {
     email = email.toLowerCase();
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email });//find the user
 
         if (!user) {
             req.session.loginEmail = email;
             return res.redirect('/?error=invalidLogin');
         }
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);//compare the password
 
         if (!passwordMatch) {
             req.session.loginEmail = email;
@@ -64,6 +64,7 @@ router.post('/', async (req, res) => {
             return res.redirect('/?error=emailNotVerified');
         }
 
+        // Set session variables
         req.session.loginEmail = '';
         req.session.userId = user._id;
         req.session.username = user.username;
@@ -144,8 +145,8 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
     const incorrectFields = [];
 
     try {
-        const existingUser = await User.findOne({ email });
-        const existingPhone = await User.findOne({ phone });
+        const existingUser = await User.findOne({ email });//check if the user already exists
+        const existingPhone = await User.findOne({ phone });//check if the phone number already exists
 
         if (existingUser) {
             incorrectFields.push('email');
@@ -155,7 +156,7 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
             incorrectFields.push('phone');
         }
 
-        const { error } = registrationSchema.validate({ email, phone, username, password }, { abortEarly: false });
+        const { error } = registrationSchema.validate({ email, phone, username, password }, { abortEarly: false });//validate the user input
         if (error) {
             const validationErrors = error.details.map(detail => detail.context.key);
             incorrectFields.push(...validationErrors);
@@ -165,18 +166,18 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
         if (incorrectFields.length > 0) {
             return res.redirect(`/register?error=${incorrectFields.join(',')}`);
         }
-
+        //store the profile image in the database if it exists
         const profileImage = req.file ? {
             data: req.file.buffer,
             contentType: req.file.mimetype
         } : null;
 
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);//hash the password
 
-        const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+        const emailVerificationToken = crypto.randomBytes(32).toString('hex');//generate a random token for email verification
         const emailVerificationExpires = Date.now() + 3600000; // 1 hour from now
 
-        const newUser = new User({
+        const newUser = new User({//create a new user
             email: email,
             phone: phone,
             username: username,
@@ -186,15 +187,15 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
             emailVerificationExpires: emailVerificationExpires
         });
 
-        await newUser.save();
+        await newUser.save();//save the user
 
-        const transporter = await createTransporter();
+        const transporter = await createTransporter();//create a transporter for sending the verification email
         if (!transporter) {
             console.error('Failed to create transporter');
             return res.status(500).send('Error sending verification email.');
         }
 
-        const verificationURL = `${process.env.REDIRECTURL}/verify/${emailVerificationToken}`;
+        const verificationURL = `${process.env.REDIRECTURL}/verify/${emailVerificationToken}`;//create the verification URL
         const mailOptions = {
             to: newUser.email,
             from: process.env.USER,
@@ -203,9 +204,10 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
             html: `<p>Please verify your email by clicking the following link:</p><a href="${verificationURL}">${verificationURL}</a>`
         };
 
-        await transporter.sendMail(mailOptions);
+        await transporter.sendMail(mailOptions);//send the email
         console.log(`Verification email sent to ${newUser.email}`);
 
+        // Set session variables
         req.session.userId = newUser._id;
         req.session.authenticated = false;
         req.session.signUpFields = null;

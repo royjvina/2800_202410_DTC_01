@@ -69,7 +69,7 @@ async function getFriendDebt(req) {
                 }
             });
         } else {
-            let userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));
+            let userPayment = transaction.payments.find(payment => payment.user_id.equals(req.session.userId));//finds the user payment in the transaction payments
             if (userPayment) {
                 if (friendDebt[transaction.payee] !== undefined) {
                     friendDebt[transaction.payee] -= userPayment.amount_paid;

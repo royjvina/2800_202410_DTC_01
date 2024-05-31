@@ -50,7 +50,7 @@ router.post('/reimburse', async (req, res) => {
         const friendId = new ObjectId(req.body.reimburseFriendId);
         const amountTobePaid = parseFloat(req.body.reimburseAmount);
 
-        const reimbursements = await Transaction.create({
+        const reimbursements = await Transaction.create({// Creates a reimbursement transaction
             name: "Reimbursement",
             group_id: groupId,
             category: "reimbursement",

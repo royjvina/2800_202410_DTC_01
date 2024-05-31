@@ -37,7 +37,7 @@ OAuth2Client.setCredentials({ refresh_token: process.env.REFRESHTOKEN });
  */
 async function createTransporter() {
     try {
-        return createTransport({
+        return createTransport({// Create a nodemailer transporter
             service: 'gmail',
             auth: {
                 type: 'OAuth2',
