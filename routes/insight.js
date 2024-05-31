@@ -17,7 +17,6 @@ router.get('/insight', async (req, res) => {
     const expenses = await insightFetcher.getExpensesByCategory(userId);
     res.render('insight', { expenses, path: '/insight' });
   } catch (error) {
-    console.error('Error fetching insight:', error);
     res.status(500).send('Internal Server Error');
   }
 });
@@ -38,7 +37,6 @@ router.get('/api/insight', async (req, res) => {
     const expenses = await insightFetcher.getExpensesByCategory(userId, startDate, endDate);
     res.json(expenses);
   } catch (error) {
-    console.error('Error fetching insight data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
