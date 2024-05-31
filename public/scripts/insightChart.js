@@ -22,11 +22,9 @@ function searchByTime() {
   })
     .then(response => response.json())
     .then(data => {
-      console.log('Fetched expenses:', data);
       updateChart(data);
     })
     .catch(error => {
-      console.error('Error fetching expenses:', error);
       document.getElementById('donut-chart').innerHTML = '<p>Error loading chart data.</p>';
     });
 }
@@ -60,7 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateChart(expenses); // Update chart with fetched expenses data
 
   } catch (error) {
-    console.error('Error fetching or rendering chart:', error);
     donutChartElement.innerHTML = '<p>Error loading chart data.</p>';
   }
 });
@@ -124,9 +121,7 @@ function updateChart(expenses) {
     return;
   }
 
-  console.log('Series:', series);
-  console.log('Labels:', labels);
-  console.log('Colors:', colors);
+
 
   // Define chart options
   const chartOptions = {
@@ -217,7 +212,6 @@ function toggleDisplayExpenses(event) {
   const category = rankElement.dataset.category;
   const details = JSON.parse(rankElement.dataset.details);
 
-  console.log(`Displaying expenses for category: ${category}`, details);
 
   let expenseDetailsElement = rankElement.querySelector('.expense-details');
 
