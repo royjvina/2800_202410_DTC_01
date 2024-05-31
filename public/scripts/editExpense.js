@@ -19,6 +19,7 @@ function goBackFromAddExpenses() {
  * @claaudiaale
  */
 function equalExpenseTabHandler() {
+    // Remove backgrond colour and text colour from other tabs, add background colour and text colour to the selected tab
     showPercentageExpense.classList.remove('bg-[#4b061a]');
     showPercentageExpense.classList.remove('text-white');
     showManualExpense.classList.remove('bg-[#4b061a]');
@@ -29,6 +30,7 @@ function equalExpenseTabHandler() {
     splitExpenseManually.classList.add('hidden');
     splitExpenseEqually.classList.remove('hidden');
     splitExpenseEqually.classList.add('flex-col');
+    // Add event listener to the select payee dropdown menu to automatically add the expense total to the user who paid for the expense
     selectedPaidBy.addEventListener('change', function () { addExpenseToPaidByUser(equal = true) });
 
 }
@@ -38,6 +40,7 @@ function equalExpenseTabHandler() {
  * @claaudiaale
  */
 function percentageExpenseTabHandler() {
+    // Remove backgrond colour and text colour from other tabs, add background colour and text colour to the selected tab
     showManualExpense.classList.remove('bg-[#4b061a]');
     showManualExpense.classList.remove('text-white');
     showEqualExpense.classList.remove('bg-[#4b061a]');
@@ -56,6 +59,7 @@ function percentageExpenseTabHandler() {
  * @claaudiaale
  */
 function manualExpenseTabHandler() {
+    // Remove backgrond colour and text colour from other tabs, add background colour and text colour to the selected tab
     showPercentageExpense.classList.remove('bg-[#4b061a]');
     showPercentageExpense.classList.remove('text-white');
     showEqualExpense.classList.remove('text-white');
@@ -76,11 +80,13 @@ function manualExpenseTabHandler() {
 function percentageHandler() {
     let percentageFields = document.querySelectorAll('.percentage');
     percentageFields.forEach(percentageField => {
+        // Add event listener to the percentage fields to automatically calculate the amount based on the percentage
         percentageField.addEventListener('input', () => {
 
             let totalAmount = selectedExpenseAmount.value;
             let id = percentageField.id;
             let inputField = document.getElementById(id.replace('Percentage', 'AmountPercentage'));
+            // Calculate the amount based on the percentage, round it to 2 decimal places and display it in the input field, change value of given fields and set the other fields to 0
             inputField.value = "$" + ((percentageField.value / 100) * totalAmount).toFixed(2);
             refreshfields(equal = true, percentage = false, manual = true);
         });
@@ -95,6 +101,7 @@ function percentageHandler() {
  * @param {boolean} manual - whether to refresh the manual fields
  */
 function refreshfields(equal = false, percentage = false, manual = false) {
+    // if equal is true, reset the equal fields to 0, uncheck the checkboxes
     if (equal) {
         equalFields = document.querySelectorAll('.userEqualSplit');
         equalFields.forEach(equalField => {
@@ -105,6 +112,7 @@ function refreshfields(equal = false, percentage = false, manual = false) {
             inputValue.value = "$0.00";
         });
     }
+    // if percentage is true, reset the percentage fields to 0, set the values to $0.00
     if (percentage) {
         percentageFields = document.querySelectorAll('.percentage');
         percentageFields.forEach(percentageField => {
@@ -115,6 +123,7 @@ function refreshfields(equal = false, percentage = false, manual = false) {
             inputValue.value = "$0.00";
         });
     }
+    // if manual is true, reset the manual fields to 0, set the values to $0.00
     if (manual) {
         manualFields = document.querySelectorAll('.friendAmountManual');
         manualFields.forEach(manualField => {
@@ -141,15 +150,17 @@ function equalHandler() {
                     totalChecked++;
                 }
             });
-            console.log(id);
             inputValues = document.querySelectorAll('.equalValue');
             inputValues.forEach(inputValue => {
+                // if the field is checked, set the value to the total amount divided by the number of checked fields
                 if (checkedFields.includes((inputValue.id).replace('AmountEqualInput', ''))) {
                     inputValue.value = "$" + (totalAmount / totalChecked).toFixed(2);
                 } else {
+                    // if the field is not checked, set the value to 0
                     inputValue.value = "$0.00";
                 }
             });
+            // only reset the percentage and manual fields 
             refreshfields(equal = false, percentage = true, manual = true);
         });
     });
@@ -160,9 +171,11 @@ function equalHandler() {
  * @balpreet787
  */
 function manualHandler() {
+    // Add event listener to the manual fields to automatically calculate the amount based on the manual input
     manualFields = document.querySelectorAll('.friendAmountManual');
     manualFields.forEach(manualField => {
         manualField.addEventListener('input', () => {
+            // only reset the equal and percentage fields
             refreshfields(equal = true, percentage = true, manual = false);
         });
     });
@@ -201,6 +214,7 @@ function checkFormValidityForPercentage() {
             total += parseFloat(percentageField.value.replace('$', ''));
         }
     });
+     // after computation, check if the user's percentage input total is equal to the total expense amount
     if (total != totalAmount) {
         console.log('Total: ' + total);
         return false;
@@ -221,6 +235,7 @@ function checkFormValidityForManual() {
     manualFields.forEach(manualField => {
         total += parseFloat(manualField.value);
     });
+    // after computation, check if the user's input total is equal to the total expense amount
     if (total != totalAmount) {
         return false;
     }
@@ -229,6 +244,11 @@ function checkFormValidityForManual() {
     }
 }
 
+
+/**
+ * This function is used to handle the modal display when there is an error in the expense split
+ * @claaudiaale
+ */
 function displayErrorModal(errorMessage) {
     let errorModal = document.getElementById('errorModal');
     document.getElementById('errorMessage').innerHTML = errorMessage;
@@ -300,8 +320,10 @@ function fullFormValidation() {
 function categoryHandler() {
     const categories = document.querySelectorAll("#groupCategoryChoices li");
     categories.forEach(category => {
+        // add event listener to the category choices to change the category input value and the category header
         category.addEventListener("click", function () {
             categories.forEach(category => {
+                // add the background colour and text colour for a selected category, remove it from the other categories
                 category.classList.remove("bg-primary");
                 category.classList.add("bg-secondary");
                 category.classList.remove("text-secondary");
@@ -309,6 +331,7 @@ function categoryHandler() {
                 let categoryId = category.id;
                 img.src = `/images/addGroupIcons/${categoryId}Black.svg`;
             });
+            // enable toggling of the background colour and text colour for categories
             category.classList.toggle("bg-secondary");
             category.classList.toggle("bg-primary");
             category.classList.toggle("text-secondary");
@@ -368,12 +391,18 @@ function addExpenseToPaidByUser() {
     let paidByUser = groupId + document.getElementById('selectedPaidBy').value;
 
     if (expenseTotal > 0) {
+        // set the value of the selected payee to the expense total, refresh fields for equal split and set the correct equal split checkbox to checked
+        // only enable this in equal tab (doing this in the percentage or manual tab would cause more work for the user)
         refreshfields(equal = true, percentage = false, manual = false);
         document.getElementById(paidByUser + "Equal").checked = true;
         document.getElementById(paidByUser + "AmountEqualInput").value = expenseTotal.toFixed(2);
     }
 }
 
+
+/**
+ * This function is executed when the DOM is fully loaded  
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const showEqualExpense = document.getElementById('showEqualExpense');
     const showPercentageExpense = document.getElementById('showPercentageExpense');
