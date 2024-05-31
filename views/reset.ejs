@@ -1,11 +1,12 @@
 <%- include('templates/headTags') %>
-<!-- reset password form start -->
+<!-- Reset password form start -->
 <body class = "">
     <div class = 'flex flex-col items-center h-dvh w-dvw'>
         <div id = 'spacer' class = "bg-inherit h-[10%]"></div>
         <div class = "bg-primary  max-w-[50%] w-fit h-fit rounded-full my-4">
             <img src="/images/navbarIcons/logo.png" class="mx-auto blur-[0.5px] p-8" id="logo" alt="logo">
         </div>
+        <!-- Check email to reset password -->
         <%  if (message === 'checkEmail') { %>
             <div class = "text-center">
                 <h1 class = "text-2xl font-semibold pb-2">PennyWise</h1>
@@ -13,6 +14,7 @@
             </div>
             <p class = "text-center font-bold mx-8">Please check your inbox for a reset link.</p>
         <% } else if (message === 'passwordResetSuccess') { %>
+            <!-- Reset password confirmation -->
             <div class = "text-center">
                 <h1 class = "text-2xl font-semibold pb-2">PennyWise</h1>
                 <p class = 'font-bold mx-8 pb-4'>Your password has been reset!</p>
@@ -29,9 +31,11 @@
             <button type = "submit" id = "reset" class="bg-primary mx-auto text-white font-medium w-1/2 text-lg p-2 border-primary border-2 rounded-full shadow-md">Send Email</button>
         </form>
         <% } %>
+        <!-- Redirect to Login -->
         <div class = "pt-4 text-center">
             <p class = "">Want to try again? <span onclick = "window.location = '/'" class = 'font-bold cursor-pointer'>Login</span></p>
         </div>
+        <!-- Redirect to register -->
         <div class = "pt-2 text-center">
             <p class = "">Don't have an account? <span onclick = "window.location = '/register'" class = 'font-bold cursor-pointer'>Sign Up</span></p>
         </div>
