@@ -54,6 +54,8 @@ router.post('/editExpense', async (req, res) => {
         console.log("Redirecting to /home");
         const formObject = req.body;
         let modifiedFormObject = {};
+
+        // Remove empty fields from the form object and convert amount to float for payments
         for (let key in formObject) {
             if (formObject[key] !== "$0.00" && formObject[key] !== "0.00" && formObject[key] !== "") {
                 console.log(formObject[key]);
@@ -67,13 +69,13 @@ router.post('/editExpense', async (req, res) => {
             }
         }
         const { selectedExpenseName, expenseId, selectedExpenseAmount, selectedDate, selectedCategory, selectedPaidBy, splitType, groupId, ...splitData } = modifiedFormObject
-        const payments = Object.keys(splitData).map(userId => {
+        const payments = Object.keys(splitData).map(userId => {// Create payments array
             return {
                 user_id: userId,
                 amount_paid: parseFloat(splitData[userId].replace('$', ''))
             };
         });
-        await Transaction.findOneAndUpdate(
+        await Transaction.findOneAndUpdate(// Update the transaction
             { _id: expenseId },
             {
                 name: selectedExpenseName.trim(),

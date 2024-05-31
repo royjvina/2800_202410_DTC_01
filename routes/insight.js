@@ -14,7 +14,7 @@ const insightFetcher = require('../controllers/insightFetcherController');
 router.get('/insight', async (req, res) => {
   try {
     const userId = req.session.userId;
-    const expenses = await insightFetcher.getExpensesByCategory(userId);
+    const expenses = await insightFetcher.getExpensesByCategory(userId);// Fetches the expenses by category
     res.render('insight', { expenses, path: '/insight' });
   } catch (error) {
     res.status(500).send('Internal Server Error');
@@ -34,7 +34,7 @@ router.get('/api/insight', async (req, res) => {
   try {
     const userId = req.session.userId;
     const { startDate, endDate } = req.query;
-    const expenses = await insightFetcher.getExpensesByCategory(userId, startDate, endDate);
+    const expenses = await insightFetcher.getExpensesByCategory(userId, startDate, endDate);// Fetches the expenses by category
     res.json(expenses);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });

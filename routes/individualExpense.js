@@ -17,8 +17,7 @@ router.get('/individualExpense', async (req, res) => {
     try {
         let userId = req.session.userId;
         let transactionId = req.query.expenseId;
-        let transaction = await Transaction.findOne({ _id: transactionId }).populate('payee').populate('payments.user_id');
-        console.log(req.originalUrl);
+        let transaction = await Transaction.findOne({ _id: transactionId }).populate('payee').populate('payments.user_id');// Fetches the transaction details
 
         res.render('individualExpense', { path: '/groups', transaction: transaction, userId: userId });
     } catch (error) {

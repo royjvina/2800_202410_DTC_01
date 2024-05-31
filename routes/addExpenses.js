@@ -115,6 +115,7 @@ router.post('/addExpenses', async (req, res) => {
                 await Group.updateOne({ _id: group._id }, { $push: { transactions: newTransaction._id } });
                 res.redirect('/home');
             } else {
+                // Update existing transaction if expenseId is provided
                 await Transaction.findByIdAndUpdate(req.body.expenseId, {
                     name: selectedExpenseName,
                     group_id: group._id,

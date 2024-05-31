@@ -10,7 +10,7 @@ function mapAndSortEntitiesWithDebts(entities, debts) {
         ...entity,
         debt: debts[entity._id.toString()] || 0
     }));
-
+    // Sort entities by debt
     entitiesWithDebts.sort((a, b) => {
         if (a.debt === 0 && b.debt !== 0) {
             return 1;

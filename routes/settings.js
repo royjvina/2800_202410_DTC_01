@@ -140,14 +140,14 @@ router.post('/settings/changePass', async (req, res) => {
         const { password } = req.body;
 
 
-        const user = await User.findById(req.session.userId);
+        const user = await User.findById(req.session.userId);// Find user by id
 
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        user.password = hashedPassword;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);// Hash the password
+        user.password = hashedPassword;// Set the password to the hashed password
 
-        await user.save();
+        await user.save();// Save the user
         res.redirect('/settings');
     } catch (error) {
         console.error(error);
@@ -169,15 +169,15 @@ router.post('/settings/changeNum', async (req, res) => {
     try {
         let { phone } = req.body;
         phone = phone.replace(/[^\d]/g, '');
-        const phoneInDB = await User.findOne({ phone: phone });
+        const phoneInDB = await User.findOne({ phone: phone });// Find user by phone number
         let phoneExists = phoneInDB ? true : false;
         if (phoneExists) {
             res.redirect('/settings?phoneExists=true');
         }
         else {
-            const user = await User.findById(req.session.userId);
+            const user = await User.findById(req.session.userId);// Find user by id
             user.phone = phone;
-            await user.save();
+            await user.save();// Save the user
 
             req.session.phone = phone;
 
@@ -195,7 +195,7 @@ router.post('/settings/deleteAccountAuthenticate', async (req, res) => {
     try {
         const { deletePassword } = req.body;
         const user = await User.findById(req.session.userId);
-        let passwordMatch = await bcrypt.compare(deletePassword, user.password);
+        let passwordMatch = await bcrypt.compare(deletePassword, user.password);// Compare the password
         if (!passwordMatch) {
             return res.redirect('/settings?deleteAccountError=true');
         }
@@ -221,8 +221,8 @@ router.post('/settings/deleteAccountAuthenticate', async (req, res) => {
 router.post('/settings/deleteAccount', async (req, res) => {
     try {
         // Update user information instead of deleting
-        const randomPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), saltRounds);
-        await User.findByIdAndUpdate(req.session.userId, {
+        const randomPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), saltRounds);// Generate a random password
+        await User.findByIdAndUpdate(req.session.userId, {// Update the user information with a deleted email, username, and random password
             email: `deleted@user.com`,
             username: `Deleted User (${user.username})`,
             profileImage: null,
