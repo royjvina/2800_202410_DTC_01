@@ -9,6 +9,7 @@
     </style>
     <div class="fixed w-full bg-white pb-2">
         <div class="flex flex-row">
+            <!-- Group Picture/Default Group Picture -->
             <% if(group.group_picBase64) { %>
             <img class="m-3 rounded-md h-20 w-20" src="<%= group.group_picBase64%>" alt="">
             <% } else { %>  
@@ -16,10 +17,13 @@
             <% } %>
             <div>
                 <div class="flex flex-row items-center">
+                    <!-- Group Name -->
                     <p class="font-semibold text-xl mt-2 pr-2" id="groupNameHere"><%=group.group_name%></p>
+                    <!-- Edit Icon to Redirect to Edit Groups Page -->
                     <a href="/addGroup?groupId=<%=group._id%>"><img src="/images/otherIcons/editIcon.svg" alt="" class="h-4 w-4 mt-2"></a>
                 </div>
                 <p class="text-gray-400 text-xs" id="usersOfAGroupHere">
+                    <!-- Display group member names -->
                     <% if (group.members.length > 3) { %>
                     <div id="moreThanThreeUsers" class="text-gray-400 text-xs pb-1 moreUsers">
                         <%= !(group.members[0].user_id.username).includes('Deleted User') ? group.members[0].user_id.username+', ':''%><%=!(group.members[1].user_id.username).includes('Deleted User') ? group.members[1].user_id.username+', ':''%>%><%=!(group.members[2].user_id.username).includes('Deleted User') ? group.members[2].user_id.username:''%> and <%=group.members.length - 3%> more
@@ -49,6 +53,7 @@
                     </div>
                     <% } %>
                 </p>
+                <!-- Suggested reimbursements button -->
                 <a href="/suggestedReimbursements?groupId=<%=group._id%>" class="flex justify-start font-medium">
                     <p class="px-2 text-[#4b061a] outline outline-1 outline-[#4b061a] hover:bg-[#4b061a] hover:text-white rounded-lg flex flex-row items-center">
                         <span class="text-sm">Suggested Reimbursements</span>
@@ -58,18 +63,20 @@
             </div>
         </div>
         <div class="text-black mt-2 flex mx-2 justify-center">
+            <!-- Expenses and Balances tabs -->
             <div class="flex flex-row border border-black rounded-full w-full justify-center">
                 <button class="w-1/2 p-1 text-white bg-[#4b061a] rounded-full" id="showExpenses">Expenses</button>
                 <button class="w-1/2 p-1 rounded-full" id="showBalances">Balances</button>
             </div>
         </div>
     </div>
+    <!-- Group expenses display -->
     <div id="expenses" class="overflow-auto mt-[150px] mb-[90px] flex-col">
         <ul>
             <% if (group.transactions) { %>
-                <% let sortedTransactions = group.transactions.sort((a, b) => {
-                    return new Date(b.date) - new Date(a.date)
-                }) %>
+                <% let sortedTransactions = group.transactions.sort((a, b) => { %>
+                   <% return new Date(b.date) - new Date(a.date) %>
+                <% }) %>
                 <% for (i=0; i < sortedTransactions.length; i++) { %>
                     <%- include('templates/groupExpense', { transaction: sortedTransactions[i] }) %> 
                 <% } %>
@@ -77,6 +84,7 @@
         </ul>
     </div>
 
+    <!-- Group balances chart display -->
     <div id="balances" class="overflow-auto mb-[90px] mt-[135px] hidden" data-friend-debt='<%= JSON.stringify(friendDebt) %>'>
     </div>
 
