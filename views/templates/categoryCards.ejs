@@ -1,5 +1,10 @@
-<% if (transaction.category == category) { %>
-     <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-primary rounded-xl text-seconday" id="<%= transaction.category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= transaction.category %>White.svg" alt=""></span><span><%= transaction.category[0].toUpperCase() + transaction.category.substring(1) %></span></li>
-<% } else { %>
-    <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="<%= category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= category %>Black.svg" alt=""></span><span><%= category[0].toUpperCase() + category.substring(1) %></span></li>
+<!-- Purpose: This template is used to display the categories of the user in the category div of the edit/add expense page. -->
+<% if (transaction.category == category && category != "miscellaneous") { %>
+    <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-primary rounded-xl text-secondary" id="<%= transaction.category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= transaction.category %>White.svg" alt=""></span><span><%= transaction.category[0].toUpperCase() + transaction.category.substring(1) %></span></li>
+<% } else if (transaction.category == category && category == "miscellaneous") { %>
+   <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-primary rounded-xl text-secondary" id="<%= transaction.category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= transaction.category %>White.svg" alt=""></span><span>Misc.</span></li>
+<% } else if (transaction.category != category && category != "miscellaneous") { %>
+   <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="<%= category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= category %>Black.svg" alt=""></span><span><%= category[0].toUpperCase() + category.substring(1) %></span></li>
+<% } else if (transaction.category != category && category == "miscellaneous") { %>
+   <li class="flex flex-row gap-1 justify-start items-center p-3 w-full bg-secondary rounded-xl" id="<%= category %>"><span><img class="w-8 h-8" src="/images/addGroupIcons/<%= category %>Black.svg" alt=""></span><span>Misc.</span></li>
 <% } %>

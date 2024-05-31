@@ -1,77 +1,109 @@
 <%- include('templates/headTags') %>
-    <header class="sticky top-0 ">
-            <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
-                <div><a id="cancelAddGroup" href="/home">
+<!-- Form submission and cancel buttons start -->
+<header class="sticky top-0 ">
+        <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
+            <div><a id="cancelAddGroup" href="/home">
                     Cancel
                 </a></div>
-            
-                <div class="">
-                    <button type="submit" form="addGroupForm" id="confirmAddGroup">Done</button>
-                </div>
+            <div class="text-lg">
+                <% if (!group) { %>
+                    Add Group
+                    <% } else { %>
+                        Edit <%= group.group_name %>
+                            <% } %>
             </div>
+            <div class="">
+                <button type="submit" form="addGroupForm" id="confirmAddGroup">Done</button>
+            </div>
+        </div>
     </header>
+    <!-- Form submission and cancel buttons end -->
+
+    <!--add/edit Form start -->
     <form action="/addGroupSubmission" method="post" id="addGroupForm" enctype="multipart/form-data" class="w-full ">
         <div class="flex flex-col gap-5 w-full">
             <div class="flex flex-row gap-3 m-2 mt-5">
                 <div>
                     <label for="groupImage" class="cursor-pointer">
-                        <% if (!group) { %>
-                        <img src="/images/homepageIconsAndPlaceholders/addGroup.svg" class="w-14 h-14" alt="Add photo" id="previewImage">
-                        <% } else { %>
-                            <% if(group.group_picBase64) { %>
-                                <img src="<%= group.group_picBase64%>" class="w-14 h-14" alt="Add photo" id="previewImage">
-                                <% } else { %>  
-                                <img class="w-14 h-14" src="/images/navbarIcons/groups.svg" id="previewImage" alt="">
-                                <% } %>
-                        <% } %>
-                    <input id="groupImage" type="file" name="groupImage" capture class="hidden">
+                        <!-- empty add form field group photo -->
+                        <% if (!group) { %>   
+                            <img src="/images/homepageIconsAndPlaceholders/addGroup.svg" class="w-14 h-14"
+                                alt="Add photo" id="previewImage">
+                            <% } else { %>
+                                <!-- pre filled edit group photo -->
+                                <% if(group.group_picBase64) { %>
+                                    <img src="<%= group.group_picBase64%>" class="w-14 h-14" alt="Add photo"
+                                        id="previewImage">
+                                    <% } else { %>
+                                        <img class="w-14 h-14" src="/images/navbarIcons/groups.svg" id="previewImage"
+                                            alt="">
+                                        <% } %>
+                                            <% } %>
+                                                <input id="groupImage" type="file" name="groupImage" capture
+                                                    class="hidden">
                 </div>
                 <div class="flex flex-col w-full">
-                    <label for="groupName">Group name</label>
+                    <label for="groupName">Group name*</label>
+                    <!-- empty add form field group name -->
                     <% if (!group) { %>
-                    <input type="text" id="groupName" name="groupName" class="w-full border-b pl-0 p-1 focus:outline-none focus:border-black">
-                    <input type="text" value="GroupDoesNotExist" id="checkGroup" class="hidden">
-                    <% } else { %>
-                    <input type="text" id="groupName" name="groupName" class="w-full border-b pl-0 p-1 focus:outline-none focus:border-black" value="<%= group.group_name %>">
-                    <input type="text" value="<%= group._id %>" name="groupId" class="hidden">
-                    <input type="text" value="GroupExists" id="checkGroup" class="hidden">
-                    <% } %>
-                    <span class="text-red-700 hidden" id="emptyGroupNameWarning">Please enter a group name</span>
+                        <input type="text" id="groupName" name="groupName"
+                            class="w-full border-b pl-0 p-1 focus:outline-none focus:border-black">
+                        <input type="text" value="GroupDoesNotExist" id="checkGroup" class="hidden">
+                        <% } else { %>
+                            <!-- pre filled edit group name -->
+                            <input type="text" id="groupName" name="groupName"
+                                class="w-full border-b pl-0 p-1 focus:outline-none focus:border-black"
+                                value="<%= group.group_name %>">
+                            <input type="text" value="<%= group._id %>" name="groupId" class="hidden">
+                            <input type="text" value="GroupExists" id="checkGroup" class="hidden">
+                            <% } %>
+                                <span class="text-red-700 hidden" id="emptyGroupNameWarning">Please enter a group
+                                    name</span>
                 </div>
             </div>
             <div class="flex flex-col w-full p-3 gap-2 mb-[70px]">
-                <div class="" class=""><span class="text-2xl">Add members</span></div>
+                <div class="" class=""><span class="text-2xl">Add members*</span></div>
                 <span class="text-red-700 hidden" id="emptyFriendWarning">Please select at least one friend</span>
                 <ul class="w-full flex flex-col gap-2" id="groupFriendChoices">
-                    <% for(let i = 0; i< friends.length; i ++) {%>
-                        <%- include('templates/friendsAddGroup', {friend: friends[i]}) %>
-                    <% } %>
-                    
+                    <!-- fill in the friends list -->
+                    <% for(let i=0; i< friends.length; i ++) {%>
+                        <%- include('templates/friendsAddGroup', {friend: friends[i], groupBalance: groupBalance}) %>
+                            <% } %>
+
                 </ul>
-                <input type="textBox" name="friends" id="friendInput" class="hidden" value="">
-            </div>            
+                <input type="textBox" name="friends" id="friendInput" class="" value="">
+            </div>
         </div>
     </form>
-    <% if (group) { %>
-    <div class="flex flex-row justify-center">
-        <button id="<%= group._id %>Delete" class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">
-            Delete
-        </button>
-    </div>
+    <!--add/edit Form end -->
 
-    <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut" id="<%= group._id %>ConfirmDeleteOptions">
-        <form action="/deleteGroup" method="post">
-            <div class="text-red-600 text-center text-sm mb-2">
-                All the transactions and debts will also be deleted. Are you sure you want to delete this group?
-            </div>
-            <div class="flex flex-row justify-center gap-2">
-                <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="submit" id="<%= group._id %>ConfirmDelete" value="Confirm">
-                <input class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" type="button" id="<%= group._id %>CancelDelete" value="Cancel">
-                <input type="text" class="hidden" name="groupDeleteId" id="<%= group._id %>Selected">
-            </div>
-        </form>
-    </div>
-    <% } %>
-    
-    <script src="/scripts/addGroup.js"></script>
-    <%- include('templates/footer') %>
+    <!-- delete group button and confirm delete options start if editing a group-->
+    <% if (group) { %>
+        <div class="flex flex-row justify-center">
+            <button id="<%= group._id %>Delete"
+                class="text-primary border border-primary rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-2 deleteGroup">
+                Delete
+            </button>
+        </div>
+
+        <div class="m-3 flex-row justify-center items-center gap-3 hidden fadeOut"
+            id="<%= group._id %>ConfirmDeleteOptions">
+            <form action="/deleteGroup" method="post">
+                <div class="text-red-600 text-center text-sm mb-2">
+                    All the transactions and debts will also be deleted. Are you sure you want to delete this group?
+                </div>
+                <div class="flex flex-row justify-center gap-2">
+                    <input
+                        class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2"
+                        type="submit" id="<%= group._id %>ConfirmDelete" value="Confirm">
+                    <input
+                        class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2"
+                        type="button" id="<%= group._id %>CancelDelete" value="Cancel">
+                    <input type="text" class="hidden" name="groupDeleteId" id="<%= group._id %>Selected">
+                </div>
+            </form>
+        </div>
+        <% } %>
+            <!-- delete group button and confirm delete options end -->
+            <script src="/scripts/addGroup.js"></script>
+            <%- include('templates/footer') %>

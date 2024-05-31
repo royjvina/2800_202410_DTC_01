@@ -1,52 +1,66 @@
 <%- include('templates/header') %>
+
+<!-- user profile and group balance summary start-->
 <div class="fixed top-15 grid grid-cols-2 rounded-b-2xl text-xl w-full text-white  bg-primary px-8 pt-2 pb-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
 id="usernameAndPic">
 <div>
     <h1>Hi, <span class="" id="namegoesHere"><%= username %></span>!</h1>
-    <% if (debtInfo.TotalpositiveDebt > debtInfo.TotalnegativeDebt) { %>
-        <p class="text-sm text-secondary italic"> Overall, you are owed $<%= debtInfo.TotalpositiveDebt - debtInfo.TotalnegativeDebt %> among your friends.</p>
-    <% } else if (debtInfo.TotalpositiveDebt < debtInfo.TotalnegativeDebt) { %>
-        <p class="text-sm text-secondary italic"> Overall, you owe $<%= debtInfo.TotalnegativeDebt - debtInfo.TotalpositiveDebt %> to your friends.</p>
-    <% } else { %>
-        <p class="text-sm text-secondary italic"> You are all settled up with your friends!</p>
+    <% if (debtInfo.totalPositiveDebt > debtInfo.totalNegativeDebt) { %>
+        <p class="text-sm text-secondary italic"> Overall, you are owed $<%= (debtInfo.totalPositiveDebt - debtInfo.totalNegativeDebt).toFixed(2) %> across all the groups.</p>
+    <% } else if (debtInfo.totalPositiveDebt < debtInfo.totalNegativeDebt) { %>
+        <p class="text-sm text-secondary italic"> Overall, you owe $<%= (debtInfo.totalNegativeDebt - debtInfo.totalPositiveDebt).toFixed(2) %> across all the groups.</p>
     <% } %>
 </div>
+<!-- user profile picture -->
+
 <img class="w-20 h-20 ml-auto rounded-full hover:cursor-pointer" id="homepagePic" data-src="<%= profilePic %>" alt="">
 </div>
-<div class="mb-[102px]">
+<!-- user profile and group balance summary end-->
 
+<div class="mb-[150px]">
+    
+    <!-- primary add buttons start -->
     <div class="flex justify-start mt-[110px] mx-3" id="AddButtonsDiv">
         <a class="hidden self-start" href="addGroup" id="createGroup">+ create group</a>
         <a class="hidden" href="/addFriend" id="addFriend">+ add friend</a>
         </div>
-        
-        <div class="text-black mt-2 flex mx-2 justify-center">
-            <div class="flex flex-row border border-black rounded-full w-full justify-center">
+        <!-- primary add buttons end -->
+
+        <!-- toggle between groups and friends buttons start -->
+        <div class="text-black mt-2 flex fixed w-full items-center justify-center">
+            <div class="flex flex-row border border-black rounded-full w-full mx-3 justify-center">
                 <button class="w-1/2 p-1 text-white  rounded-full bg-[#4b061a]" id="showGroups">Groups</button>
-                <button class="w-1/2 p-1 rounded-full" id="showFriends">Friends</button>
+                <button class="w-1/2 p-1 bg-white rounded-full" id="showFriends">Friends</button>
             </div>
         </div>
-        
-            <div id="groups" class="flex-col m-3 mt-6 gap-3 flex">
-                <ul>
+        <!-- toggle between groups and friends buttons end -->
+
+        <!-- groups and friends start -->
+
+            <div id="groups" class="flex-col m-3 mt-16 gap-3 flex">
+                <ul class="flex flex-col gap-2">
                     <% for(let i = 0; i < groups.length; i++) {%>
                         <%- include('templates/groupsHomepage', { group: groups[i] }) %>
                     <% } %>
+                    <button class="text-primary pt-4 text-center underline hidden" data-length="<%= groups.length %>" id="showMoreGroups">Show more</button>
+                    <button class="text-primary pt-4 text-center underline hidden" id="showLessGroups">Show less</button>
                 </ul>
                 
-                            
             </div>
-            <div id="friends" class="hidden flex-col m-3 mt-6 gap-3">
+            <div id="friends" class="hidden flex-col m-3 mt-16 gap-3">
                 <ul class="flex flex-col gap-2">
                     <% for(let i = 0; i < friends.length; i++ ) { %>
                         <%- include('templates/friendsHomepage', { friend: friends[i] }) %>
-                    <% } %>
-                </ul>
+                        <% } %>
+                        <button class="text-primary pt-4 text-center underline hidden" data-length="<%= friends.length %>" id="showMoreFriends">Show more</button>
+                        <button class="text-primary pt-4 text-center underline hidden" id="showLessFriends">Show less</button>
+                    </ul>
             </div>
-                
+            <!-- groups and friends end -->
             
             </div>
-            <div class="hidden flex-row justify-center mt-10" id="addFriendSecondaryDiv">
+            <!-- secondary add buttons start -->
+            <div class="hidden flex-row justify-center mt-10 mb-[150px]" id="addFriendSecondaryDiv">
                 <a id="addFriendSecondary" href="/addFriend" class="flex flex-row items-center border py-3 px-9 text-primary border-primary gap-3 rounded-xl hover:bg-primary hover:text-white">
                     <img src="/images/homepageIconsAndPlaceholders/addFriend.svg" id="addFriendPic" class="w-8 h-8" alt=""> <span>Add a friend</span></a>
             </div>
@@ -55,5 +69,6 @@ id="usernameAndPic">
                     <img src="/images/homepageIconsAndPlaceholders/addGroup.svg" id="addGroupPic" class="w-8 h-8" alt=""> <span>Create a group</span></a>
             </div>
         </div>
+        <!-- secondary add buttons end -->
         <script src="/scripts/main.js"></script>
 <%- include('templates/footer') %>

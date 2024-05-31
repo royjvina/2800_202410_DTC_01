@@ -1,5 +1,10 @@
 <%- include('templates/header') %>
 
+<!-- 
+ * @file Conversation History page
+ * @description This file renders the conversation history page where users can download or delete their past conversations.
+  -->
+
 <div class="min-h-screen flex flex-col items-center bg-gray-100 py-6">
     <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl">
         <h1 class="text-3xl font-bold mb-4">Conversation History</h1>
@@ -8,18 +13,21 @@
                 <% chatHistories.forEach(chat => { %>
                     <li class="mb-5">
                         <p>Date: <%= new Date(chat.date).toLocaleString() %></p>
-                        <button class="save-btn text-xl" data-id="<%= chat._id %>"><strong>Download</strong></button>
-                        <button class="delete-btn text-xl" data-id="<%= chat._id %>"><strong>Delete</strong></button>
+                        <div class="flex flex-row gap-2 mt-2">
+                            <button class="save-btn text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-1 text-[16px]" data-id="<%= chat._id %>">Download</button>
+                            <button class="delete-btn text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-2 py-1 text-[16px]" data-id="<%= chat._id %>">Delete</button>
+                        </div>
                     </li>
                 <% }) %>
             </ul>
         <% } else { %>
             <p class="text-gray-500">No conversation history found.</p>
         <% } %>
-        <a href="/AI" class="mt-4 inline-block bg-red-400 text-white py-2 px-4 rounded hover:bg-red-600">Go Back</a>
+        <a href="/AI" class="mt-4 inline-block text-primary underline">Go Back</a>
     </div>
 </div>
 
 <script src="/scripts/aiLog.js"></script>
 
 <%- include('templates/footer') %>
+

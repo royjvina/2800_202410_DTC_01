@@ -1,8 +1,18 @@
-const Transaction = require('./Transaction');
-const Group = require('./Group');
-const User = require('./User');
+const Transaction = require('../models/Transaction');
+const Group = require('../models/Group');
+const User = require('../models/User');
 
+/**
+ * Function to get recent activities for a user
+ * @param {string} userId - The ID of the user
+ * @returns {Promise<Array>} - A promise that resolves to an array of recent activity objects
+ * @async
+ * @example
+ * // Get recent activities for user '12345'
+ * getRecentActivities('12345').then(activities => console.log(activities));
+ */
 async function getRecentActivities(userId) {
+    // Fetch transactions where the user is involved
     const transactions = await Transaction.find({ 'payments.user_id': userId })
         .populate({
             path: 'group_id',
@@ -18,10 +28,12 @@ async function getRecentActivities(userId) {
 
     console.log(transactions);
 
+    // Map transactions to a more user-friendly format
     return transactions.map(transaction => {
         const userPayment = transaction.payments.find(payment => payment.user_id._id.toString() === userId.toString());
         let groupPic = null;
 
+        // Convert group picture to base64 format if it exists
         if (transaction.group_id.group_pic && transaction.group_id.group_pic.data) {
             groupPic = `data:${transaction.group_id.group_pic.contentType};base64,${transaction.group_id.group_pic.data.toString('base64')}`;
         }

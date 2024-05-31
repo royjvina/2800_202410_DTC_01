@@ -1,49 +1,50 @@
+// Load global configurations and environment variables
 require('./include_config.js');
-
 require('dotenv').config();
 
+// Import necessary packages
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const Mongostore = require('connect-mongo');
+const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
-const { ObjectId } = require('mongodb');
-const cors = require('cors')
+const cors = require('cors');
 
-
-
-
+// Define constants for port and session expiration time
 const port = process.env.PORT || 3000;
-const expireTime = 1 * 60 * 60 * 1000;
+const expireTime = 2 * 60 * 60 * 1000; // 2 hours
 
+// Create an Express application
 const app = express();
 
+// Define MongoDB configuration variables
 const mongodb_uri = process.env.MONGODB_URI;
 const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 
-
+// Set the view engine to EJS and define the views directory
 app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
-
+// Connect to MongoDB using Mongoose
 mongoose.connect(mongodb_uri)
     .then(() => {
-        console.log('Connected to MongoDB')
+        console.log('Connected to MongoDB');
     })
     .catch((error) => {
-        console.error('Error connecting to MongoDB:', error)
-    }
-    );
+        console.error('Error connecting to MongoDB:', error);
+    });
 
-var mongoStore = Mongostore.create({
+// Create a session store using MongoDB
+var mongoStore = MongoStore.create({
     mongoUrl: mongodb_uri,
     crypto: {
         secret: mongodb_session_secret
     },
 });
 
+// Configure session management
 app.use(session({
     secret: node_session_secret,
     resave: false,
@@ -55,70 +56,55 @@ app.use(session({
     }
 }));
 
-
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Enable CORS, JSON parsing, and URL-encoded form parsing
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/* ------- all functions ------- */
-isValidSession = (req) => {
-    if (req.session.authenticated) {
-        return true;
-    }
-    return false;
-};
-sessionValidation = (req, res, next) => {
+// Middleware to check if user is authenticated
+const isValidSession = (req) => req.session.authenticated;
+const sessionValidation = (req, res, next) => {
     if (isValidSession(req)) {
         next();
+    } else {
+        res.redirect('/');
     }
-    else {
-        res.redirect('/')
-    }
-}
+};
 
-/* ------- all routes ------- */
+// Import route modules
 const authRouter = require("./routes/authentication");
 const aiAdvisorRouter = require("./routes/aiAdvisor");
 const homeRouter = require("./routes/home");
-const personalRouter = require("./routes/personal");
 const addExpenseRouter = require("./routes/addExpenses");
 const groupsRouter = require("./routes/groups");
 const individualExpenseRouter = require("./routes/individualExpense");
 const settingsRouter = require("./routes/settings");
-const suggestedReimbursementsRouter = require("./routes/suggestedReimbursements")
-const expensePersonalRouter = require("./routes/expensePersonal");
+const suggestedReimbursementsRouter = require("./routes/suggestedReimbursements");
 const recentActivityRouter = require("./routes/recentActivity");
 const insightRouter = require("./routes/insight");
+const editExpenseRouter = require("./routes/editExpense");
 
-
+// Use routes with session validation where needed
 app.use("/", authRouter);
 app.use("/", sessionValidation, aiAdvisorRouter);
 app.use("/", sessionValidation, homeRouter);
-app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, addExpenseRouter);
 app.use("/", sessionValidation, groupsRouter);
 app.use("/", sessionValidation, individualExpenseRouter);
 app.use("/", sessionValidation, recentActivityRouter);
 app.use("/", sessionValidation, settingsRouter);
-app.use("/", sessionValidation, personalRouter);
 app.use("/", sessionValidation, suggestedReimbursementsRouter);
-app.use("/", sessionValidation, expensePersonalRouter);
 app.use("/", sessionValidation, recentActivityRouter);
 app.use("/", sessionValidation, insightRouter);
+app.use("/", sessionValidation, editExpenseRouter);
 
-
-
-
-
-
-
-
-// all unrealated routes
+// Catch-all route for 404 errors
 app.get('*', (req, res) => {
     res.render('404', { path: req.path });
-})
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -131,6 +117,7 @@ app.use((err, req, res, next) => {
     }
 });
 
+// Start the server and listen on the specified port
 app.listen(port, () => {
     console.log('Server is running on port ' + port);
 });

@@ -1,14 +1,19 @@
-#wrapper {
+/**
+ * Wrapper element that centers its content both vertically and horizontally.
+ */
+ #wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  height: 100%;
   width: 100%;
   position: absolute;
-  top: 10%;
   left: 0;
 }
 
+/**
+ * Container for introductory elements, centered vertically and horizontally.
+ */
 .introContainer {
   display: flex;
   flex-direction: column;
@@ -16,26 +21,31 @@
   margin-bottom: 5px;
 }
 
+/**
+ * Container for the chat section, with a fixed width range and padding.
+ */
 #chatContainer {
   background-color: white;
-  border-radius: 10px;
-  padding: 10px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  min-width: 360px;
-  max-width: 800px;
   height: 95%;
   color: white;
   font-size: 12px;
   position: relative;
-  margin-bottom: 50px
+  margin-bottom: 50px;
 }
 
+/**
+ * Header section of the chat, with padding.
+ */
 #chatHeader {
   padding: 10px;
 }
 
+/**
+ * Styles for the history icon within the chat header.
+ */
 #chatHeader .history-icon {
   color: white;
   scale: 1.5;
@@ -43,6 +53,9 @@
   cursor: pointer;
 }
 
+/**
+ * Main content area of the chat, with flexible layout to grow and overflow handling.
+ */
 #chatContent {
   display: flex;
   flex-direction: column;
@@ -50,6 +63,9 @@
   overflow: hidden;
 }
 
+/**
+ * Container for messages, with a background color, flexible layout to grow, and vertical scrolling.
+ */
 .messages {
   background-color: #f8fafc;
   flex-grow: 1;
@@ -59,6 +75,9 @@
   flex-direction: column;
 }
 
+/**
+ * Container for the input section, initially hidden.
+ */
 #inputContainer {
   display: none; 
   align-items: center;
@@ -70,6 +89,9 @@
   position: relative;
 }
 
+/**
+ * Base styles for message elements.
+ */
 .message {
   margin-bottom: 10px;
   padding: 10px;
@@ -81,18 +103,27 @@
   position: relative;
 }
 
+/**
+ * Styles for messages sent by the user.
+ */
 .message.me {
   align-self: flex-end;
-  background-color: #f8fafc;
-  color: #000;
+  background-color: #6E0924;
+  color: white;
 }
 
+/**
+ * Styles for messages sent by the bot.
+ */
 .message.bot {
   align-self: flex-start;
-  background-color: #f8fafc;
-  color: #333;
+  background-color: #6E0924;
+  color: white;
 }
 
+/**
+ * Styles for text input fields.
+ */
 input[type="text"] {
   padding: 10px;
   border-radius: 20px;
@@ -104,12 +135,18 @@ input[type="text"] {
   margin-right: 10px;
 }
 
+/**
+ * Styles for focused text input fields.
+ */
 input:focus {
   outline: none;
   border-color: black;
   background-color: #f8fafc;  
 }
 
+/**
+ * Base styles for buttons.
+ */
 button {
   padding: 10px;
   background-color: #6E0924;
@@ -123,6 +160,9 @@ button {
   align-items: center;
 }
 
+/**
+ * Styles for disabled buttons.
+ */
 button:disabled,
 button[disabled] {
   border: 1px solid #999999;
@@ -130,6 +170,7 @@ button[disabled] {
   color: #666666;
 }
 
+/* Uncomment and modify the following sections as needed */
 /* h1 {
   font-size: 28px;
   text-shadow: 2px 2px #000;
@@ -150,10 +191,13 @@ button[disabled] {
   margin-bottom: 3px;
 } */
 
+/**
+ * Styles for the loading indicator.
+ */
 #loading {
   padding-bottom: 10px;
   display: none;
-  color: black
+  color: black;
 }
 
 /* #introMessage {
@@ -167,6 +211,9 @@ button[disabled] {
   flex-direction: column;
 } */
 
+/**
+ * Styles for the start button.
+ */
 #startBtn {
   border: #000;
   font-weight: bold;
@@ -176,6 +223,9 @@ button[disabled] {
   border-radius: 20px;
 }
 
+/**
+ * Styles for the no button.
+ */
 #noBtn {
   border: #000;
   font-weight: bold;
@@ -185,6 +235,9 @@ button[disabled] {
   border-radius: 20px;
 }
 
+/**
+ * Styles for labels.
+ */
 label {
   font-size: 20px;
   text-align: center;
@@ -192,7 +245,9 @@ label {
   margin-bottom: 5px;
 }
 
+/**
+ * Container for the chat section, initially hidden.
+ */
 #chat {
   display: none;
 }
-

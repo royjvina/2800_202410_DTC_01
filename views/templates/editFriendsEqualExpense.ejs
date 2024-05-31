@@ -1,0 +1,22 @@
+<!--  Purpose: This template is used to display the friends of the user in the equal expense div of edit expense page. -->
+<div class="flex flex-row">
+    <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2 w-full">
+        <input type="checkbox" id="<%= group._id %><%= friend._id %>Equal" name="userEqualSplit" value="true"
+            data-user-id="<%= friend._id %>" class="userEqualSplit">
+        <div class="w-1/2 flex flex-row items-center">
+            <% if (friend.profileImageBase64) { %>
+                <img class=" pl-1 h-10 w-10 rounded-lg" src="<%= friend.profileImageBase64 %>" alt="">
+                <% } else { %>
+                    <img class=" pl-1 h-10 w-10 rounded-lg"
+                        src="/images/homepageIconsAndPlaceholders/profilePicPlaceholderSettings.svg" alt="">
+                    <% } %>
+                        <p class="font-semibold px-2">
+                            <%= friend.username %>
+                        </p>
+        </div>
+        <input readonly class="equalValue text-right text-xl font-semibold text-gray-400 w-1/2 pr-2" type="text" value="$0.00"
+            id="<%= group._id %><%= friend._id %>AmountEqualInput" name="<%= group._id %><%= friend._id %>AmountEqual"
+            min="0">
+    </div>
+
+</div>

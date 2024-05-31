@@ -1,0 +1,6 @@
+<% if (transaction.payee._id.equals(friend._id)) { %>
+    <option class="text-center" value="<%= friend._id %>" selected><%= friend.username %></option>
+<% } else { %>
+     <option class="text-center username <%= group._id %>" id="<%= friend._id %>userName" value="<%= friend._id %>"><%= friend.username %></option>
+<% } %>
+

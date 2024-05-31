@@ -2,44 +2,90 @@
     <header class="sticky top-0">
         <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
             <div>
+                <!-- Back Button -->
                 <a id="goBack" class="text-4xl flex flex-row items-center pl-1 mb-2" id="backIndividualExpense">
                     &#8249;
                 </a>
             </div>
             <div class="">
-                <a href="/addExpenses?expenseId=<%= transaction._id %>"><button type="submit" id="editExpense">Edit</button></a>
+                <!-- Submission/Edit Button -->
+                <a href="/editExpenses?expenseId=<%= transaction._id %>"><button type="submit"
+                        id="editExpense">Edit</button></a>
             </div>
         </div>
     </header>
 
-    <div class="flex flex-row bg-primary pb-6 rounded-b-3xl p-4 fixed top-14 w-full">
-        <% let transactionCategory = transaction.category %>
-        <img class="p-2" src="/images/addGroupIcons/<%= transactionCategory %>White.svg" alt="" height="85" width="85">
-        <div class="flex flex-col pl-2 w-full">
-            <div class="flex flex-row justify-between leading-4 text-white pb-1">
-                <p class="text-xl font-semibold"><%= transaction.name %></p>
-                <p class="text-xl font-semibold">$<%= transaction.total_cost.toFixed(2) %></p>
-            </div>
-            <% let transactionDateString = transaction.date.toString() %>
-            <p class="text-sm text-white font-normal leading-4"><%= transactionDateString.substring(4, 10) + ", " + transactionDateString.substring(11, 15) %></p>
-            <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Paid By:</span> 
-                <% if (transaction.payee._id == userId) { %>
-                    <%= transaction.payee.username %> (You)
-                    <% } else { %>
-                    <%= transaction.payee.username %>
-                <% } %>
-            </p>
-            <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Category:</span> <%= transaction.category.toString()[0].toUpperCase() + transaction.category.toString().substring(1) %></p>
+    <div class=" fixed top-14 w-full">
+        <div class="flex flex-row bg-primary p-4 rounded-b-3xl">
+            <!-- Display category picture -->
+            <% let transactionCategory=transaction.category %>
+                <img class="p-2" src="/images/addGroupIcons/<%= transactionCategory %>White.svg" alt="" height="85"
+                    width="85">
+                <div class="flex flex-col pl-2 w-full">
+                    <div class="flex flex-row justify-between leading-4 text-white pb-1">
+                        <!-- Display transaction name -->
+                        <p class="text-xl font-semibold">
+                            <%= transaction.name %>
+                        </p>
+                        <!-- Display transaction total cost -->
+                        <p class="text-xl font-semibold">$<%= transaction.total_cost.toFixed(2) %>
+                        </p>
+                    </div>
+                    <% let transactionDateString = transaction.date.toUTCString() %>
+                    <% let month = transactionDateString.substring(8, 12) %>
+                    <% let day = transactionDateString.substring(5, 7) %>
+                    <% let year = transactionDateString.substring(12, 16) %>
+                        <div class="flex flex-row justify-between items-center">
+                            <div>
+                                <!-- Display transaction date -->
+                                <p class="text-sm text-white font-normal leading-4">
+                                    <%= month + day + ", " + year %>
+                                </p>
+                                <p class="text-sm text-white font-normal leading-4"><span class="font-medium">Paid
+                                        By:</span>
+                                        <!-- Display transaction payee name -->
+                                    <% if (transaction.payee._id==userId) { %>
+                                        <%= transaction.payee.username %> (You)
+                                            <% } else { %>
+                                                <%= transaction.payee.username %>
+                                                    <% } %>
+                                </p>
+                                <!-- Display transaction category name -->
+                                <p class="text-sm text-white font-normal leading-4"><span
+                                        class="font-medium">Category:</span>
+                                    <%= transaction.category.toString()[0].toUpperCase() +
+                                        transaction.category.toString().substring(1) %>
+                                </p>
+                            </div>
+                        </div>
+                </div>
+        </div>
+        <div class="overflow-auto mb-[90px] bg-white">
+            <ul>
+                <!-- Display each user's split -->
+                <% let payments=transaction.payments %>
+                    <% for (let i=0; i < payments.length; i++) { %>
+                        <%- include('templates/usersSplit', { payments: payments[i], userId: userId}) %>
+                            <% } %>
+            </ul>
+        </div>
+        <div class="text-right flex flex-col items-center">
+            <!-- Delete expense button -->
+            <button type="button"
+                class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2 fadeOut"
+                id="deleteExpense">Delete</button>
+            <form action="/deleteExpense" method="post" id="deleteExpenseForm" class="hidden fadeOut flex-row gap-2">
+                <input type="hidden" name="expenseId" value="<%= transaction._id %>">
+                <button type="submit"
+                    class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2"
+                    id="ConfirmDeleteExpense">Confirm</button>
+                <button type="button"
+                    class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2"
+                    id="CancelDeleteExpense">Cancel</button>
+            </form>
         </div>
     </div>
-    <div class="overflow-auto mb-[90px] mt-[120px]">
-        <ul>
-            <% let payments = transaction.payments %>
-            <% for (let i = 0; i < payments.length; i++) { %>
-                <%- include('templates/usersSplit', { payments: payments[i], userId: userId}) %>
-            <% } %>
-        </ul>
     </div>
 
-<script src="/scripts/individualExpense.js"></script>
-<%- include('templates/footer') %>
+    <script src="/scripts/individualExpense.js"></script>
+    <%- include('templates/footer') %>

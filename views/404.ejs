@@ -1,13 +1,20 @@
 <%- include('templates/header') %>
-  <div class="container mx-auto flex items-center justify-center min-h-screen">
+
+<!-- * @file 404 Error page
+ * @description This file renders an error page with a message indicating that the link url provided doesnt lead to a page on the webapp and a link to return to the home page.
+  -->
+
+
+<div class="container mx-auto flex items-center justify-center min-h-screen">
     <div class="wrapper">
-      <div class="box bg-white p-8 rounded shadow-md">
-        <h1 class="text-4xl font-bold text-center">Something went wrong</h1>
-        <p class="text-gray-700 text-center">Please try it again later.</p>
-        <div class="text-center mt-4">
-          <a href="/" class="text-blue-500">Go home</a>
+        <div class="box bg-white p-8 rounded shadow-md">
+            <h1 class="text-4xl font-bold text-center">Oops, looks like this page does not exist.</h1>
+            <p class="text-gray-700 text-center"></p>
+            <div class="text-center mt-4">
+                <a href="/home" class="text-blue-500">Go home</a>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
+
 <%- include('templates/footer') %>

@@ -1,13 +1,51 @@
-#settingsIcon {
+/**
+ * Styles for the settings icon.
+ * Scales the icon to 110% of its original size.
+ */
+ #settingsIcon {
     transform: scale(1.1);
 }
 
+/**
+ * Class to hide elements manually.
+ * Sets the opacity to 0, scales the element down to 90% of its original size,
+ * and disables pointer events.
+ */
 .hideManually {
     opacity: 0;
     transform: scale(0.9);
     pointer-events: none;
 }
 
+/**
+ * Class to apply a fade-out transition effect.
+ * Smoothly transitions the opacity and transform properties over 0.5 seconds.
+ */
 .fadeOut {
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
+
+
+.visually-hidden {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden;
+}
+header {
+    z-index: 1000;
+    position: sticky;
+    top: 0;
+  }
+
+  .expense-details {
+    display: none;
+    margin-top: 10px;
+  }
+
+  .expense-details.show {
+    display: block;
+  }

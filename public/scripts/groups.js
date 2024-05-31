@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function() {
      */
 
     function expensesTabHandler() {
+        // add background and text colour to selected tab, remove it from the other tab
+        // show expenses, hide balances
         showBalances.classList.remove('bg-[#4b061a]');
         showBalances.classList.remove('text-white');
         showExpenses.classList.add('bg-[#4b061a]');
@@ -25,6 +27,8 @@ document.addEventListener("DOMContentLoaded", function() {
      */
 
     function balancesTabHandler() {
+        // add background and text colour to selected tab, remove it from the other tab
+        // show balances, hide expenses
         showExpenses.classList.remove('bg-[#4b061a]');
         showExpenses.classList.remove('text-white');
         showBalances.classList.add('bg-[#4b061a]');
@@ -45,12 +49,14 @@ document.addEventListener("DOMContentLoaded", function() {
         let moreUsers = document.querySelectorAll('.moreUsers')
 
         moreUsers.forEach(user => {
+            // if there are more than 3 users, show the first 3 and hide the rest
             user.addEventListener('click', function() {
                 if (lessUsers.classList.contains('hidden')) {
                     lessUsers.classList.remove('hidden');
                     lessUsers.classList.add('flex');
                     allUsers.classList.add('hidden');
                 } else {
+                    // if there are less than 3 users or 3 users, show all users
                     lessUsers.classList.add('hidden');
                     allUsers.classList.remove('hidden');
                     allUsers.classList.add('flex');
@@ -59,19 +65,20 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
 
+    // add event listeners to tabs using functions from above
     showExpenses.addEventListener('click', expensesTabHandler);
     showBalances.addEventListener('click', balancesTabHandler);
     userListHandler();
+
     const balances = document.getElementById('balances');
     const friendDebt = JSON.parse(balances.dataset.friendDebt);
 
+    // get all users and their balances to display as charts categories
     const debtData = Object.values(friendDebt).map(friend => ({
         x: friend.name,
         y: friend.amount,
         color: friend.amount >= 0 ? '#00E396' : '#FF4560'
     }));
-
-    console.log(debtData);
 
     // chart API for balances
     const data = debtData.sort((a, b) => a.y - b.y);
@@ -175,6 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
         },
     };
 
+    // render chart in balances div
     var chart = new ApexCharts(document.querySelector("#balances"), options);
     chart.render();
 });

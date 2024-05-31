@@ -1,118 +1,177 @@
 <%- include('templates/header') %>
-
-<main class="bg-gray-50">
-  <div class="mx-auto bg-white shadow-xl rounded-lg overflow-hidden h-dvh">
-    <div class="p-4 flex items-center justify-between shadow border-b">
-      <h2 class="text-lg font-semibold text-center flex-1">Settings</h2>
-    </div>
-
-    <div class="p-4 bg-gray-50 h-dvh">
-      <div class="flex justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
-          <% if (!editMode) { %>
+<!-- Settings Page -->
+  <main class="">
+      <div class="p-4  h-dvh">
+        <!-- Profile Image and User Info -->
+        <% if (!editMode) { %>
+          <div class="flex justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
             <div class="w-16 min-w-16 h-16 flex items-center justify-center">
               <label for="profileImage" id="profileImage" class="">
                 <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Image" class="max-w-full max-h-full">
               </label>
             </div>
             <div id="userInfo" class="w-full flex flex-col items-center justify-center">
-              <h3 class="w-4/5 border border-white text-lg font-semibold"><%= username %></h3>
-              <p class="w-4/5 border border-white text-gray-600"><%= email %></p>
-              <p class="w-4/5 border border-white text-gray-600"><%= phoneNumber %></p>
+              <h3 class="w-4/5 border border-white text-lg font-semibold">
+                <!-- Display username -->
+                <%= username %>
+              </h3>
+              <!-- Display email -->
+              <p class="w-4/5 border border-white text-gray-600">
+                <%= email %>
+              </p>
+              <!-- Display phone number -->
+              <p class="w-4/5 border border-white text-gray-600">
+                <%= phoneNumber %>
+              </p>
             </div>
-          <% } else { %>
-            <form id="editUserInfo" action="/settings" method="POST" enctype="multipart/form-data" class="flex justify-between items-center">              <div class="w-16 min-w-16 h-16 border border-gray-400 flex items-center justify-center">
-                <label for="profileImage" class="cursor-pointer">
-                  <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Image" class="max-w-full max-h-full">
-                  <input id="profileImage" type="file" name="profileImage" capture class="hidden">
-                </label>
-              </div>
-              <div class="w-full flex flex-col items-center justify-center">
-                <input type="text" name="username" value="<%= username %>" class="w-4/5 focus:outline-none border border-gray-400 text-lg font-semibold" />
-                <p name="email" value="<%= email %>" class="w-4/5 border border-white text-gray-600"><%= email %></p>
-                <p name="phone" value="<%= phoneNumber %>" class="w-4/5 border border-white text-gray-600"><%= phoneNumber %></p>
-              </div>
-            </form>
-          <% } %>
-          <div class="w-16 h-16 flex flex-row items-center">
-          <% if (!editMode) { %>
-            <form action="/settings/edit" method="GET" class="h-full w-full">
-              <button type="submit" class="h-full w-full">
-                <!-- Pencil -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full icon icon-tabler icon-tabler-pencil" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                  <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                  <path d="M13.5 6.5l4 4" />
-                </svg>
-              </button>
-            </form>
-          <% } else { %>
-            <button type="submit" form="editUserInfo" class="w-16 h-16 font-bold text-lg">Save</button>
-          <% } %>
+            <!-- if in edit mode after clicking the edit button -->
+            <% } else { %>
+              <div class="flex flex-col justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
+              <form id="editUserInfo" action="/settings" method="POST" enctype="multipart/form-data"
+                class="flex justify-between items-center">
+                <div class="w-16 min-w-16 h-16 border border-gray-400 flex items-center justify-center">
+                  <label for="profileImage" class="cursor-pointer">
+                    <img id="settingsProfilePic" data-src="<%= profilePic %>" alt="Image" class="max-w-full max-h-full">
+                    <!-- Input field for editing profile image -->
+                    <input id="profileImage" type="file" name="profileImage" capture class="hidden">
+                  </label>
+                </div>
+                <div class="w-full flex flex-col items-center justify-center">
+                  <!-- Input field for editing username -->
+                  <input type="text" name="username" value="<%= username %>"
+                    class="w-4/5 focus:outline-none border border-gray-400 text-lg font-semibold" />
+                  <p name="email" value="<%= email %>" class="w-4/5 border border-white text-gray-600">
+                    <%= email %>
+                  </p>
+                  <p name="phone" value="<%= phoneNumber %>" class="w-4/5 border border-white text-gray-600">
+                    <%= phoneNumber %>
+                  </p>
+                </div>
+              </form>
+              <% } %>
+                <div class="w-16 h-16 flex flex-row items-center">
+                  <% if (!editMode) { %>
+                    <form action="/settings/edit" method="GET" class="h-full w-full">
+                      <button type="submit" class="h-6 w-6 flex flex-row items-center">
+                        <!-- Editing icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                          class="h-full w-full icon icon-tabler icon-tabler-pencil" width="20" height="20"
+                          viewBox="0 0 24 24" stroke-width="1.0" stroke="#000000" fill="none" stroke-linecap="round"
+                          stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                          <path d="M13.5 6.5l4 4" />
+                        </svg>
+                      </button>
+                    </form>
+                    <% } else { %>
+                      <div class=""><button type="submit" form="editUserInfo"
+                          class="w-16 h-16 font-bold text-lg">Save</button></div>
+                      <% } %>
+                </div>
         </div>
-      </div>
-    
-      <div class="w-full flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-        <form action="/logout" method="POST" class = "w-full">
-          <button type="submit" class="mx-auto font-bold w-full text-center text-red-500">LOGOUT</button>
+        <!-- logout button -->
+        <div
+          class="w-full flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+          <form action="/logout" method="POST" class="w-full">
+            <button type="submit" class="mx-auto font-bold w-full text-center text-red-500">LOGOUT</button>
           </form>
-      </div>
+        </div>
 
-      <!-- <div class="mb-4">
-        <h4 class="font-semibold text-gray-700">Group</h4>
-        <ul>
-          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-            <span class="text-gray-700">Friends Edit</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </li>
-          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-            <span class="text-gray-700">Group activities</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </li>
-        </ul>
-      </div> -->
 
-      <div>
-        <h4 class="font-semibold text-gray-700 pt-2">Account settings</h4>
-        <ul>
-          <li class="">
-            <a href="/settings/changePass" class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-              <span class="text-gray-700">Change password</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </li>
-          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-            <span class="text-gray-700">Set budget</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </li>
-          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-            <span class="text-gray-700">Notifications</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </li>
-          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-            <span class="text-gray-700">Display</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </li>
-          <li class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-            <span class="text-gray-700">Chat</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </li>
-        </ul>
+        <!-- Account settings -->
+        <div>
+          <h4 class="font-semibold text-gray-700 pt-2 mt-3">Account settings</h4>
+          <ul>
+            <!-- Change password -->
+            <div id="changePassSetting" class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+              <div class="flex items-center space-x-2">
+                <img src="images/otherIcons/password.svg" alt="">
+                <span class="text-gray-700">Change Password</span>
+              </div>
+              <img id="passArrow" src="images/otherIcons/downArrowSettings.svg" class="w-6 h-3" alt="">
+            </div>
+            <div>
+              <form action="/settings/changePass" method="post" class="hidden fadeOut flex-col items-center w-full" id="changePassForm">
+                <div class="text-sm text-center" id="passwordFormat">Must contain at least 8 characters including 1 uppercase, 1 lowercase, 1 number, and 1 special character.</div>
+                <input type="password" id="newPassword" name="password" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="New password">
+                <input type="password" id="confirmPassword" name="confirmPassword" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="Change password">
+                <div class="text-red-600 text-center text-sm mb-2" id="passwordWarning"></div>
+                <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePass">Submit</button>
+                <div id="confirmChangePass" class="hidden flex-row justify-center gap-2 fadeOut">
+                  <button type="submit" id="submitChangePass" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
+                  <button type="button" id="cancelChangePass" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </ul>
+
+          <!-- Change phone number -->
+          <ul>
+            <div id="changePhoneSetting"
+              class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+              <div class="flex items-center space-x-2">
+                <img src="images/otherIcons/phoneNumber.svg" alt="">
+                <span class="text-gray-700">Change Phone Number</span>
+              </div>
+              <img id="phoneArrow" src="images/otherIcons/downArrowSettings.svg" class="w-6 h-3" alt="">
+            </div>
+          </ul>
+          <div>
+            <% if(phoneExists) { %>
+            <form action="/settings/changeNum" method="post" class="flex fadeOut flex-col items-center w-full" id="changePhoneForm">
+              <input type="tel" id="newPhone" name="phone" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2  w-5/6" placeholder="New phone number">
+              <div class="text-red-600 text-center text-sm mb-2" id="phoneWarning">This phone number already exists in the system, please try another number</div>
+              <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePhone">Submit</button>
+              <div id="confirmChangePhone" class="hidden flex-row justify-center gap-2 fadeOut">
+                <button type="submit" id="submitChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
+                <button type="button" id="cancelChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
+              </div>
+            </form>
+            <% } else { %>
+              <form action="/settings/changeNum" method="post" class="hidden fadeOut flex-col items-center w-full" id="changePhoneForm">
+                <input type="tel" id="newPhone" name="phone" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2  w-5/6" placeholder="new phone number">
+                <div class="text-red-600 text-center text-sm mb-2" id="phoneWarning"></div>
+                <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePhone">Submit</button>
+                <div id="confirmChangePhone" class="hidden flex-row justify-center gap-2 fadeOut">
+                  <button type="submit" id="submitChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Confirm</button>
+                  <button type="button" id="cancelChangePhone" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2">Cancel</button>
+                </div>
+              </form>
+              <% } %>
+          </div>
+          <ul>
+            <!-- Delete Account -->
+            <div id="deleteAccountSetting" class="flex justify-between p-3 items-center bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
+              <div class="flex items-center space-x-2">
+                <img src="images/otherIcons/trash.svg" alt="">
+                <span class="text-gray-700">Delete Account</span>
+              </div>
+              <img src="images/otherIcons/downArrowSettings.svg" id="deleteArrow" class="w-6 h-3" alt="">
+            </div>
+            <form action="/settings/deleteAccountAuthenticate" id="deleteAccountFormAuth" method="POST" class="<%= deleteAccountError ? 'flex' : 'hidden' %> flex-col items-center w-full justify-center gap-4 text-center m-4 mx-auto fadeOut">
+              <% if(settledInEveryGroup) {%>
+              <input type="password" id="deletePassword" name="deletePassword" class="focus:outline-none focus:border-black border-b px-3 pt-2 w-5/6" placeholder="Enter password">
+              <div class="text-red-600 text-center text-sm mb-2" id="deleteWarning"><%= deleteAccountError ? 'Password you entered is incorrect' : '' %> </div>
+              <button type="submit" id="deleteAccount"
+              class="bg-red-500 text-white px-3 py-2 border-red-500 border border-primary rounded-xl shadow-md hover:bg-red-600">
+              Delete Account
+            </button>
+          <% } else {%>
+            <div class="text-red-600 text-center text-sm mb-2">Your balance must must be zero in all groups for you to delete your account.</div>
+          <% } %>
+            </form>
+            <form action="/settings/deleteAccountAuthenticate" id="deleteAccountForm" method="POST" class="<%= deleteAccountAuthenticated ? 'flex': 'hidden' %> flex-col items-center w-full justify-center gap-4 my-3 text-center">
+              <div class="text-red-600 text-center text-sm mb-2">Are you sure you want to delete your account?</div>
+        <div id="confirmDeleteAccount" class="flex flex-row justify-center gap-2 fadeOut">
+          <button type="submit" id="submitDeleteAccount" class=" text-white border border-primary gap-3 rounded-xl bg-red-500 px-3 py-2">Confirm Deletion</button>
+          <button type="button" id="cancelDeleteAccount" class=" text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-green-400 px-3 py-2">Cancel</button>
+        </div>
+      </form>
+          </ul>
+        </div>
+       
       </div>
-  </div>
-</main>
-<script src="/scripts/settings.js"></script>
-<%- include('templates/footer') %>
+  </main>
+  <script src="/scripts/settings.js"></script>
+  <%- include('templates/footer') %>

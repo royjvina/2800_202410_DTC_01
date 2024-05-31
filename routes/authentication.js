@@ -2,10 +2,8 @@ const express = require("express");
 const router = express.Router();
 const User = require('../models/User');
 const { registrationSchema } = require('../models/UserRegistration');
-const { passwordSchema } = require('../models/UserPassword');
 const bcrypt = require('bcrypt');
-const { createTransport } = require('nodemailer');
-const { google } = require('googleapis');
+const { createTransporter } = require('../controllers/mailer');
 const crypto = require('crypto');
 const saltRounds = 12;
 const multer = require('multer');
@@ -14,58 +12,59 @@ const path = require("path");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const OAuth2Client = new google.auth.OAuth2(
-    process.env.CLIENTID,
-    process.env.CLIENTSECRET,
-    process.env.REDIRECTURL
-);
-
-OAuth2Client.setCredentials({ refreshToken: process.env.REFRESHTOKEN });
-
-async function createTransporter() {
-    try {
-        return createTransport({
-            service: 'gmail',
-            auth: {
-                type: 'OAuth2',
-                user: process.env.USER,
-                clientId: process.env.CLIENTID,
-                clientSecret: process.env.CLIENTSECRET,
-                refreshToken: process.env.REFRESHTOKEN,
-                accessToken: await OAuth2Client,
-            },
-        });
-    } catch (error) {
-        console.error('Error creating transporter:', error);
-        return null;
-    }
-}
-
-
+/**
+ * Route for rendering the home page
+ * @name get/
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/", (req, res) => {
+    if (req.session.authenticated) {
+        return res.redirect('/home');
+    }
     const errorMessage = req.query.error;
     const loginEmail = req.session.loginEmail || '';
-    res.render('index.ejs', { error: errorMessage, loginEmail, path: req.path });
-})
+    const message = req.query.message;
+    res.render('index.ejs', { error: errorMessage, loginEmail, message, path: req.path });
+});
 
+/**
+ * Route for handling user login
+ * @name post/
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/', async (req, res) => {
-    const { email, password } = req.body;
+    var { email, password } = req.body;
+    email = email.toLowerCase();
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email });//find the user
 
         if (!user) {
             req.session.loginEmail = email;
             return res.redirect('/?error=invalidLogin');
         }
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);//compare the password
 
         if (!passwordMatch) {
             req.session.loginEmail = email;
             return res.redirect('/?error=invalidLogin');
         }
 
+        if (!user.emailVerified) {
+            req.session.loginEmail = email;
+            return res.redirect('/?error=emailNotVerified');
+        }
+
+        // Set session variables
         req.session.loginEmail = '';
         req.session.userId = user._id;
         req.session.username = user.username;
@@ -75,20 +74,32 @@ router.post('/', async (req, res) => {
         } else {
             req.session.profilePic = null;
         }
-
         req.session.phoneNumber = user.phone;
         req.session.email = user.email;
         req.session.authenticated = true;
         req.session.authorisation = user.authorisation;
-        console.log()   
-        return res.redirect('/home');
+        req.session.save((err) => {
+            if (err) {
+                console.error('Error saving session:', err);
+                return res.status(500).send('Error logging in');
+            }
+            return res.redirect('/home');
+        });
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).send('Error logging in');
     }
 });
 
-
+/**
+ * Route for handling user logout
+ * @name post/logout
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -99,26 +110,43 @@ router.post('/logout', (req, res) => {
     });
 });
 
+/**
+ * Route for rendering the registration page
+ * @name get/register
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/register", (req, res) => {
     const incorrectFields = req.query.error ? req.query.error.split(',') : [];
+    const message = req.query.message
     const signUpFields = req.session.signUpFields || {};
-    console.log(signUpFields);
     incorrectFields.forEach(field => {
         signUpFields[field] = '';
     });
 
-    res.render('register.ejs', { error: incorrectFields, signUpFields, path: req.path });
+    res.render('register.ejs', { error: incorrectFields, message: message, signUpFields, path: req.path });
 });
 
+/**
+ * Route for handling user registration
+ * @name post/submitRegistration
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/submitRegistration', upload.single('profileImage'), async (req, res) => {
     var { email, phone, username, password } = req.body;
-    console.log(req.body);
+    phone = phone.replace(/[^\d]/g, '');
     const incorrectFields = [];
 
     try {
-        const existingUser = await User.findOne({ email });
-        const existingPhone = await User.findOne({ phone });
-
+        const existingUser = await User.findOne({ email });//check if the user already exists
+        const existingPhone = await User.findOne({ phone });//check if the phone number already exists
 
         if (existingUser) {
             incorrectFields.push('email');
@@ -128,7 +156,7 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
             incorrectFields.push('phone');
         }
 
-        const { error } = registrationSchema.validate({ email, phone, username, password }, { abortEarly: false });
+        const { error } = registrationSchema.validate({ email, phone, username, password }, { abortEarly: false });//validate the user input
         if (error) {
             const validationErrors = error.details.map(detail => detail.context.key);
             incorrectFields.push(...validationErrors);
@@ -138,46 +166,118 @@ router.post('/submitRegistration', upload.single('profileImage'), async (req, re
         if (incorrectFields.length > 0) {
             return res.redirect(`/register?error=${incorrectFields.join(',')}`);
         }
-        let profileImage = null;
-        if (req.file) {
-            profileImage = {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            };
+        //store the profile image in the database if it exists
+        const profileImage = req.file ? {
+            data: req.file.buffer,
+            contentType: req.file.mimetype
+        } : null;
+
+        const hashedPassword = await bcrypt.hash(password, saltRounds);//hash the password
+
+        const emailVerificationToken = crypto.randomBytes(32).toString('hex');//generate a random token for email verification
+        const emailVerificationExpires = Date.now() + 3600000; // 1 hour from now
+
+        const newUser = new User({//create a new user
+            email: email,
+            phone: phone,
+            username: username,
+            password: hashedPassword,
+            profileImage: profileImage,
+            emailVerificationToken: emailVerificationToken,
+            emailVerificationExpires: emailVerificationExpires
+        });
+
+        await newUser.save();//save the user
+
+        const transporter = await createTransporter();//create a transporter for sending the verification email
+        if (!transporter) {
+            console.error('Failed to create transporter');
+            return res.status(500).send('Error sending verification email.');
         }
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const newUser = new User({ email, phone, username, password: hashedPassword, profileImage });
 
-        await newUser.save();
+        const verificationURL = `${process.env.REDIRECTURL}/verify/${emailVerificationToken}`;//create the verification URL
+        const mailOptions = {
+            to: newUser.email,
+            from: process.env.USER,
+            subject: 'Email Verification',
+            text: `Please verify your email by clicking the following link: ${verificationURL}`,
+            html: `<p>Please verify your email by clicking the following link:</p><a href="${verificationURL}">${verificationURL}</a>`
+        };
 
+        await transporter.sendMail(mailOptions);//send the email
+        console.log(`Verification email sent to ${newUser.email}`);
+
+        // Set session variables
         req.session.userId = newUser._id;
-        req.session.authenticated = true;
-        if (profileImage) {
-            console.log(newUser.profileImage);
-            req.session.profilePic = `data:${newUser.profileImage.contentType};base64,${newUser.profileImage.data.toString('base64')}`
-        }
-        else {
-            req.session.profilePic = null;
-        }
-        req.session.username = newUser.username;
-        req.session.phoneNumber = newUser.phone;
-        req.session.email = newUser.email;
-        req.session.authorisation = newUser.authorisation;
-        delete req.session.signUpFields;
-        res.redirect('/home');
+        req.session.authenticated = false;
+        req.session.signUpFields = null;
+        res.redirect('/?message=Please check your email for verification link.');
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).send('Error registering user.');
     }
 });
 
+/**
+ * Route for verifying a user's email
+ * @name get/verify/:token
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.get('/verify/:token', async (req, res) => {
+    const token = req.params.token;
 
+    try {
+        const user = await User.findOne({
+            emailVerificationToken: token,
+            emailVerificationExpires: { $gt: Date.now() }
+        });
 
+        if (!user) {
+            return res.redirect('/?error=invalidOrExpiredToken');
+        }
+
+        user.emailVerified = true;
+        user.emailVerificationToken = undefined;
+        user.emailVerificationExpires = undefined;
+
+        await user.save();
+
+        req.session.userId = user._id;
+        req.session.authenticated = true;
+        res.render('verificationSuccess', { path: req.path });
+    } catch (error) {
+        console.error('Error verifying email:', error);
+        res.status(500).send('Error verifying email.');
+    }
+});
+
+/**
+ * Route for rendering the password reset request page
+ * @name get/reset
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/reset", (req, res) => {
     const message = req.query.message;
     res.render('reset.ejs', { message, path: req.path });
 });
 
+/**
+ * Route for handling password reset requests
+ * @name post/reset
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/reset', async (req, res) => {
     const { email } = req.body;
 
@@ -198,6 +298,11 @@ router.post('/reset', async (req, res) => {
         const resetURL = `${process.env.REDIRECTURL}/reset/${token}`;
         const transporter = await createTransporter();
 
+        if (!transporter) {
+            console.error('Failed to create transporter');
+            return res.status(500).send('Error sending reset email.');
+        }
+
         const mailOptions = {
             to: user.email,
             from: process.env.USER,
@@ -206,6 +311,7 @@ router.post('/reset', async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
+        console.log(`Password reset email sent to ${user.email}`);
 
         res.redirect('/reset?message=checkEmail');
     } catch (error) {
@@ -214,6 +320,15 @@ router.post('/reset', async (req, res) => {
     }
 });
 
+/**
+ * Route for rendering the password reset form
+ * @name get/reset/:token
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/reset/:token', async (req, res) => {
     try {
         const token = req.params.token;
@@ -235,10 +350,18 @@ router.get('/reset/:token', async (req, res) => {
     }
 });
 
+/**
+ * Route for handling password reset submissions
+ * @name post/reset/:token
+ * @function
+ * @memberof module:routers/auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post('/reset/:token', async (req, res) => {
     const { password, confirmPassword } = req.body;
 
-    // Validate password
     const { error } = passwordSchema.validate({ password });
 
     if (error) {
@@ -275,4 +398,4 @@ router.post('/reset/:token', async (req, res) => {
     }
 });
 
-module.exports = router
+module.exports = router;

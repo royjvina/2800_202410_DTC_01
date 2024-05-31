@@ -1,5 +1,5 @@
 <%- include('templates/HeadTags') %>
-<body>
+<!-- suggested reimbursements start -->
     <header class="sticky top-0">
         <div class="flex flex-row justify-between font-bold p-3 bg-primary items-center text-white h-[60px]">
             <div>
@@ -7,15 +7,15 @@
                     &#8249;
                 </button>
             </div>
-            <p class="flex justify-center w-full class=" style="font-family: Georgia, 'Times New Roman', Times, serif;"">Reimbursements</p>
+            <p class="flex justify-center w-full ">Reimbursements</p>
     </header>
     
-    <ul>
+    <ul class="mx-6 my-4 flex flex-col gap-2 mb-[120px]">
         <% Object.keys(debtInGroup).forEach(function(userId) { %>
             <%- include('templates/suggestedReimbursementsTemplate.ejs', {friendDebt : debtInGroup[userId], loggedUser: loggedUsername, userId: userId, groupId: groupId})%>
         <% }); %>  
     </ul>
-
+<!-- suggested reimbursements end -->
     <script src="/scripts/reimbursement.js"></script>
     
 

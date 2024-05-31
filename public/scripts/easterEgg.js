@@ -1,4 +1,11 @@
+/* This file contains the code for the easter egg. When the user clicks on the logo, the easter egg is triggered.*/
 
+/**
+ * This function is used to display the dialog of Pennywise the clown word by word.
+ * @param {string} dialog - The dialog to be displayed.
+ * @param {number} clickCount - The number of times the logo has been clicked.
+ * @balpreet787
+ */
 function pennyWiseDialog(dialog, clickCount = 0) {
     let i = 0;
     let speed = 50;
@@ -17,7 +24,10 @@ function pennyWiseDialog(dialog, clickCount = 0) {
 
     typeWriter();
 }
-
+/**
+ * This function is used to logout the user.
+ * @balpreet787
+ */
 function logout() {
     const form = document.createElement('form');
     form.method = 'POST';
@@ -28,6 +38,11 @@ function logout() {
     form.submit();
 }
 
+/**
+    * This function is used to make the image appear bigger.
+    * @param {HTMLElement} image - The image to be made bigger.
+    * @balpreet787
+    */
 function makeImageAppearBigger(image) {
     let i = 0;
     let speed = 50;
@@ -43,13 +58,13 @@ function makeImageAppearBigger(image) {
     makeBigger();
 }
 
+// This is an event listener that listens for the click event on the logo.
 document.addEventListener('DOMContentLoaded', function() {
     let clickCount = 0;
     const logo = document.getElementById('logo');
 
     logo.addEventListener('click', function() {
         clickCount++;
-        console.log(clickCount);
         if (clickCount === 5) {
             pennyWiseDialog('Stop hitting me! It hurts, you know?');
             setTimeout(function() {

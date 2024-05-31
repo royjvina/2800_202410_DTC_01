@@ -1,19 +1,25 @@
-<div class="flex flex-row">
-    <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2">
-        <input type="checkbox" id="<%= friend.username %>" name="userPercentageSplit" value="<%= friend.username %>" class="userPercentageSplit hidden">
-        <div class="w-1/2 flex flex-row items-center">
-            <img class="p-3" src="<%= friend.profileImageBase64 %>" alt=""
-                height="50" width="50">
-            <p class="font-semibold px-2"><% friend.username %></p>
-        </div>
-        <div class="flex flex-col">
-            <div class="flex flex-row">
-                <input
-                    class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage"
-                    type="number" id="user1Percentage" name="user1Percentage" min="0" placeholder="0">
-                <p class="text-gray-400 text-xl font-semibold px-2">%</p>
+<% if (!friend.username.includes("Deleted User")) { %>
+        <div class="flex flex-row">
+            <div class="bg-white rounded-2xl m-2 flex flex-row items-center p-2">
+                <div class="w-1/2 flex flex-row items-center">
+                    <% if (friend.profileImageBase64) { %>
+                        <img class="h-10 w-10 rounded-lg" src="<%= friend.profileImageBase64 %>" alt="">
+                        <% } else { %>
+                        <img class="h-10 w-10 rounded-lg" src="/images/homepageIconsAndPlaceholders/profilePicPlaceholderSettings.svg" alt="">
+                        <% } %>
+        
+                        <p class="font-semibold px-2"><%= friend.username %></p>
+                    </div>
+                <div class="flex flex-col">
+                    <div class="flex flex-row">
+                        <input
+                            class="ml-auto w-1/2 font-semibold text-xl text-right focus:outline-none focus:border-b-2 px-2 percentage userPercentageSplit"
+                            type="number" id="<%= group._id %><%= friend._id %>Percentage" data-user-id="<%= friend._id %>" name="<%= group._id %><%= friend._id %>Percentage" min="0" placeholder="0">
+                        <p class="text-gray-400 text-xl font-semibold px-2">%</p>
+                    </div>
+                    <span class="ml-auto text-sm text-gray-500 px-2 amountPercentage" id="<%= group._id %><%= friend._id %>PercentageAmount" name="<%= group._id %><%= friend._id %>PercentageAmount">$0.00</span>
+                    <input class="visually-hidden" type="hidden" id="<%= group._id %><%= friend._id %>AmountPercentage" name="<%= group._id %><%= friend._id %>AmountPercentage" min="0">
+                </div>
             </div>
-            <span class="ml-auto text-sm text-gray-500 px-2" id="user1AmountPercentage" name="user1AmountPercentage">$0.00</span>
         </div>
-    </div>
-</div>
+    <% } %>
