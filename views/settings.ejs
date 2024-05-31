@@ -1,7 +1,8 @@
 <%- include('templates/header') %>
-
+<!-- Settings Page -->
   <main class="">
       <div class="p-4  h-dvh">
+        <!-- Profile Image and User Info -->
         <% if (!editMode) { %>
           <div class="flex justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
             <div class="w-16 min-w-16 h-16 flex items-center justify-center">
@@ -20,6 +21,7 @@
                 <%= phoneNumber %>
               </p>
             </div>
+            <!-- if in edit mode after clicking the edit button -->
             <% } else { %>
               <div class="flex flex-col justify-between items-center mb-4 shadow-sm rounded-xl bg-white p-4">
               <form id="editUserInfo" action="/settings" method="POST" enctype="multipart/form-data"
@@ -63,7 +65,7 @@
                       <% } %>
                 </div>
         </div>
-
+        <!-- logout button -->
         <div
           class="w-full flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
           <form action="/logout" method="POST" class="w-full">
@@ -72,20 +74,11 @@
         </div>
 
 
+        <!-- Account settings -->
         <div>
-          <!-- <h4 class="font-semibold text-gray-700 pt-2 mt-3">Display</h4>
-          <ul>
-            <a href="" class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-              <div class="flex items-center space-x-2">
-                <img src="images/otherIcons/display.svg" alt="">
-                <span class="text-gray-700">Display mode</span>
-              </div>
-              <img src="images/otherIcons/rightArrow.svg" alt="">
-            </a>
-          </ul> -->
-
           <h4 class="font-semibold text-gray-700 pt-2 mt-3">Account settings</h4>
           <ul>
+            <!-- Change password -->
             <div id="changePassSetting" class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
               <div class="flex items-center space-x-2">
                 <img src="images/otherIcons/password.svg" alt="">
@@ -107,6 +100,8 @@
               </form>
             </div>
           </ul>
+
+          <!-- Change phone number -->
           <ul>
             <div id="changePhoneSetting"
               class="flex items-center justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
@@ -141,6 +136,7 @@
               <% } %>
           </div>
           <ul>
+            <!-- Delete Account -->
             <div id="deleteAccountSetting" class="flex justify-between p-3 items-center bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
               <div class="flex items-center space-x-2">
                 <img src="images/otherIcons/trash.svg" alt="">
@@ -169,27 +165,7 @@
       </form>
           </ul>
         </div>
-        <h4 class="font-semibold text-gray-700 pt-2 mt-2">Support & About</h4>
-
-        <ul>
-          <a href="" class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-            <div class="flex items-center space-x-2">
-              <img src="images/otherIcons/report.svg" alt="">
-              <span class="text-gray-700">Report a problem</span>
-            </div>
-            <img src="images/otherIcons/rightArrow.svg" alt="">
-          </a>
-        </ul>
-        <ul>
-          <a href="" class="flex justify-between p-3 bg-white shadow-sm hover:bg-gray-100 rounded-lg mt-2 border-b">
-            <div class="flex items-center space-x-2">
-              <img src="images/otherIcons/help.svg" alt="">
-              <span class="text-gray-700">Terms and Policies</span>
-            </div>
-            <img src="images/otherIcons/rightArrow.svg" alt="">
-          </a>
-        </ul>
-
+       
       </div>
   </main>
   <script src="/scripts/settings.js"></script>
