@@ -118,7 +118,7 @@ function refreshfields(equal = false, percentage = false, manual = false) {
     if (manual) {
         manualFields = document.querySelectorAll('.friendAmountManual');
         manualFields.forEach(manualField => {
-            manualField.value = "0.00";
+            manualField.value = "";
         });
     }
 }
@@ -374,18 +374,18 @@ function addExpenseToPaidByUser() {
     }
 }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const showEqualExpense = document.getElementById('showEqualExpense');
-        const showPercentageExpense = document.getElementById('showPercentageExpense');
-        const showManualExpense = document.getElementById('showManualExpense');
-        percentageHandler();
-        equalHandler();
-        manualHandler();
-        addExpenseHandler();
-        showEqualExpense.addEventListener('click', equalExpenseTabHandler);
-        showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
-        showManualExpense.addEventListener('click', manualExpenseTabHandler);
-        closeExpenseError.addEventListener('click', function () { errorModal.close() })
-        goBackFromAddExpenses();
-        categoryHandler();
-    });
+document.addEventListener('DOMContentLoaded', () => {
+    const showEqualExpense = document.getElementById('showEqualExpense');
+    const showPercentageExpense = document.getElementById('showPercentageExpense');
+    const showManualExpense = document.getElementById('showManualExpense');
+    percentageHandler();
+    equalHandler();
+    manualHandler();
+    addExpenseHandler();
+    showEqualExpense.addEventListener('click', equalExpenseTabHandler);
+    showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
+    showManualExpense.addEventListener('click', manualExpenseTabHandler);
+    closeExpenseError.addEventListener('click', function () { errorModal.close() })
+    goBackFromAddExpenses();
+    categoryHandler();
+});
