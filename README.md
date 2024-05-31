@@ -50,7 +50,7 @@ The current version 1.0 of the application is hosted on https://pennywisedtc01.o
     ```
 
 ### Usage
-- **Access the Application:** Open your browser and navigate to `http://localhost:3000`.
+- **Access the Application:** Open your browser and navigate to `https://pennywisedtc01.com`.
 - **Authentication:** 
   - **Register:** Create a new account by providing your email, phone number, username, and password.
   - **Login:** Access your account using your registered email and password.
@@ -106,6 +106,11 @@ What we'd like to build in the future:
 * Advanced data visualization for spending trends.
 * Multi-currency support.
 * Ability to remove friends from a group
+* Chat system to talk to your friends within a group
+* Incorporate reading banking data
+* We also would have liked to implement receipt reading from pictures taken
+* Integration with bank APIs for automatic transaction import to verify payments and add personalization for spending habits.
+
 
 ## 7. Contents of Folder
 Content of the project folder:
