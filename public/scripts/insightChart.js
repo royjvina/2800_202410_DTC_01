@@ -22,11 +22,9 @@ function searchByTime() {
   })
     .then(response => response.json())
     .then(data => {
-      console.log('Fetched expenses:', data);
       updateChart(data);
     })
     .catch(error => {
-      console.error('Error fetching expenses:', error);
       document.getElementById('donut-chart').innerHTML = '<p>Error loading chart data.</p>';
     });
 }
@@ -60,7 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateChart(expenses); // Update chart with fetched expenses data
 
   } catch (error) {
-    console.error('Error fetching or rendering chart:', error);
     donutChartElement.innerHTML = '<p>Error loading chart data.</p>';
   }
 });
@@ -124,16 +121,14 @@ function updateChart(expenses) {
     return;
   }
 
-  console.log('Series:', series);
-  console.log('Labels:', labels);
-  console.log('Colors:', colors);
+
 
   // Define chart options
   const chartOptions = {
     series: series,
     chart: {
       type: 'donut',
-      height: 390
+      height: 390,
     },
     labels: labels,
     colors: colors,
@@ -160,7 +155,7 @@ function updateChart(expenses) {
       enabled: false
     },
     legend: {
-      position: 'bottom'
+      position: 'bottom',
     }
   };
 
@@ -184,9 +179,9 @@ function updateRanking(categoryMap) {
       rankElement.innerHTML = `
       <div class="flex justify-between items-center">
         <div class="flex-1">
-          <span class="font-bold">${index + 1}.</span> ${item[0]} - $${item[1].totalCost.toFixed(2)}
+          <span class="font-bold text-lg">${index + 1}.</span> ${item[0][0].toUpperCase() + item[0].slice(1)} - $${item[1].totalCost.toFixed(2)}
         </div>
-        <span class="text-primary font-semibold">more</span>
+        <span  ><img class="downArrow w-5 h-3" id="arrowrank-${index + 1}" src="images/otherIcons/downArrowSettings.svg" alt></span>
       </div>
     `;
       rankElement.classList.add('text-sm', 'text-gray-700', 'shadow-lg', 'p-3', 'rounded-md', 'border-l-4', 'hover:bg-gray-100', 'transition', 'duration-300');
@@ -217,7 +212,6 @@ function toggleDisplayExpenses(event) {
   const category = rankElement.dataset.category;
   const details = JSON.parse(rankElement.dataset.details);
 
-  console.log(`Displaying expenses for category: ${category}`, details);
 
   let expenseDetailsElement = rankElement.querySelector('.expense-details');
 
@@ -225,14 +219,16 @@ function toggleDisplayExpenses(event) {
     expenseDetailsElement = document.createElement('div');
     expenseDetailsElement.classList.add('expense-details');
     rankElement.appendChild(expenseDetailsElement);
+    rankElement.parentElement.querySelector('.downArrow').style.transform = 'rotate(180deg)';
   }
 
   if (expenseDetailsElement.classList.contains('show')) {
     expenseDetailsElement.classList.remove('show');
+    rankElement.parentElement.querySelector('.downArrow').style.transform = 'rotate(0deg)';
     expenseDetailsElement.innerHTML = '';
   } else {
     expenseDetailsElement.classList.add('show');
-    expenseDetailsElement.innerHTML = `<h3 class="font-bold text-sm mb-2">Detail</h3>`;
+    expenseDetailsElement.innerHTML = `<h3 class=" text-[12px] mb-2">Expenses in this category:</h3>`;
 
     if (!details || details.length === 0) {
       expenseDetailsElement.innerHTML += '<p class="text-gray-600">No expenses found for this category.</p>';

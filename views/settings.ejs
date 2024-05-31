@@ -96,7 +96,7 @@
             <div>
               <form action="/settings/changePass" method="post" class="hidden fadeOut flex-col items-center w-full" id="changePassForm">
                 <div class="text-sm text-center" id="passwordFormat">Must contain at least 8 characters including 1 uppercase, 1 lowercase, 1 number, and 1 special character.</div>
-                <input type="password" id="newPassword" name="password" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="new password">
+                <input type="password" id="newPassword" name="password" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="New password">
                 <input type="password" id="confirmPassword" name="confirmPassword" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2 w-5/6" placeholder="Change password">
                 <div class="text-red-600 text-center text-sm mb-2" id="passwordWarning"></div>
                 <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePass">Submit</button>
@@ -120,7 +120,7 @@
           <div>
             <% if(phoneExists) { %>
             <form action="/settings/changeNum" method="post" class="flex fadeOut flex-col items-center w-full" id="changePhoneForm">
-              <input type="tel" id="newPhone" name="phone" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2  w-5/6" placeholder="new phone number">
+              <input type="tel" id="newPhone" name="phone" class="focus:outline-none focus:border-black border-b px-3 pt-2 m-2  w-5/6" placeholder="New phone number">
               <div class="text-red-600 text-center text-sm mb-2" id="phoneWarning">This phone number already exists in the system, please try another number</div>
               <button type="button" class="text-primary border border-primary gap-3 rounded-xl hover:bg-primary hover:text-white bg-white px-3 py-2" id="changePhone">Submit</button>
               <div id="confirmChangePhone" class="hidden flex-row justify-center gap-2 fadeOut">
@@ -150,7 +150,7 @@
             </div>
             <form action="/settings/deleteAccountAuthenticate" id="deleteAccountFormAuth" method="POST" class="<%= deleteAccountError ? 'flex' : 'hidden' %> flex-col items-center w-full justify-center gap-4 text-center m-4 mx-auto fadeOut">
               <% if(settledInEveryGroup) {%>
-              <input type="password" id="deletePassword" name="deletePassword" class="focus:outline-none focus:border-black border-b px-3 pt-2 w-5/6" placeholder="enter password">
+              <input type="password" id="deletePassword" name="deletePassword" class="focus:outline-none focus:border-black border-b px-3 pt-2 w-5/6" placeholder="Enter password">
               <div class="text-red-600 text-center text-sm mb-2" id="deleteWarning"><%= deleteAccountError ? 'Password you entered is incorrect' : '' %> </div>
               <button type="submit" id="deleteAccount"
               class="bg-red-500 text-white px-3 py-2 border-red-500 border border-primary rounded-xl shadow-md hover:bg-red-600">

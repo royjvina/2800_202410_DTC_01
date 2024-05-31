@@ -22,7 +22,6 @@ async function getExpensesByCategory(userId, startDate, endDate) {
 
     // Extract group IDs from the user's groups
     const groupIds = user.groups.map(group => group._id);
-    console.log(`Found group IDs: ${groupIds}`);
 
     // Build the match query for transactions
     const matchQuery = { group_id: { $in: groupIds } };
@@ -57,11 +56,9 @@ async function getExpensesByCategory(userId, startDate, endDate) {
       details: expenseMap[key].details
     }));
 
-    console.log(`Processed expenses: ${JSON.stringify(result)}`);
 
     return result;
   } catch (error) {
-    console.error('Error fetching expenses by category:', error);
     throw new Error('Error fetching expenses by category: ' + error.message);
   }
 }

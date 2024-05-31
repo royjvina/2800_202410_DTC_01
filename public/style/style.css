@@ -25,6 +25,7 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
+
 .visually-hidden {
     position: absolute !important;
     clip: rect(1px, 1px, 1px, 1px);
@@ -34,3 +35,17 @@
     width: 1px !important;
     overflow: hidden;
 }
+header {
+    z-index: 1000;
+    position: sticky;
+    top: 0;
+  }
+
+  .expense-details {
+    display: none;
+    margin-top: 10px;
+  }
+
+  .expense-details.show {
+    display: block;
+  }

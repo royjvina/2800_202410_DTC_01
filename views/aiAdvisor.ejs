@@ -1,4 +1,4 @@
-<%- include('templates/headtags') %>
+<%- include('templates/headTags') %>
 <link rel="stylesheet" href="/style/styleAi.css">
 <div id="wrapper" class = "pb-[60px]">
     <div id="chatContainer" class = "">
@@ -13,7 +13,7 @@
                 <button id="saveBtn" class = "hidden font-semibold text-lg" onclick="saveConversation()">Save</button>
             </div>
         </div>
-        <div id="chatContent" class = "">
+        <div id="chatContent" class = "m-3">
             <div id="introContainer" class = "h-full flex flex-col items-center justify-center text-black">
                 <p id="introMessage" class = "text-xl font-bold">Heads up!</p>
                 <p id="introMessage" class = "text-center text-lg pt-4" >This AI advisor can provide personalized advice, but it will need
@@ -21,7 +21,7 @@
                 <p id="introMessage" class = "text-center text-lg pt-4" >Are you comfortable sharing that information?</p>
                     
             </div>
-            <div id="introQuestion">
+            <div id="introQuestion" class="m-3">
                 <button id="startBtn" class = "text-lg font-semibold shadow-lg" onclick="startChat()">Yes</button>
             </div>
             <div id="chat" class="overflow-auto">

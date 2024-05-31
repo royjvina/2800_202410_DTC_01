@@ -102,17 +102,17 @@ function refreshfields(equal = false, percentage = false, manual = false) {
         });
         inputValues = document.querySelectorAll('.equalValue');
         inputValues.forEach(inputValue => {
-            inputValue.value = "";
+            inputValue.value = "$0.00";
         });
     }
     if (percentage) {
         percentageFields = document.querySelectorAll('.percentage');
         percentageFields.forEach(percentageField => {
-            percentageField.value = "";
+            percentageField.value = "$0.00";
         });
         inputValues = document.querySelectorAll('.percentageValue');
         inputValues.forEach(inputValue => {
-            inputValue.value = "";
+            inputValue.value = "$0.00";
         });
     }
     if (manual) {
@@ -374,18 +374,18 @@ function addExpenseToPaidByUser() {
     }
 }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const showEqualExpense = document.getElementById('showEqualExpense');
-        const showPercentageExpense = document.getElementById('showPercentageExpense');
-        const showManualExpense = document.getElementById('showManualExpense');
-        percentageHandler();
-        equalHandler();
-        manualHandler();
-        addExpenseHandler();
-        showEqualExpense.addEventListener('click', equalExpenseTabHandler);
-        showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
-        showManualExpense.addEventListener('click', manualExpenseTabHandler);
-        closeExpenseError.addEventListener('click', function () { errorModal.close() })
-        goBackFromAddExpenses();
-        categoryHandler();
-    });
+document.addEventListener('DOMContentLoaded', () => {
+    const showEqualExpense = document.getElementById('showEqualExpense');
+    const showPercentageExpense = document.getElementById('showPercentageExpense');
+    const showManualExpense = document.getElementById('showManualExpense');
+    percentageHandler();
+    equalHandler();
+    manualHandler();
+    addExpenseHandler();
+    showEqualExpense.addEventListener('click', equalExpenseTabHandler);
+    showPercentageExpense.addEventListener('click', percentageExpenseTabHandler);
+    showManualExpense.addEventListener('click', manualExpenseTabHandler);
+    closeExpenseError.addEventListener('click', function () { errorModal.close() })
+    goBackFromAddExpenses();
+    categoryHandler();
+});
