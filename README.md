@@ -25,8 +25,6 @@ List technologies (with version numbers), APIs, icons, fonts, images, media, or 
 * Joi for validation
 * Multer for file uploads
 * Inputmask for form input formatting
-* Various SVG icons and images for UI elements from SVG Repo,  https://www.svgrepo.com/
-* Chatgpt for minor debugging, https://chat.openai.com/
 
 ## 4. Complete Setup/Installation/Usage
 The current version 1.0 of the application is hosted on https://pennywisedtc01.online/
@@ -75,7 +73,7 @@ The current version 1.0 of the application is hosted on https://pennywisedtc01.o
   - **Delete Expense:** Remove an expense from the group.
 
 - **Insight Feature:**
-  - **Expense Insights:** View insights into your spending habits categorized by different types of expenses.
+  - **Expense Insights:** View insights for your spending habits categorized by different types of expenses.
   - **Historical Data:** Analyze your spending over different time periods.
 
 - **Settings:**
@@ -85,7 +83,7 @@ The current version 1.0 of the application is hosted on https://pennywisedtc01.o
 
 - **AI Advisor:**
   - **Chat:** Interact with the AI financial advisor for personalized financial advice.
-  - **History:** View the history of your interactions with the AI advisor.
+  - **History:** View the history of your interactions with the AI advisor and delete history logs as you wish.
 
 ### Additional Notes
 - **Function Headers and Comments:** Refer to function headers and comments within the codebase to understand the functionality of different components.
@@ -102,11 +100,12 @@ Here are some known bugs and limitations of the application:
 - **Session Expiry:** Users may experience unexpected session expiries, requiring them to log in again.
 
 
-## 6. Features for Future
+## 6. Features for the Future
 What we'd like to build in the future:
-* Integration with bank APIs for automatic transaction import.
+* Integration with bank APIs for automatic transaction import to verify payments and add personalization for spending habits.
 * Advanced data visualization for spending trends.
 * Multi-currency support.
+* Ability to remove friends from a group
 
 ## 7. Contents of Folder
 Content of the project folder:
@@ -215,3 +214,9 @@ It has the following subfolders and files:
         ├── usersForExpense.ejs         # Users for expense template
         └── usersSplit.ejs              # Users split template
 ```
+
+## 9. Credits
+* Various SVG icons and images for UI elements from SVG Repo,  https://www.svgrepo.com/
+* Chatgpt for debugging, https://chat.openai.com/
+* Stack Overflow for debugging, https://stackoverflow.com/
+* W3Schools for debugging, https://www.w3schools.com/
